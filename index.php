@@ -1,3 +1,3 @@
 <?php
 
-echo "<h1>Hello world 💪</h1>";
+echo "<h1>Hejka kochani! 💪</h1>";
