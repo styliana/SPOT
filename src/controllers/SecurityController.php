@@ -1,13 +1,10 @@
 <?php
 
-require_once 'AppController.php';
-
+require_once 'AppController.php'; // Poprawnie! (są w tym samym folderze)
 
 class SecurityController extends AppController {
 
-
     public function login() {
-
         return $this->render("login");
     }
 
@@ -16,6 +13,8 @@ class SecurityController extends AppController {
             return $this->render('register');
         }
 
-        return $this->render('login', ['message' => 'Zarejestrowano użytkownika']);
+        // ... logika rejestracji ...
+
+        return $this->render('login', ['message' => 'Zarejestrowano pomyślnie!']);
     }
 }

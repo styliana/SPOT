@@ -1,6 +1,8 @@
 <?php
 
+// Te ścieżki są poprawne, bo są liczone od /app/
 require_once 'src/controllers/SecurityController.php';
+require_once 'src/controllers/ReservationController.php';
 
 class Routing {
 
@@ -16,17 +18,23 @@ class Routing {
 
     public static function run($url) {
         $action = explode("/", $url)[0];
-        
+
         if (empty($action)) {
-            $action = 'login'; // Default action when URL is empty
-        }
-        
-        if (!array_key_exists($action, self::$routes)) {
-            die("Wrong url!");
+            $action = 'login'; // Domyślna akcja
         }
 
-        $controller = self::$routes[$action];
-        $object = new $controller;
-        return $object->$action();
+        if (!array_key_exists($action, self::$routes)) {
+            die("Wrong url! Action: " . $action);
+        }
+
+        $controllerName = self::$routes[$action];
+        $object = new $controllerName;
+
+        // Sprawdzamy, czy kontroler ma metodę o nazwie akcji
+        if (method_exists($object, $action)) {
+            return $object->$action();
+        } else {
+            die("Method $action not found in controller $controllerName!");
+        }
     }
 }

@@ -21,17 +21,30 @@ class AppController {
 
     protected function render(string $template = null, array $variables = [])
     {
-        $templatePath = 'public/views/'. $template.'.html';
-        $templatePath404 = 'public/views/404.html';
+        // Sprawdzamy najpierw plik .php, potem .html
+        $templatePathPhp = 'public/views/'. $template.'.php';
+        $templatePathHtml = 'public/views/'. $template.'.html';
+        $templatePath404 = 'public/views/404.html'; // Nadal używamy 404.html
+
         $output = "";
-                 
-        if(file_exists($templatePath)){
+
+        // Wybór ścieżki: preferujemy .php
+        $chosenTemplatePath = null;
+        if (file_exists($templatePathPhp)) {
+            $chosenTemplatePath = $templatePathPhp;
+        } elseif (file_exists($templatePathHtml)) {
+            $chosenTemplatePath = $templatePathHtml;
+        }
+
+
+        if($chosenTemplatePath){
             extract($variables);
-            
+
             ob_start();
-            include $templatePath;
+            include $chosenTemplatePath;
             $output = ob_get_clean();
         } else {
+            // Jeśli nie znaleziono ani .php ani .html, renderujemy 404
             ob_start();
             include $templatePath404;
             $output = ob_get_clean();
