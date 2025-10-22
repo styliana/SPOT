@@ -1,0 +1,263 @@
+/* --- 1. Ustawienia Strony --- */
+body {
+    background-color: var(--background-gray-light);
+}
+
+.bookings-page-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* --- 2. Nagłówek i Przycisk "FAB" --- */
+.bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem; /* Zamiast .page-title margin */
+}
+
+.page-title {
+    margin-bottom: 0; /* Reset globalnego stylu */
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease;
+}
+.fab:hover {
+    background-color: var(--dark-blue-text);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+.desktop-fab {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.desktop-fab .material-icons-outlined {
+    font-size: 20px;
+    margin-right: 0.25rem;
+}
+
+/* Domyślnie ukryty */
+.mobile-fab {
+    display: none;
+}
+
+/* --- 3. Kontener Tabeli (Karta) --- */
+.table-container {
+    width: 100%;
+    background-color: var(--background-white);
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden; /* Ważne dla border-radius */
+    /* Bezpieczny scroll na małych desktopach */
+    overflow-x: auto; 
+}
+
+/* --- 4. Tabela (Desktop) --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0; /* Delikatny separator */
+    color: var(--text-dark);
+}
+
+/* Nagłówki */
+th {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Komórki danych */
+td {
+    font-size: 0.95rem;
+}
+
+/* Ostatni wiersz bez ramki */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Kolumna z checkboxem */
+th:first-child, td:first-child {
+    width: 40px;
+    text-align: center;
+    padding-right: 0.5rem;
+}
+
+/* Kolumna "Actions" */
+.actions-header, .actions-cell {
+    width: 80px;
+    text-align: center;
+}
+
+.kebab-menu {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.kebab-menu:hover {
+    background-color: #f0f0f0;
+}
+.kebab-menu .material-icons-outlined {
+    color: var(--text-light);
+}
+
+/* --- 5. Pigułki (Status, Type) --- */
+.pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.pill-blue {
+    background-color: var(--light-blue);
+    color: var(--dark-blue-text);
+}
+.pill-green {
+    background-color: #d1fae5;
+    color: #067647;
+}
+.pill-orange {
+    background-color: #ffedd5;
+    color: #b45309;
+}
+.pill-red {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+.pill-gray {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+
+/* --- 6. RESPONSIVE (Mobile) --- */
+@media (max-width: 800px) {
+    
+    .bookings-page-content {
+        padding: 1rem;
+        padding-bottom: 100px; /* Miejsce na przycisk FAB */
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+    
+    .desktop-fab {
+        display: none; /* Ukryj przycisk desktopowy */
+    }
+    
+    .mobile-fab {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 2rem;
+    }
+    
+    .table-container {
+        /* Usuwamy kartę, bo każda rezerwacja będzie kartą */
+        background-color: transparent;
+        box-shadow: none;
+        overflow-x: visible;
+    }
+
+    /* === Magia responsywnej tabeli === */
+    
+    table {
+        border-collapse: separate;
+        border-spacing: 0 1rem; /* Odstęp między kartami */
+    }
+    
+    /* 1. Ukryj nagłówki tabeli */
+    thead {
+        display: none;
+    }
+
+    /* 2. Zmień wiersze w bloki (karty) */
+    tr {
+        display: block;
+        width: 100%;
+        background: var(--background-white);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border: 1px solid #f0f0f0;
+        position: relative;
+    }
+    
+    /* 3. Zmień komórki w bloki */
+    td {
+        display: block;
+        width: 100%;
+        text-align: right; /* Wartość będzie po prawej */
+        padding: 0.75rem 1rem;
+        border-bottom: 1px dotted #eee;
+    }
+    
+    /* 4. Dodaj etykietę (z atrybutu data-label) po lewej */
+    td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-dark);
+        margin-right: 1rem;
+    }
+    
+    /* 5. Dostosuj specjalne komórki */
+    
+    /* Ukryj checkbox na mobilce */
+    td:first-child { 
+        display: none;
+    }
+
+    /* Ostatnia komórka bez ramki */
+    td:last-child {
+        border-bottom: none;
+    }
+
+    /* Komórka akcji */
+    .actions-cell {
+        /* Przenosimy kebab menu do rogu karty */
+        position: absolute;
+        top: 0.25rem;
+        right: 0.25rem;
+        width: auto;
+        border: none;
+        padding: 0.25rem;
+    }
+    .actions-cell::before {
+        display: none; /* Ukryj etykietę "Actions" */
+    }
+}

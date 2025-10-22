@@ -3,6 +3,7 @@
 // Te ścieżki są poprawne, bo są liczone od /app/
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/ReservationController.php';
+require_once 'src/controllers/BookingsController.php';
 
 class Routing {
 

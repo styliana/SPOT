@@ -10,10 +10,11 @@ Routing::post('login', 'SecurityController');
 Routing::get('register', 'SecurityController');
 Routing::post('register', 'SecurityController');
 
-// Używamy trasy 'reservation' i kontrolera 'ReservationController'
+
 Routing::get('reservation', 'ReservationController');
 Routing::post('reservation', 'ReservationController');
 
+Routing::get('mybookings', 'BookingsController');
 
 Routing::run($path);
 ?>
