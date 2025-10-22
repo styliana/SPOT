@@ -32,17 +32,22 @@
                 <h2 class="page-title">Welcome to SPOT!</h2>
 
                 <div class="toggle-buttons">
-                    <a href="login" class="toggle-btn active">Login</a>
-                    <a href="register" class="toggle-btn inactive">Register</a>
+                    <a href="login" class="toggle-btn inactive">Login</a>
+                    <a href="register" class="toggle-btn active">Register</a>
                 </div>
 
-                <p class="subtitle">Log in honey:)</p>
+                <p class="subtitle">Log in or register honey</p>
 
-                <form class="login-form" action="login" method="POST">
+                <form class="login-form" action="register" method="POST">
                     
                     <?php if(isset($message)): ?>
                         <div class="message error"><?php echo $message; ?></div>
                     <?php endif; ?>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" required>
+                    </div>
 
                     <div class="form-group">
                         <label for="username">User name</label>
@@ -57,15 +62,7 @@
                         </div>
                     </div>
 
-                    <div class="form-extras">
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember">Remember me</label>
-                        </div>
-                        <a href="#" class="forgot-password">Forgot Password?</a>
-                    </div>
-                    
-                    <button type="submit" class="login-btn">Log in</button>
+                    <div style="height: 2rem;"></div> <button type="submit" class="login-btn">Register</button>
                 </form>
 
             </div>
