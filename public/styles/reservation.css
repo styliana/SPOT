@@ -1,0 +1,241 @@
+/* --- 1. Ustawienia Jasnego Motywu dla Strony Rezerwacji --- */
+body {
+    background-color: var(--background-gray-light);
+}
+
+/* --- 2. Główna zawartość strony --- */
+.reservation-page-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-title {
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+}
+
+/* --- 3. Formularz i Grid (Desktop) --- */
+.reservation-form {
+    width: 100%;
+}
+
+.content-grid {
+    display: grid;
+    /* Kolumna formularza (min 350px, maks 1fr) i kolumna mapy (2fr) */
+    grid-template-columns: minmax(350px, 1fr) 2fr;
+    gap: 2rem;
+    align-items: start;
+    
+    /* Definiujemy obszary siatki */
+    grid-template-areas:
+        "form-top    map"
+        "form-bottom map";
+}
+
+/* Grupa górna (data, czas) */
+.form-top-group {
+    grid-area: form-top; /* Umieść w obszarze 'form-top' */
+    background-color: var(--background-white);
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Grupa dolna (pokój, submit) */
+.form-bottom-group {
+    grid-area: form-bottom; /* Umieść w obszarze 'form-bottom' */
+    background-color: var(--background-white);
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem; /* Odstęp między górną a dolną częścią formularza */
+}
+
+/* Kolumna prawa: Mapa */
+.map-wrapper {
+    grid-area: map; /* Umieść w obszarze 'map', zajmie obie komórki w pionie */
+    min-width: 400px;
+    align-self: start;
+}
+
+.subsection-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+/* --- 4. Elementy Formularza --- */
+.form-group {
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    padding-right: 3rem;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background-color: var(--background-white);
+    border: 1px solid var(--light-blue);
+    border-radius: 2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-with-icon input[readonly] {
+    background-color: var(--background-gray-light);
+    cursor: not-allowed;
+}
+
+.input-with-icon input::placeholder {
+    color: var(--text-light);
+}
+
+.input-with-icon input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.input-with-icon .input-icon {
+    position: absolute;
+    right: 1rem;
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary-blue);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.submit-btn:hover {
+    background-color: var(--dark-blue-text);
+}
+
+
+/* --- 5. Style Mapy Interaktywnej --- */
+#map-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3; 
+    /* background-image: url('../images/twoja-mapa.png'); */ /* Tło wyłączone */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 2px solid var(--primary-blue); /* Zmieniona ramka na niebieską */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#room-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.room {
+    fill: rgba(0, 0, 0, 0);
+    stroke: rgba(0,0,0,0.5);
+    stroke-width: 1px;
+    cursor: pointer;
+    transition: fill 0.2s ease-in-out;
+}
+.room.available:hover {
+    fill: rgba(0, 255, 0, 0.4);
+}
+.room.unavailable {
+    fill: rgba(255, 0, 0, 0.5);
+    cursor: not-allowed;
+}
+.room.selected {
+    fill: rgba(59, 130, 246, 0.6);
+    stroke: var(--primary-blue);
+    stroke-width: 2px;
+}
+
+
+/* --- 6. RESPONSIVE (Mobile) --- */
+@media (max-width: 800px) {
+    
+    body {
+        background-color: var(--background-white);
+    }
+    
+    .reservation-page-content {
+        padding: 1.5rem;
+    }
+    
+    .page-title {
+        font-size: 1.75rem;
+        text-align: center;
+    }
+    
+    .content-grid {
+        /* Na mobilce wyłączamy grid i wracamy do układu blokowego */
+        display: block;
+    }
+    
+    .form-top-group,
+    .form-bottom-group {
+        padding: 0;
+        box-shadow: none;
+        width: 100%;
+        margin-bottom: 0;
+        gap: 1.25rem;
+        /* Resetujemy margines dodany na desktopie */
+        margin-top: 0; 
+    }
+
+    .map-wrapper {
+        width: 100%;
+        margin: 1.5rem 0;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+    
+    #map-container {
+        aspect-ratio: 1 / 1;
+        border: 1px solid #eee;
+    }
+
+    .form-bottom-group {
+        padding-top: 1.5rem;
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+    }
+}
