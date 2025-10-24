@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPOT - Moje Rezerwacje</title>
-
     <link rel="stylesheet" type="text/css" href="public/styles/main.css">
     <link rel="stylesheet" type="text/css" href="public/styles/bookings.css">
-
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,33 +14,27 @@
 <body>
     
     <header class="main-header">
-        <div class="header-logo">
-            <h1 class="logo">SP<span class="logo-globe"></span>T</h1>
-        </div>
         <nav class="main-nav">
-            <ul>
-                <li><a href="#" class="nav-link">About</a></li>
-                <li><a href="mybookings" class="nav-link">My bookings</a></li>
-                <li><a href="#" class="nav-link">My profile</a></li>
-                <li><a href="#" class="nav-link">Log out</a></li>
-            </ul>
+             <ul>
+                 <li><a href="/about" class="nav-link">About</a></li>
+                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
+                 <li><a href="#" class="nav-link">My profile</a></li>
+                 <li><a href="#" class="nav-link">Log out</a></li>
+             </ul>
         </nav>
         <nav class="mobile-nav">
-            <a href="#"><span class="material-icons-outlined">person_outline</span></a>
-            <a href="mybookings"><span class="material-icons-outlined">description</span></a>
-            <a href="#"><span class="material-icons-outlined">logout</span></a>
+             <a href="#"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
+             <a href="#"><span class="material-icons-outlined">logout</span></a>
         </nav>
     </header>
-
     <main class="bookings-page-content">
-        
         <div class="bookings-header">
             <h2 class="page-title">My bookings</h2>
-            <a href="reservation" class="fab desktop-fab">
+            <a href="/reservation" class="fab desktop-fab">
                 <span class="material-icons-outlined">add</span>
             </a>
         </div>
-
         <div class="table-container">
             <table>
                 <thead>
@@ -70,7 +62,6 @@
                             </button>
                         </td>
                     </tr>
-                    
                     <tr>
                         <td data-label="Select"><input type="checkbox"></td>
                         <td data-label="Room">Pokój Cichej Nauki (STUDYROOM1)</td>
@@ -84,7 +75,6 @@
                             </button>
                         </td>
                     </tr>
-                    
                     <tr>
                         <td data-label="Select"><input type="checkbox"></td>
                         <td data-label="Room">Pokój ROOM4</td>
@@ -101,11 +91,9 @@
                 </tbody>
             </table>
         </div>
-
-        <a href="reservation" class="fab mobile-fab">
+        <a href="/reservation" class="fab mobile-fab">
             <span class="material-icons-outlined">add</span>
         </a>
     </main>
-
 </body>
 </html>

@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPOT - Dodaj Rezerwację</title>
-
     <link rel="stylesheet" type="text/css" href="public/styles/main.css">
     <link rel="stylesheet" type="text/css" href="public/styles/reservation.css">
-
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,38 +14,25 @@
 <body>
     
     <header class="main-header">
-        <div class="header-logo">
-            <h1 class="logo">SP<span class="logo-globe"></span>T</h1>
-        </div>
         <nav class="main-nav">
-            <ul>
-                <li><a href="#" class="nav-link">About</a></li>
-                <li><a href="#" class="nav-link">My bookings</a></li>
-                <li><a href="#" class="nav-link">My profile</a></li>
-                <li><a href="#" class="nav-link">Log out</a></li>
-            </ul>
+             <ul>
+                 <li><a href="/about" class="nav-link">About</a></li>
+                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
+                 <li><a href="#" class="nav-link">My profile</a></li>
+                 <li><a href="/login" class="nav-link">Log out</a></li>
+             </ul>
         </nav>
-        
         <nav class="mobile-nav">
-            <a href="#">
-                <span class="material-icons-outlined">person_outline</span>
-            </a>
-            <a href="#">
-                <span class="material-icons-outlined">description</span>
-            </a>
-            <a href="#">
-                <span class="material-icons-outlined">logout</span>
-            </a>
+             <a href="#"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
+             <a href="/login"><span class="material-icons-outlined">logout</span></a>
         </nav>
     </header>
-
     <main class="reservation-page-content">
         <h2 class="page-title">Add a reservation</h2>
-
-        <form class="reservation-form" action="reservation" method="POST">
-            <div class="content-grid">
-                
-                <div class="form-top-group">
+        <div class="content-grid">
+            <div class="form-wrapper">
+                <form class="reservation-form" action="/reservation" method="POST">
                     <div class="form-group">
                         <label for="date">Enter date</label>
                         <div class="input-with-icon">
@@ -62,28 +47,7 @@
                             <span class="material-icons-outlined input-icon">schedule</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="map-wrapper">
-                    <h3 class="subsection-title desktop-only">Choose available room</h3>
-                    
-                    <div id="map-container">
-                        <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-                            
-                            <rect id="ROOM1" class="room available" data-room-name="Pokój ROOM1" width="127.1" height="44.5" x="90.7" y="151.5" />
-                            <rect id="AULA1" class="room available" data-room-name="Aula A1" width="168.2" height="98.3" x="234.3" y="100.6" />
-                            <rect id="ROOM2" class="room available" data-room-name="Pokój ROOM2" width="73.7" height="53.0" x="92.9" y="212.8" />
-                            <rect id="ROOM3" class="room unavailable" data-room-name="Pokój ROOM3 (Zajęty)" width="154.4" height="47.6" x="416.4" y="146.0" />
-                            <rect id="ROOM4" class="room available" data-room-name="Pokój ROOM4" width="63.7" height="142.1" x="102.9" y="377.3" />
-                            <rect id="ROOM5" class="room available" data-room-name="Pokój ROOM5" width="184.4" height="65.3" x="179.8" y="451.0" />
-                            <rect id="STUDYROOM1" class="room available" data-room-name="Pokój Cichej Nauki" width="58.4" height="72.2" x="307.3" y="370.3" />
-                            <rect id="AULA2" class="room unavailable" data-room-name="Aula A2 (Zajęta)" width="196.7" height="154.4" x="448.7" y="363.4" />
-
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="form-bottom-group">
+                    <div class="form-spacer"></div>
                     <div class="form-group">
                         <label for="room-id">Room</label>
                         <div class="input-with-icon">
@@ -91,43 +55,39 @@
                         </div>
                     </div>
                     <button type="submit" class="submit-btn">Submit</button>
-                </div>
-
+                </form>
             </div>
-        </form>
+            <div class="map-wrapper">
+                <h3 class="subsection-title desktop-only">Choose available room</h3>
+                <div id="map-container">
+                    <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                        <rect id="ROOM1" class="room available" data-room-name="Pokój ROOM1" width="127.1" height="44.5" x="90.7" y="151.5" />
+                        <rect id="AULA1" class="room available" data-room-name="Aula A1" width="168.2" height="98.3" x="234.3" y="100.6" />
+                        <rect id="ROOM2" class="room available" data-room-name="Pokój ROOM2" width="73.7" height="53.0" x="92.9" y="212.8" />
+                        <rect id="ROOM3" class="room unavailable" data-room-name="Pokój ROOM3 (Zajęty)" width="154.4" height="47.6" x="416.4" y="146.0" />
+                        <rect id="ROOM4" class="room available" data-room-name="Pokój ROOM4" width="63.7" height="142.1" x="102.9" y="377.3" />
+                        <rect id="ROOM5" class="room available" data-room-name="Pokój ROOM5" width="184.4" height="65.3" x="179.8" y="451.0" />
+                        <rect id="STUDYROOM1" class="room available" data-room-name="Pokój Cichej Nauki" width="58.4" height="72.2" x="307.3" y="370.3" />
+                        <rect id="AULA2" class="room unavailable" data-room-name="Aula A2 (Zajęta)" width="196.7" height="154.4" x="448.7" y="363.4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
     </main>
-
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    
-    const svgMap = document.getElementById('room-layer');
-    const roomInput = document.getElementById('room-id'); // To pole jest teraz mniej ważne
-
-    svgMap.addEventListener("click", (e) => {
-        const room = e.target.closest("rect.room"); 
-        if (!room) return;
-
-        if (room.classList.contains('unavailable')) {
-            alert(`Pokój ${room.id} (${room.dataset.roomName || room.id}) jest zajęty.`);
-            return;
-        }
-        
-        const roomId = room.id;
-        
-        // === ZMIANA TUTAJ ===
-        // Zamiast wypełniać pole, przechodzimy na stronę /room/{roomId}
-        window.location.href = `/room/${roomId}`; 
-        
-        /* // Stary kod (można usunąć):
-        const roomName = room.dataset.roomName || roomId;
-        roomInput.value = `${roomId} - ${roomName}`;
-        const allRooms = svgMap.querySelectorAll('rect.room');
-        allRooms.forEach(r => r.classList.remove('selected'));
-        room.classList.add('selected');
-        alert(`Wybrano pokój: ${roomName}`); 
-        */
-    });
-});
-</script>
+     document.addEventListener('DOMContentLoaded', () => {
+         const svgMap = document.getElementById('room-layer');
+         svgMap.addEventListener("click", (e) => {
+             const room = e.target.closest("rect.room");
+             if (!room) return;
+             if (room.classList.contains('unavailable')) {
+                 alert(`Pokój ${room.id} (${room.dataset.roomName || room.id}) jest zajęty.`);
+                 return;
+             }
+             const roomId = room.id;
+             window.location.href = `/room/${roomId}`;
+         });
+     });
+     </script>
 </body>
 </html>

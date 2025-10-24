@@ -8,10 +8,10 @@
 /* --- 2. Zmienne (Paleta Kolorów) --- */
 :root {
     /* Kolory Główne */
-    --primary-blue: #3b82f6;
+    --primary-blue: #1622a5;
     --light-blue: #cbe1ff;
-    --dark-blue-text: #2563eb;
-    --dark-blue-header: #1a237e;
+    --dark-blue-text: #1622a5;
+    --dark-blue-header: #1622a5; /* Kolor nagłówka */
 
     /* Motyw Jasny (Domyślny) */
     --text-dark: #1f2937;
@@ -19,18 +19,11 @@
     --background-white: #ffffff;
     --background-gray-light: #f9fafb;
     --border-gray: #d1d5db;
-
-    /* Motyw Ciemny */
-    --background-dark: #121212;
-    --input-bg-dark: #2a2a2a;
-    --input-border-dark: #4a4a4a;
-    --text-on-dark: #e0e0e0;
 }
 
 /* --- 3. Style Domyślne (body, html) --- */
 body, html {
     height: 100%;
-    /* Domyślny font i motyw (jasny) */
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     background-color: var(--background-white);
     color: var(--text-dark);
@@ -40,51 +33,31 @@ body, html {
 
 /* --- 4. Globalne Ustawienia Fontów --- */
 /* Ustawiamy Poppins dla kluczowych, powtarzalnych elementów */
-.logo,
 .page-title,
 .section-title,
 .main-nav a,
 .form-group label,
 .toggle-btn,
 .login-btn,
-.submit-btn {
+.submit-btn,
+.choose-room-button,
+.fab,
+.kebab-menu,
+th /* Dodano nagłówki tabel */
+{
     font-family: 'Poppins', sans-serif;
 }
 
-/* --- 5. Komponent: Logo (Style Bazowe) --- */
-.logo {
-    display: flex;
-    align-items: center;
-    font-weight: 800;
-}
-
-.logo-globe {
-    display: inline-block;
-    border-radius: 50%;
-    background-color: var(--primary-blue);
-}
-
-/* --- 6. Komponent: Nagłówek/Menu (Header) --- */
+/* --- 5. Komponent: Nagłówek/Menu (Header) --- */
 .main-header {
     background-color: var(--dark-blue-header);
     color: white;
-    padding: 1rem 2rem;
+    padding: 0 2rem; /* Usunięto padding góra/dół, wysokość ustalona przez align-items */
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* === KLUCZOWA ZMIANA: Wyrównaj wszystko do prawej === */
     align-items: center;
+    min-height: 60px; /* Minimalna wysokość nagłówka */
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-/* Style logo specyficzne dla nagłówka */
-.header-logo .logo {
-    font-size: 2.2rem;
-    color: white;
-}
-
-.header-logo .logo-globe {
-    width: 1.5rem;
-    height: 1.5rem;
-    margin: 0 0.4rem;
 }
 
 /* Nawigacja w nagłówku */
@@ -100,82 +73,34 @@ body, html {
     font-weight: 500;
     font-size: 1rem;
     transition: color 0.3s ease;
+    padding: 0.5rem 0; /* Dodano padding pionowy dla lepszego klikania */
+    display: inline-block; /* Aby padding zadziałał */
 }
 
 .main-nav a:hover {
     color: var(--primary-blue);
 }
 
-/* --- 7. Responsywność Globalnych Komponentów --- */
-@media (max-width: 768px) {
-    /* Responsywność nagłówka */
-    .main-header {
-        flex-direction: column;
-        padding: 1rem;
-    }
-
-    .main-nav ul {
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        width: 100%;
-        text-align: center;
-    }
-
-    .main-nav li {
-        width: 100%;
-    }
-
-    .main-nav a {
-        display: block;
-        padding: 0.5rem;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
-    }
-}
-
-/* --- 8. Style Typografii (dodaj na końcu main.css) --- */
-
-/* Główny tytuł strony (np. "Add a reservation") */
-.page-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2rem; /* 32px */
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-}
-
-/* Mniejszy tytuł sekcji (np. "Choose available room") */
-.subsection-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.25rem; /* 20px */
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-}
-
-/* --- 9. Responsywność Globalnego Nagłówka (Dodatek) --- */
-
+/* --- 6. Nawigacja Mobilna --- */
 /* Domyślnie ukrywamy nawigację mobilną */
 .mobile-nav {
     display: none;
 }
 
+/* --- 7. Responsywność Globalnych Komponentów --- */
 @media (max-width: 768px) {
-    /* Nadpisujemy domyślne style mobilne dla nagłówka */
+    /* Nagłówek mobilny */
     .main-header {
-        flex-direction: row; /* Zmieniamy z column na row */
-        justify-content: space-between;
+        justify-content: center; /* Na mobilce ikony są wyśrodkowane */
         padding: 0 1rem;
         height: 60px; /* Stała wysokość */
     }
-    
-    /* Ukrywamy logo i nawigację desktopową */
-    .header-logo,
+
+    /* Ukrywamy nawigację desktopową */
     .main-nav {
         display: none;
     }
-    
+
     /* Pokazujemy nawigację mobilną */
     .mobile-nav {
         display: flex;
@@ -183,14 +108,44 @@ body, html {
         align-items: center;
         width: 100%;
     }
-    
+
     .mobile-nav a {
         color: white;
         text-decoration: none;
         padding: 0.5rem;
     }
-    
+
     .mobile-nav .material-icons-outlined {
-        font-size: 28px; /* Rozmiar ikon */
+        font-size: 28px;
     }
 }
+
+/* --- 8. Style Typografii --- */
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.subsection-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+/* --- 9. Pigułki (do main.css) --- */
+.pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif; /* Pigułki używają Roboto */
+}
+.pill-blue { background-color: var(--light-blue); color: var(--dark-blue-text); }
+.pill-green { background-color: #d1fae5; color: #067647; }
+.pill-orange { background-color: #ffedd5; color: #b45309; }
+.pill-red { background-color: #fee2e2; color: #b91c1c; }
+.pill-gray { background-color: #f3f4f6; color: #4b5563; }

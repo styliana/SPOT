@@ -4,42 +4,34 @@ require_once 'AppController.php';
 
 class RoomController extends AppController {
 
-    // Metoda będzie wywołana dla URL typu /room/{id}
     public function room(string $roomId) {
         
-        // W przyszłości: Pobierz dane o pokoju z bazy
-        // $roomDetails = $this->roomRepository->getRoomById($roomId);
-        
-        // === PRZYKŁADOWE DANE (zastąp je danymi z bazy) ===
-        $roomDetails = null;
-        if ($roomId === 'CU001') {
-             $roomDetails = [
-                'id' => 'CU001',
-                'name' => 'Room CU001', // Możesz dać ładniejszą nazwę, np. 'Sala Rektorska'
-                'workspaces' => 25,
-                'type' => 'Lecture room',
-                'description' => 'Interactive board, broken door' 
-             ];
-        } elseif ($roomId === 'AULA1') {
-             $roomDetails = [
-                'id' => 'AULA1',
-                'name' => 'Aula A1',
-                'workspaces' => 150,
-                'type' => 'Auditorium',
-                'description' => 'Projector, sound system'
-             ];
-        }
-        // === KONIEC PRZYKŁADOWYCH DANYCH ===
+        // === ZAKTUALIZOWANE DANE PRZYKŁADOWE ===
+        // Dodaj tutaj dane dla WSZYSTKICH pokoi z Twojego SVG
+        $allRoomsData = [
+            'ROOM1' => ['id' => 'ROOM1', 'name' => 'Pokój ROOM1', 'workspaces' => 15, 'type' => 'Biuro', 'description' => 'Standardowe wyposażenie biurowe.'],
+            'AULA1' => ['id' => 'AULA1', 'name' => 'Aula A1', 'workspaces' => 120, 'type' => 'Aula wykładowa', 'description' => 'Projektor, nagłośnienie.'],
+            'ROOM2' => ['id' => 'ROOM2', 'name' => 'Pokój ROOM2', 'workspaces' => 8, 'type' => 'Sala seminaryjna', 'description' => 'Mała sala na spotkania.'],
+            'ROOM3' => ['id' => 'ROOM3', 'name' => 'Pokój ROOM3', 'workspaces' => 20, 'type' => 'Laboratorium', 'description' => 'Wyposażenie laboratoryjne.'], // Ten jest 'unavailable', ale nadal może mieć stronę info
+            'ROOM4' => ['id' => 'ROOM4', 'name' => 'Pokój ROOM4', 'workspaces' => 10, 'type' => 'Biuro', 'description' => 'Pokój dla pracowników.'],
+            'ROOM5' => ['id' => 'ROOM5', 'name' => 'Pokój ROOM5', 'workspaces' => 30, 'type' => 'Sala komputerowa', 'description' => 'Stanowiska komputerowe.'],
+            'STUDYROOM1' => ['id' => 'STUDYROOM1', 'name' => 'Pokój Cichej Nauki', 'workspaces' => 12, 'type' => 'Czytelnia', 'description' => 'Miejsce do nauki indywidualnej.'],
+            'AULA2' => ['id' => 'AULA2', 'name' => 'Aula A2', 'workspaces' => 200, 'type' => 'Aula wykładowa', 'description' => 'Duża aula na parterze.'], // Ten też jest 'unavailable'
+            // Dodaj resztę pokoi, jeśli masz więcej w SVG...
+        ];
 
-        // Jeśli nie znaleziono pokoju, możesz zwrócić 404
+        // Sprawdzamy, czy mamy dane dla żądanego ID
+        $roomDetails = $allRoomsData[$roomId] ?? null; 
+        // === KONIEC AKTUALIZACJI DANYCH ===
+
+
         if (!$roomDetails) {
-            // Możesz stworzyć dedykowany widok 404 lub przekierować
-            // Na razie prosty komunikat:
-             die("Room with ID $roomId not found!"); 
-             // Lepsza opcja: return $this->render('404');
+             // Zamiast die(), zwracamy widok 404
+             http_response_code(404); 
+             return $this->render('404');
+            // die("Room with ID $roomId not found!"); // Stara wersja
         }
 
-        // Przekaż dane do widoku i go wyrenderuj
         return $this->render('room_info', ['room' => $roomDetails]);
     }
 }

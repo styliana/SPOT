@@ -1,4 +1,4 @@
-/* --- 1. Ustawienia Jasnego Motywu dla Strony Rezerwacji --- */
+/* --- 1. Ustawienia Jasnego Motywu --- */
 body {
     background-color: var(--background-gray-light);
 }
@@ -16,54 +16,35 @@ body {
     color: var(--text-dark);
 }
 
-/* --- 3. Formularz i Grid (Desktop) --- */
-.reservation-form {
-    width: 100%;
-}
-
+/* --- 3. Grid (Desktop) --- */
 .content-grid {
     display: grid;
-    /* Kolumna formularza (min 350px, maks 1fr) i kolumna mapy (2fr) */
+    /* Kolumna formularza i kolumna mapy */
     grid-template-columns: minmax(350px, 1fr) 2fr;
     gap: 2rem;
     align-items: start;
-    
-    /* Definiujemy obszary siatki */
+    /* Definiujemy tylko jeden obszar dla formularza */
     grid-template-areas:
-        "form-top    map"
-        "form-bottom map";
+        "form map";
 }
 
-/* Grupa górna (data, czas) */
-.form-top-group {
-    grid-area: form-top; /* Umieść w obszarze 'form-top' */
+/* === ZMIANA TUTAJ: Jeden wrapper === */
+.form-wrapper {
+    grid-area: form; /* Cały formularz jest w obszarze 'form' */
     background-color: var(--background-white);
     padding: 2rem 2.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
+    /* Flexbox do ułożenia elementów formularza */
+    display: flex; 
     flex-direction: column;
-    gap: 1.5rem;
-}
-
-/* Grupa dolna (pokój, submit) */
-.form-bottom-group {
-    grid-area: form-bottom; /* Umieść w obszarze 'form-bottom' */
-    background-color: var(--background-white);
-    padding: 2rem 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 2rem; /* Odstęp między górną a dolną częścią formularza */
 }
 
 /* Kolumna prawa: Mapa */
 .map-wrapper {
-    grid-area: map; /* Umieść w obszarze 'map', zajmie obie komórki w pionie */
+    grid-area: map;
     min-width: 400px;
-    align-self: start;
+    align-self: start; /* Mapa trzyma się góry */
 }
 
 .subsection-title {
@@ -74,6 +55,13 @@ body {
 }
 
 /* --- 4. Elementy Formularza --- */
+.reservation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Odstęp między .form-group */
+    flex-grow: 1; /* Formularz wypełnia .form-wrapper */
+}
+
 .form-group {
     text-align: left;
 }
@@ -84,6 +72,12 @@ body {
     font-weight: 500;
     color: var(--text-dark);
     margin-bottom: 0.6rem;
+}
+
+/* Pusta przestrzeń między grupami pól */
+.form-spacer {
+    flex-grow: 1; /* Wypycha pole Room i przycisk na dół */
+    min-height: 2rem; /* Minimalny odstęp */
 }
 
 .input-with-icon {
@@ -136,7 +130,7 @@ body {
     border-radius: 2rem;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
-    margin-top: 1rem;
+    margin-top: 1rem; /* Zmniejszony margines górny */
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
@@ -145,16 +139,16 @@ body {
 }
 
 
-/* --- 5. Style Mapy Interaktywnej --- */
+/* --- 5. Style Mapy Interaktywnej (bez zmian) --- */
 #map-container {
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 3; 
-    /* background-image: url('../images/twoja-mapa.png'); */ /* Tło wyłączone */
+    /* background-image: url('../images/twoja-mapa.png'); */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border: 2px solid var(--primary-blue); /* Zmieniona ramka na niebieską */
+    border: 2px solid var(--primary-blue);
     border-radius: 8px;
     overflow: hidden;
 }
@@ -167,75 +161,82 @@ body {
     height: 100%;
 }
 
-.room {
-    fill: rgba(0, 0, 0, 0);
-    stroke: rgba(0,0,0,0.5);
-    stroke-width: 1px;
-    cursor: pointer;
-    transition: fill 0.2s ease-in-out;
-}
-.room.available:hover {
-    fill: rgba(0, 255, 0, 0.4);
-}
-.room.unavailable {
-    fill: rgba(255, 0, 0, 0.5);
-    cursor: not-allowed;
-}
-.room.selected {
-    fill: rgba(59, 130, 246, 0.6);
-    stroke: var(--primary-blue);
-    stroke-width: 2px;
-}
+.room { fill: rgba(0, 0, 0, 0); stroke: rgba(0,0,0,0.5); stroke-width: 1px; cursor: pointer; transition: fill 0.2s ease-in-out; }
+.room.available:hover { fill: rgba(0, 255, 0, 0.4); }
+.room.unavailable { fill: rgba(255, 0, 0, 0.5); cursor: not-allowed; }
+.room.selected { fill: rgba(59, 130, 246, 0.6); stroke: var(--primary-blue); stroke-width: 2px; }
 
 
 /* --- 6. RESPONSIVE (Mobile) --- */
 @media (max-width: 800px) {
     
-    body {
-        background-color: var(--background-white);
-    }
+    body { background-color: var(--background-white); }
     
-    .reservation-page-content {
-        padding: 1.5rem;
-    }
+    .reservation-page-content { padding: 1.5rem; }
     
-    .page-title {
-        font-size: 1.75rem;
-        text-align: center;
-    }
+    .page-title { font-size: 1.75rem; text-align: center; }
     
     .content-grid {
-        /* Na mobilce wyłączamy grid i wracamy do układu blokowego */
-        display: block;
+        display: block; /* Wyłączamy grid */
     }
     
-    .form-top-group,
-    .form-bottom-group {
+    .form-wrapper {
         padding: 0;
         box-shadow: none;
         width: 100%;
-        margin-bottom: 0;
-        gap: 1.25rem;
-        /* Resetujemy margines dodany na desktopie */
-        margin-top: 0; 
+        /* Musimy zachować układ kolumnowy dla flexboxa */
+        display: flex;
+        flex-direction: column; 
     }
+
+    .reservation-form {
+        /* Formularz nadal musi zawierać wszystko */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* === ZMIANA TUTAJ: Oddzielamy elementy formularza === */
+    /* Wszystkie grupy pól mają teraz margines dolny */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    /* Usuwamy spacer, bo nie jest potrzebny */
+    .form-spacer { display: none; }
+
 
     .map-wrapper {
         width: 100%;
-        margin: 1.5rem 0;
+        margin: 1.5rem 0; /* Mapa nadal jest pośrodku */
+        /* Kolejność w HTML decyduje, ale dla pewności można dodać order */
+        order: 2; /* Ustawia mapę jako drugi element w kolejności wizualnej */
     }
 
-    .desktop-only {
-        display: none;
+    /* === ZMIANA TUTAJ: Grupowanie dla kolejności === */
+    /* Musimy znowu zgrupować elementy formularza, aby 'order' zadziałał */
+    .form-wrapper .form-group:nth-child(-n+2) { /* Pierwsze dwa (date, time) */
+        order: 1; 
     }
+     .form-wrapper .form-group:nth-child(n+3) { /* Reszta (room, przycisk) */
+         order: 3;
+    }
+    .form-wrapper .submit-btn { /* Przycisk też musi być w trzeciej grupie */
+         order: 3;
+    }
+
+    .desktop-only { display: none; }
     
     #map-container {
         aspect-ratio: 1 / 1;
         border: 1px solid #eee;
     }
 
-    .form-bottom-group {
-        padding-top: 1.5rem;
-        box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
-    }
+    /* Dolny cień/ramka dla grupy z przyciskiem */
+     .form-wrapper .form-group:last-of-type,
+     .form-wrapper .submit-btn {
+         /* Symulujemy dolną ramkę/cień, ale bez dodatkowego diva */
+         position: relative; 
+         /* Można dodać cień, jeśli chcesz */
+         /* box-shadow: 0 -4px 12px rgba(0,0,0,0.03); */
+         padding-top: 0.5rem; /* Mały odstęp od mapy */
+     }
 }
