@@ -9,7 +9,7 @@
 :root {
     /* Kolory Główne */
     --primary-blue: #1622a5;
-    --light-blue: #cbe1ff;
+    --light-blue: #57B1E1; /* ew. ebe1ff */
     --dark-blue-text: #1622a5;
     --dark-blue-header: #1622a5; /* Kolor nagłówka */
 
@@ -32,7 +32,6 @@ body, html {
 }
 
 /* --- 4. Globalne Ustawienia Fontów --- */
-/* Ustawiamy Poppins dla kluczowych, powtarzalnych elementów */
 .page-title,
 .section-title,
 .main-nav a,
@@ -43,7 +42,7 @@ body, html {
 .choose-room-button,
 .fab,
 .kebab-menu,
-th /* Dodano nagłówki tabel */
+th
 {
     font-family: 'Poppins', sans-serif;
 }
@@ -52,18 +51,22 @@ th /* Dodano nagłówki tabel */
 .main-header {
     background-color: var(--dark-blue-header);
     color: white;
-    padding: 0 2rem; /* Usunięto padding góra/dół, wysokość ustalona przez align-items */
+    padding: 0 2rem;
     display: flex;
-    justify-content: flex-end; /* === KLUCZOWA ZMIANA: Wyrównaj wszystko do prawej === */
+    /* Usunięto justify-content, margines załatwi sprawę */
     align-items: center;
-    min-height: 60px; /* Minimalna wysokość nagłówka */
+    min-height: 60px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 /* Nawigacja w nagłówku */
+.main-nav {
+    margin-left: auto; /* === KLUCZOWA ZMIANA: Wypycha nawigację na prawo === */
+}
+
 .main-nav ul {
     list-style: none;
-    display: flex;
+    display: flex; /* Domyślnie flex, zadziała na desktopie */
     gap: 2rem;
 }
 
@@ -73,18 +76,17 @@ th /* Dodano nagłówki tabel */
     font-weight: 500;
     font-size: 1rem;
     transition: color 0.3s ease;
-    padding: 0.5rem 0; /* Dodano padding pionowy dla lepszego klikania */
-    display: inline-block; /* Aby padding zadziałał */
+    padding: 0.5rem 0;
+    display: inline-block;
 }
 
 .main-nav a:hover {
-    color: var(--primary-blue);
+    color: var(--light-blue);
 }
 
 /* --- 6. Nawigacja Mobilna --- */
-/* Domyślnie ukrywamy nawigację mobilną */
 .mobile-nav {
-    display: none;
+    display: none; /* Domyślnie ukryta */
 }
 
 /* --- 7. Responsywność Globalnych Komponentów --- */
@@ -103,7 +105,7 @@ th /* Dodano nagłówki tabel */
 
     /* Pokazujemy nawigację mobilną */
     .mobile-nav {
-        display: flex;
+        display: flex; /* Pokazujemy flex */
         justify-content: space-around;
         align-items: center;
         width: 100%;
@@ -142,7 +144,7 @@ th /* Dodano nagłówki tabel */
     border-radius: 12px;
     font-size: 0.8rem;
     font-weight: 600;
-    font-family: 'Roboto', sans-serif; /* Pigułki używają Roboto */
+    font-family: 'Roboto', sans-serif;
 }
 .pill-blue { background-color: var(--light-blue); color: var(--dark-blue-text); }
 .pill-green { background-color: #d1fae5; color: #067647; }
