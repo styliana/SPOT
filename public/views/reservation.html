@@ -98,26 +98,36 @@
     </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const svgMap = document.getElementById('room-layer');
-        const roomInput = document.getElementById('room-id');
-        svgMap.addEventListener("click", (e) => {
-            const room = e.target.closest("rect.room"); 
-            if (!room) return;
-            if (room.classList.contains('unavailable')) {
-                alert(`Pokój ${room.id} (${room.dataset.roomName}) jest zajęty.`);
-                return;
-            }
-            const roomId = room.id;
-            const roomName = room.dataset.roomName || roomId;
-            roomInput.value = `${roomId} - ${roomName}`;
-            
-            // Logika do podświetlania
-            const allRooms = svgMap.querySelectorAll('rect.room');
-            allRooms.forEach(r => r.classList.remove('selected'));
-            room.classList.add('selected');
-        });
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const svgMap = document.getElementById('room-layer');
+    const roomInput = document.getElementById('room-id'); // To pole jest teraz mniej ważne
+
+    svgMap.addEventListener("click", (e) => {
+        const room = e.target.closest("rect.room"); 
+        if (!room) return;
+
+        if (room.classList.contains('unavailable')) {
+            alert(`Pokój ${room.id} (${room.dataset.roomName || room.id}) jest zajęty.`);
+            return;
+        }
+        
+        const roomId = room.id;
+        
+        // === ZMIANA TUTAJ ===
+        // Zamiast wypełniać pole, przechodzimy na stronę /room/{roomId}
+        window.location.href = `/room/${roomId}`; 
+        
+        /* // Stary kod (można usunąć):
+        const roomName = room.dataset.roomName || roomId;
+        roomInput.value = `${roomId} - ${roomName}`;
+        const allRooms = svgMap.querySelectorAll('rect.room');
+        allRooms.forEach(r => r.classList.remove('selected'));
+        room.classList.add('selected');
+        alert(`Wybrano pokój: ${roomName}`); 
+        */
     });
-    </script>
+});
+</script>
 </body>
 </html>
