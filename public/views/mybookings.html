@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPOT - My Bookings</title>
+    <link rel="stylesheet" type="text/css" href="public/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="public/styles/mybookings.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="main-nav">
+             <ul>
+                 <li><a href="/about" class="nav-link">About</a></li>
+                 <li><a href="/reservation" class="nav-link">Add reservation</a></li>
+                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
+                 <li><a href="/login" class="nav-link">Log out</a></li>
+             </ul>
+        </nav>
+        <nav class="mobile-nav">
+             <a href="#"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/reservation"><span class="material-icons-outlined">add</span></a>
+             <a href="/login"><span class="material-icons-outlined">logout</span></a>
+        </nav>
+    </header>
+    <main class="bookings-page-content">
+        <h2 class="page-title">My Bookings</h2>
+        <div class="bookings-list">
+            <!-- Sample booking items - will be replaced with PHP-generated content -->
+            <div class="booking-item">
+                <div class="booking-header">
+                    <h3>Room 301</h3>
+                    <span class="booking-status confirmed">Confirmed</span>
+                </div>
+                <div class="booking-details">
+                    <p><span class="material-icons-outlined">calendar_month</span> 2025-10-29</p>
+                    <p><span class="material-icons-outlined">schedule</span> 14:00 - 16:00</p>
+                </div>
+                <div class="booking-actions">
+                    <button class="btn-cancel">Cancel Booking</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

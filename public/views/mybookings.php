@@ -18,12 +18,12 @@
              <ul>
                  <li><a href="/about" class="nav-link">About</a></li>
                  <li><a href="/mybookings" class="nav-link">My bookings</a></li>
-                 <li><a href="#" class="nav-link">My profile</a></li>
+                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
                  <li><a href="/login" class="nav-link">Log out</a></li>
              </ul>
         </nav>
         <nav class="mobile-nav">
-             <a href="#"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
              <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
              <a href="/login"><span class="material-icons-outlined">logout</span></a>
         </nav>

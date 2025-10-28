@@ -1,0 +1,162 @@
+/* --- 1. Układ Strony --- */
+body {
+    background-color: var(--background-gray-light); /* Jasnoszare tło */
+}
+
+.profile-page-content {
+    width: 100%;
+    max-width: 700px; /* Szerokość optymalna dla profilu */
+    margin: 4rem auto; /* Centrowanie i margines od góry/dołu */
+    padding: 2rem;
+}
+
+.page-title {
+    text-align: center; /* Wyśrodkowanie tytułu */
+    margin-bottom: 2.5rem;
+}
+
+/* --- 2. Karta Profilu --- */
+.profile-card {
+    background-color: var(--background-white);
+    padding: 2.5rem 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    text-align: center; /* Wyśrodkowanie awatara, imienia, emaila */
+}
+
+/* --- 3. Awatar --- */
+.profile-avatar {
+    margin-bottom: 1rem;
+    display: inline-block; /* Aby marginesy działały poprawnie */
+    position: relative;
+}
+.avatar-placeholder {
+    font-size: 80px; /* Duża ikona */
+    color: var(--text-light);
+    height: 80px; /* Wymuszenie wysokości dla spójności */
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.avatar-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-blue); /* Niebieska ramka wokół awatara */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- 4. Dane Użytkownika --- */
+.user-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.user-email {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    word-break: break-all; /* Zabezpieczenie przed długim emailem */
+}
+
+/* --- 5. Separator --- */
+.profile-separator {
+    border: none;
+    height: 1px;
+    background-color: #eee; /* Jasnoszara linia */
+    margin: 2rem 0; /* Odstęp od góry i dołu */
+}
+
+/* --- 6. Szczegóły Profilu --- */
+.profile-details {
+    text-align: left; /* Wyrównanie szczegółów do lewej */
+    margin-bottom: 2.5rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between; /* Etykieta po lewej, wartość po prawej */
+    align-items: center; /* Wyrównanie w pionie */
+    padding: 0.85rem 0; /* Zwiększony padding */
+    border-bottom: 1px dashed #f0f0f0; /* Subtelny separator */
+}
+.detail-item:last-child {
+    border-bottom: none; /* Ostatni bez separatora */
+}
+
+.detail-label {
+    font-weight: 500;
+    color: var(--text-light);
+    margin-right: 1rem;
+    font-size: 0.9rem; /* Lekko mniejsza etykieta */
+}
+
+.detail-value {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 1rem;
+    text-align: right; /* Wyrównanie wartości do prawej */
+}
+
+/* --- 7. Przycisk Edycji --- */
+.edit-profile-button {
+    display: inline-flex; /* Użycie flex dla ikony i tekstu */
+    align-items: center;
+    gap: 0.5rem; /* Odstęp między ikoną a tekstem */
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary-blue);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    font-family: 'Poppins', sans-serif;
+}
+.edit-profile-button .material-icons-outlined {
+    font-size: 1.25rem; /* Rozmiar ikony edycji */
+}
+
+.edit-profile-button:hover {
+    background-color: var(--dark-blue-text);
+}
+
+/* --- 8. Responsywność --- */
+@media (max-width: 768px) {
+    .profile-page-content {
+        margin: 2rem auto;
+        padding: 1rem;
+    }
+
+    .profile-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .user-name {
+        font-size: 1.5rem;
+    }
+
+    .detail-item {
+        /* Na mobilce etykieta nad wartością */
+        flex-direction: column; 
+        align-items: flex-start; /* Wyrównanie do lewej */
+        padding: 0.6rem 0;
+    }
+    
+    .detail-label {
+        font-size: 0.8rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .detail-value {
+        font-size: 0.95rem;
+        text-align: left; /* Wyrównanie do lewej */
+    }
+}

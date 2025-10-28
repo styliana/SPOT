@@ -5,7 +5,9 @@ require_once 'src/controllers/ReservationController.php';
 require_once 'src/controllers/BookingsController.php';
 require_once 'src/controllers/RoomController.php';
 require_once 'src/controllers/AboutController.php';
-require_once 'src/controllers/AppController.php'; // WAŻNE: Dodano AppController
+require_once 'src/controllers/ProfileController.php';
+require_once 'src/controllers/AppController.php';
+
 
 class Routing {
 
@@ -25,21 +27,19 @@ class Routing {
     public static function run(string $url) {
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Usuń pierwszy pusty element, jeśli URL zaczynał się od /
         $urlParts = explode('/', $url);
-        // Jeśli URL był pusty lub tylko '/', $action będzie pusty, ustawiamy na 'login'
-        $action = $urlParts[0] ?: 'login';
-        // Zaktualizuj URL po potencjalnym usunięciu pustego elementu (jeśli był tylko /)
+        $action = ($urlParts[0] === '' && isset($urlParts[1])) ? $urlParts[1] : ($urlParts[0] ?: 'login');
         if ($url === '' && $action === 'login') {
             $url = 'login';
             $urlParts = ['login'];
+        } elseif ($urlParts[0] === '' && count($urlParts) > 1) {
+            array_shift($urlParts);
+            $url = implode('/', $urlParts);
         }
-
 
         foreach (self::$routes[$method] as $route => $controllerAction) {
             $routeParts = explode('/', $route);
 
-            // Podstawowe sprawdzenie formatu
             if (strpos($controllerAction, '@') === false) {
                  error_log("Invalid route definition: $controllerAction. Missing '@'.");
                  continue;
@@ -47,7 +47,6 @@ class Routing {
             $controllerName = explode('@', $controllerAction)[0];
             $methodName = explode('@', $controllerAction)[1];
 
-            // Sprawdzanie dopasowania długości
             if (count($urlParts) !== count($routeParts)) {
                 continue;
             }
@@ -55,18 +54,15 @@ class Routing {
             $match = true;
             $params = [];
             for ($i = 0; $i < count($routeParts); $i++) {
-                // Sprawdzenie czy $routeParts[$i] i $urlParts[$i] istnieją
                 if (!isset($routeParts[$i]) || !isset($urlParts[$i])) {
                      $match = false;
                      break;
                 }
 
-                // Sprawdzenie czy to parametr dynamiczny
                 if ($routeParts[$i] !== '' && $routeParts[$i][0] === '{' && $routeParts[$i][strlen($routeParts[$i]) - 1] === '}') {
                     $paramName = trim($routeParts[$i], '{}');
                     $params[$paramName] = $urlParts[$i];
                 } elseif ($routeParts[$i] !== $urlParts[$i]) {
-                    // Statyczna część się nie zgadza
                     $match = false;
                     break;
                 }
@@ -84,26 +80,28 @@ class Routing {
                      continue;
                 }
 
-                // Przekazanie parametrów jako argumenty funkcji
-                // Używamy array_values, aby upewnić się, że argumenty są indeksowane numerycznie
+                // Wywołanie metody kontrolera z parametrami
                 return call_user_func_array([$object, $methodName], array_values($params));
             }
         }
 
-        // Nie znaleziono trasy, zwracamy 404
-        http_response_code(404);
-        // Upewnij się, że klasa AppController jest dostępna (dzięki require_once na górze)
+
+        // Nie znaleziono trasy, wywołujemy publiczną metodę notFound()
         if (class_exists('AppController')) {
             $controller = new AppController();
-            // Sprawdź, czy metoda render istnieje, zanim ją wywołasz
-            if (method_exists($controller, 'render')) {
-                 return $controller->render('404');
+            // Sprawdzamy, czy istnieje publiczna metoda notFound
+            if (method_exists($controller, 'notFound')) {
+                 return $controller->notFound(); // Wywołujemy publiczną metodę
             } else {
-                 die("404 Not Found (AppController has no render method)");
+                 // Fallback, jeśli metoda notFound z jakiegoś powodu nie istnieje
+                 http_response_code(404);
+                 die("404 Not Found (AppController has no notFound method)");
             }
         } else {
-            // Fallback, jeśli AppController z jakiegoś powodu nie jest załadowany
+             // Fallback, jeśli AppController nie jest załadowany
+             http_response_code(404);
              die("404 Not Found (and AppController is missing)");
         }
+
     }
 }
