@@ -1,96 +1,198 @@
-/* --- 1. Page Layout --- */
+/* --- 1. Układ Strony --- */
 body {
-    background-color: var(--background-gray-light); /* Consistent light background */
+    background-color: var(--background-gray-light); /* Jasnoszare tło dla całej strony */
 }
 
 .about-page-content {
-    width: 100%;
-    max-width: 900px; /* Comfortable reading width */
-    margin: 4rem auto; /* Top/bottom margin and centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Wyśrodkowanie zawartości */
+    padding: 3rem 1.5rem 4rem; /* Zwiększony padding, zwłaszcza na dole */
+    min-height: calc(100vh - 60px); /* Dopasowanie do wysokości ekranu minus nagłówek */
+}
+
+/* --- 2. Sekcja Hero (Tytuł i Tagline) --- */
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
     padding: 2rem;
+    max-width: 900px; /* Nieco szerszy niż reszta treści */
+    width: 100%;
 }
 
-.about-container {
-    background-color: var(--background-white);
-    padding: 3rem 4rem; /* Generous padding */
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
-    text-align: center; /* Center align most text */
-}
-
-/* --- 2. Typography & Content Styling --- */
 .about-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.75rem; /* Larger title */
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--dark-blue-header);
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
 }
 
 .spot-highlight {
-    color: var(--primary-blue); /* Highlight SPOT name */
+    color: var(--primary-blue);
+    position: relative;
 }
 
 .tagline {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: var(--primary-blue);
     font-weight: 500;
-    color: var(--text-light);
-    margin-bottom: 2rem;
+    margin-bottom: 0;
 }
 
-.separator {
-    border: none;
-    height: 2px;
-    background: linear-gradient(to right, transparent, var(--primary-blue), transparent); /* Gradient separator */
-    margin: 2rem auto; /* Spacing */
-    width: 60%;
+/* --- 3. Wrapper na Sekcje z Treścią --- */
+.about-sections-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Zmniejszony odstęp między sekcjami, bo mamy separatory */
+    max-width: 800px;
+    width: 100%;
+    background-color: var(--background-white);
+    padding: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
 }
 
-.about-text {
-    font-size: 1.1rem; /* Slightly larger text for readability */
-    line-height: 1.8;
-    color: var(--text-dark);
-    text-align: justify; /* Justify text for a clean look */
-    margin-bottom: 1.5rem;
+/* --- 4. Poszczególne Sekcje --- */
+.about-section {
+    margin-bottom: 0;
 }
 
-.about-text strong {
-    font-weight: 600; /* Make strong text stand out */
+.section-heading {
+    display: flex; /* WAŻNE: Włączamy flex dla nagłówka */
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-blue-text);
+    margin-bottom: 1.2rem;
+    gap: 0.8rem; /* Odstęp między ikoną a tekstem */
+}
+
+.section-icon {
+    font-size: 2.2rem;
     color: var(--primary-blue);
 }
 
+.about-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+.about-text:last-child {
+     margin-bottom: 0;
+}
+
+.spot-bold {
+    font-weight: 700;
+    color: var(--dark-blue-text);
+}
+
+/* Separator między sekcjami */
+.section-separator {
+    border: none;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 1.5rem 0;
+}
+
+/* --- 5. Sekcja Misji --- */
+.mission-intro {
+     text-align: center;
+     font-style: italic;
+     color: var(--text-light);
+     margin-bottom: 2rem;
+}
+
+.mission-points {
+    display: flex; /* WAŻNE: Włączamy flex dla kontenera punktów misji */
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.mission-item {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+    background-color: var(--background-gray-light);
+    flex: 1 1 180px;
+    min-width: 150px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.mission-item:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+
+.mission-icon {
+    font-size: 2.8rem;
+    color: var(--primary-blue);
+    margin-bottom: 0.8rem;
+}
+
+.mission-item p {
+     font-family: 'Poppins', sans-serif;
+     font-weight: 600;
+     color: var(--text-dark);
+}
+
+/* --- 6. Status Prototypu --- */
 .work-in-progress {
     font-size: 0.9rem;
     color: var(--text-light);
-    margin-top: 3rem;
+    margin-top: 2rem;
+    text-align: center;
     font-style: italic;
 }
 
-/* --- 3. Responsive Adjustments --- */
+/* --- 7. Responsywność --- */
 @media (max-width: 768px) {
     .about-page-content {
-        margin: 2rem auto;
-        padding: 1rem;
+        padding: 2rem 1rem 3rem;
     }
 
-    .about-container {
-        padding: 2rem 1.5rem; /* Less padding on mobile */
+    .hero-section {
+         padding: 1rem 0;
+         margin-bottom: 2rem;
     }
 
     .about-title {
-        font-size: 2rem; /* Smaller title */
+        font-size: 2.2rem;
     }
-
     .tagline {
         font-size: 1rem;
     }
 
-    .separator {
-        width: 80%;
+    .about-sections-wrapper {
+        padding: 2rem 1.5rem;
+    }
+
+    .section-heading {
+        font-size: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    .section-icon {
+        font-size: 2rem;
     }
 
     .about-text {
-        font-size: 1rem;
-        text-align: left; /* Left align on mobile for better reading */
+        text-align: left;
+    }
+
+    .mission-points {
+        flex-direction: column; /* Ikony jedna pod drugą */
+        align-items: center;
+    }
+    .mission-item {
+        width: 100%;
+        max-width: 300px;
     }
 }
