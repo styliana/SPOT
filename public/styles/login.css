@@ -11,11 +11,9 @@
 .left-pane {
     flex: 1; /* Zajmuje połowę */
     position: relative;
-    /* Usunięto display: flex i background-color: #333 */
     overflow: hidden; /* Ważne, aby obrazek nie wychodził poza */
 }
 
-/* === NOWY STYL DLA OBRAZKA === */
 .uni-image {
     display: block; /* Usuwa ewentualne marginesy */
     width: 100%;    /* Szerokość na 100% kontenera */
@@ -23,9 +21,7 @@
     object-fit: cover; /* Wypełnia kontener, przycinając jeśli trzeba */
 }
 
-/* Usunięto: .left-pane .logo-container, .left-pane .logo, .left-pane .logo-globe */
-
-/* Logo na mobilce (bez zmian, ale nieużywane w tym HTML) */
+/* Logo na mobilce (dla register.html) */
 .mobile-logo { display: none; margin-bottom: 2rem; }
 .mobile-logo .logo { color: var(--text-dark); font-size: 3.5rem; text-shadow: none; }
 .mobile-logo .logo-globe { width: 3rem; height: 3rem; }
@@ -57,6 +53,21 @@
     text-align: center; /* Wyśrodkowanie tytułu */
 }
 
+/* === NOWY STYL DLA KOMUNIKATÓW BŁĘDÓW === */
+.message.error {
+    background-color: #fee2e2; /* Czerwone tło */
+    color: #b91c1c; /* Ciemnoczerwony tekst */
+    border: 1px solid #fecaca; /* Czerwona ramka */
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: left; /* Lepsze dla listy błędów */
+}
+/* === KONIEC NOWEGO STYLU === */
+
+
 /* Przełącznik Login/Register */
 .toggle-buttons {
     display: flex;
@@ -76,7 +87,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif; /* Dodano font */
+    font-family: 'Poppins', sans-serif;
 }
 
 .toggle-btn.inactive {
@@ -99,7 +110,7 @@
     font-size: 1rem;
     margin-top: 1.5rem;
     margin-bottom: 2rem;
-    text-align: center; /* Wyśrodkowanie podtytułu */
+    text-align: center;
 }
 
 /* Formularz */
@@ -117,7 +128,7 @@
     font-weight: 500;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
-    font-family: 'Poppins', sans-serif; /* Dodano font */
+    font-family: 'Poppins', sans-serif;
 }
 
 .form-group input[type="text"],
@@ -178,13 +189,11 @@
     margin-right: 0.5rem;
 }
 
-/* Poprawka dla etykiety remember me */
 .remember-me label {
-    margin-bottom: 0; /* Usunięcie dolnego marginesu */
-    font-weight: 400; /* Normalna grubość fontu */
-    font-family: 'Roboto', sans-serif; /* Użycie Roboto */
+    margin-bottom: 0;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
 }
-
 
 .forgot-password {
     color: var(--text-dark);
@@ -208,7 +217,7 @@
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-    font-family: 'Poppins', sans-serif; /* Dodano font */
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-btn:hover {
@@ -219,19 +228,19 @@
 /* --- RESPONSIVE (Mobile) --- */
 @media (max-width: 800px) {
     .login-page {
-        flex-direction: column; /* Układ kolumnowy */
-        height: auto; /* Automatyczna wysokość */
-        min-height: 100vh; /* Minimum 100% wysokości ekranu */
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
     }
 
     .left-pane {
-        display: none; /* Ukrywamy obrazek */
+        display: none;
     }
 
     .right-pane {
-        flex: 1; /* Zajmuje całą dostępną przestrzeń */
+        flex: 1;
         width: 100%;
-        align-items: center; /* Centrujemy formularz pionowo */
+        align-items: center; /* Poprawiono z flex-start na center */
         padding: 2rem 1.5rem;
     }
 
@@ -240,8 +249,10 @@
         align-items: center;
     }
 
-    /* Usunięto .mobile-logo { display: flex; } bo nie ma go w HTML */
-
+    .mobile-logo {
+        display: flex; /* Włączamy logo na mobilce dla strony rejestracji */
+    }
+    
     .page-title {
         text-align: center;
     }
