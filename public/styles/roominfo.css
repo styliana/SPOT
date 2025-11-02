@@ -1,24 +1,24 @@
 /* --- 1. Ustawienia Strony --- */
 body {
-    background-color: var(--background-gray-light); /* Jasnoszare tło */
+    background-color: var(--background-gray-light);
 }
 
 .room-info-page-content {
     width: 100%;
-    max-width: 900px; /* Nieco węższy kontener */
+    max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
-    position: relative; /* Dla przycisku wstecz */
+    position: relative;
 }
 
 /* --- 2. Przycisk Wstecz --- */
 .back-button {
     position: absolute;
-    top: 2.25rem; /* Dopasowanie do page-title */
-    left: 0rem; /* Przy samej krawędzi kontenera */
+    top: 2.25rem;
+    left: 0rem;
     color: var(--text-dark);
     text-decoration: none;
-    display: flex; /* Tylko na desktopie */
+    display: flex;
     align-items: center;
     padding: 0.5rem;
     border-radius: 50%;
@@ -33,7 +33,7 @@ body {
 
 /* --- 3. Tytuł Strony --- */
 .page-title {
-    text-align: center; /* Tytuł na środku */
+    text-align: center;
     margin-bottom: 2.5rem;
 }
 
@@ -42,7 +42,7 @@ body {
     background-color: var(--background-white);
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    overflow: hidden; /* Dla border-radius */
+    overflow: hidden;
     margin-bottom: 2rem;
 }
 
@@ -58,7 +58,6 @@ th, td {
     color: var(--text-dark);
 }
 
-/* Nagłówki */
 th {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -67,52 +66,22 @@ th {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
-/* Komórki danych */
 td {
     font-size: 0.95rem;
 }
-
-/* Ostatni wiersz bez ramki */
 tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Styl dla pigułki (kopiujemy z bookings.css lub main.css) */
-.pill {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-.pill-blue {
-    background-color: var(--light-blue);
-    color: var(--dark-blue-text);
-}
-
+/* Style .pill są teraz w main.css */
 
 /* --- 5. Przycisk "Choose this room" --- */
 .choose-room-button {
-    display: block; /* Przycisk na całą szerokość */
+    display: block;
     width: 100%;
-    max-width: 300px; /* Ograniczamy szerokość */
-    margin: 2rem auto 0; /* Centrowanie i margines */
-    padding: 0.9rem 1.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: white;
-    background-color: var(--primary-blue);
-    border: none;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-    font-family: 'Poppins', sans-serif;
-}
-
-.choose-room-button:hover {
-    background-color: var(--dark-blue-text);
+    max-width: 300px;
+    margin: 2rem auto 0;
+    /* Style bazowe są w main.css */
 }
 
 /* --- 6. RESPONSIVE (Mobile) --- */
@@ -120,55 +89,43 @@ tbody tr:last-child td {
     .room-info-page-content {
         padding: 1.5rem;
     }
-
-    /* Przycisk wstecz */
     .back-button {
-        top: 1rem; /* Wyżej na mobilce */
-        left: 0.5rem; /* Z marginesem */
+        top: 1rem;
+        left: 0.5rem;
     }
-
     .page-title {
         font-size: 1.75rem;
         margin-bottom: 2rem;
-        /* Tekst nieco wcięty, by nie nachodzić na strzałkę */
-        padding-left: 2.5rem; 
-        text-align: left; 
+        padding-left: 2.5rem;
+        text-align: left;
     }
-
-    /* Tabela zmienia się w listę */
     .info-table-container {
         border-radius: 0.75rem;
-        box-shadow: none; /* Usuwamy cień na mobilce */
+        box-shadow: none;
         border: 1px solid #f0f0f0;
     }
-
     thead {
-        display: none; /* Ukryj nagłówki */
+        display: none;
     }
-
     tr, td {
-        display: block; /* Wiersz i komórki jako bloki */
+        display: block;
         width: 100%;
-        border: none; /* Usuwamy ramki wewnątrz */
-        text-align: left; /* Wyrównanie do lewej */
+        border: none;
+        text-align: left;
     }
-    
     tr {
-         padding: 0.5rem 0; /* Odstęp między "sekcjami" */
+         padding: 0.5rem 0;
          border-bottom: 1px solid #f0f0f0;
     }
     tr:last-child {
          border-bottom: none;
     }
-
     td {
         padding: 0.5rem 1rem;
     }
-
-    /* Dodajemy etykietę przed wartością */
     td::before {
-        content: attr(data-label); /* Pobieramy tekst z data-label */
-        display: block; /* Etykieta nad wartością */
+        content: attr(data-label);
+        display: block;
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
         font-size: 0.8rem;
@@ -176,9 +133,8 @@ tbody tr:last-child td {
         margin-bottom: 0.25rem;
         text-transform: uppercase;
     }
-
     .choose-room-button {
-        max-width: 100%; /* Przycisk na całą szerokość */
+        max-width: 100%;
         font-size: 1rem;
         padding: 0.8rem 1rem;
     }

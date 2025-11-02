@@ -4,37 +4,37 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: var(--background-gray-light); /* Dodajemy tło do body */
+    background-color: var(--background-gray-light);
 }
 
 /* --- 1. Panel z Obrazkiem (Lewa Strona) --- */
 .left-pane {
-    flex: 1; /* Zajmuje połowę */
+    flex: 1;
     position: relative;
-    overflow: hidden; /* Ważne, aby obrazek nie wychodził poza */
+    overflow: hidden;
 }
 
 .uni-image {
-    display: block; /* Usuwa ewentualne marginesy */
-    width: 100%;    /* Szerokość na 100% kontenera */
-    height: 100%;   /* Wysokość na 100% kontenera */
-    object-fit: cover; /* Wypełnia kontener, przycinając jeśli trzeba */
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Logo na mobilce (dla register.html) */
 .mobile-logo { display: none; margin-bottom: 2rem; }
-.mobile-logo .logo { color: var(--text-dark); font-size: 3.5rem; text-shadow: none; }
-.mobile-logo .logo-globe { width: 3rem; height: 3rem; }
+/* Style .logo i .logo-globe usunięte, bo używamy SVG w register.html */
+
 
 /* --- 2. Panel Formularza (Prawa Strona) --- */
 .right-pane {
-    flex: 1; /* Zajmuje drugą połowę */
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    overflow-y: auto; /* Scroll, jeśli formularz za długi */
-    background-color: var(--background-white); /* Białe tło dla prawej strony */
+    overflow-y: auto;
+    background-color: var(--background-white);
 }
 
 .form-container {
@@ -46,27 +46,22 @@
 
 /* Tytuł "Welcome to SPOT!" */
 .page-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-    text-align: center; /* Wyśrodkowanie tytułu */
+    /* Style bazowe są w main.css */
+    text-align: center;
 }
 
-/* === NOWY STYL DLA KOMUNIKATÓW BŁĘDÓW === */
+/* Komunikaty błędów */
 .message.error {
-    background-color: #fee2e2; /* Czerwone tło */
-    color: #b91c1c; /* Ciemnoczerwony tekst */
-    border: 1px solid #fecaca; /* Czerwona ramka */
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
     border-radius: 8px;
     padding: 0.75rem 1rem;
     margin-bottom: 1.5rem;
     font-size: 0.9rem;
     font-weight: 500;
-    text-align: left; /* Lepsze dla listy błędów */
+    text-align: left;
 }
-/* === KONIEC NOWEGO STYLU === */
-
 
 /* Przełącznik Login/Register */
 .toggle-buttons {
@@ -87,22 +82,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
 }
-
-.toggle-btn.inactive {
-    background-color: transparent;
-    color: white;
-}
-.toggle-btn.inactive:hover {
-    background-color: rgba(255,255,255, 0.1);
-}
-
-.toggle-btn.active {
-    background-color: var(--light-blue);
-    color: var(--dark-blue-text);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+.toggle-btn.inactive { background-color: transparent; color: white; }
+.toggle-btn.inactive:hover { background-color: rgba(255,255,255, 0.1); }
+.toggle-btn.active { background-color: var(--light-blue); color: var(--dark-blue-text); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
 /* Podtytuł */
 .subtitle {
@@ -113,60 +96,9 @@
     text-align: center;
 }
 
-/* Formularz */
+/* Formularz (style bazowe w main.css) */
 .login-form {
     width: 100%;
-}
-
-.form-group {
-    margin-bottom: 1.25rem;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
-    font-family: 'Poppins', sans-serif;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"] {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
-    border: 1px solid var(--light-blue);
-    border-radius: 2rem;
-    background-color: var(--background-white);
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-    background-color: var(--background-white);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-/* Wrapper dla hasła z ikonką */
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper input {
-    padding-right: 3rem;
-}
-
-.password-wrapper .eye-icon {
-    position: absolute;
-    right: 1rem;
-    color: var(--text-light);
-    cursor: pointer;
-    user-select: none;
 }
 
 /* Dodatki (Remember me / Forgot) */
@@ -184,15 +116,15 @@
     align-items: center;
     color: var(--text-dark);
 }
-
 .remember-me input[type="checkbox"] {
+    width: auto; /* Nadpisanie globalnego 100% */
     margin-right: 0.5rem;
 }
-
 .remember-me label {
     margin-bottom: 0;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;
+    font-size: 0.875rem;
 }
 
 .forgot-password {
@@ -200,69 +132,19 @@
     text-decoration: none;
     font-weight: 500;
 }
-.forgot-password:hover {
-    text-decoration: underline;
-}
+.forgot-password:hover { text-decoration: underline; }
 
-/* Główny przycisk "Log in" */
-.login-btn {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-    background-color: var(--primary-blue);
-    border: none;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-    font-family: 'Poppins', sans-serif;
-}
-
-.login-btn:hover {
-    background-color: var(--dark-blue-text);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
-}
+/* Przycisk (style bazowe w main.css) */
+/* .login-btn {} */
 
 /* --- RESPONSIVE (Mobile) --- */
 @media (max-width: 800px) {
-    .login-page {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-    }
-
-    .left-pane {
-        display: none;
-    }
-
-    .right-pane {
-        flex: 1;
-        width: 100%;
-        align-items: center; /* Poprawiono z flex-start na center */
-        padding: 2rem 1.5rem;
-    }
-
-    .form-container {
-        max-width: 100%;
-        align-items: center;
-    }
-
-    .mobile-logo {
-        display: flex; /* Włączamy logo na mobilce dla strony rejestracji */
-    }
-    
-    .page-title {
-        text-align: center;
-    }
-
-    .toggle-buttons,
-    .login-form {
-        width: 100%;
-    }
-
-    .subtitle {
-        text-align: center;
-    }
+    .login-page { flex-direction: column; height: auto; min-height: 100vh; }
+    .left-pane { display: none; }
+    .right-pane { flex: 1; width: 100%; align-items: center; padding: 2rem 1.5rem; }
+    .form-container { max-width: 100%; align-items: center; }
+    .mobile-logo { display: flex; }
+    .page-title { text-align: center; }
+    .toggle-buttons, .login-form { width: 100%; }
+    .subtitle { text-align: center; }
 }

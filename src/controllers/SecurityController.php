@@ -1,6 +1,6 @@
 <?php
 
-require_once 'AppController.php'; // Poprawnie! (są w tym samym folderze)
+require_once 'AppController.php'; 
 
 class SecurityController extends AppController {
 
