@@ -1,4 +1,4 @@
-# What is SPOT? ✨ (work in progress... prototypin phase)
+# What is SPOT? ✨ (work in progress... starting coding phase)
 
 > Smart Place Organization Tool | "Your campus. Your space. Your SPOT."
 
