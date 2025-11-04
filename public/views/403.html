@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPOT - Dostęp zabroniony (403)</title>
+    <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="/public/styles/error.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body class="error-page-body-with-header"> <header class="main-header">
+        <nav class="main-nav">
+             <ul>
+                 <li><a href="/about" class="nav-link">About</a></li>
+                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
+                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
+                 <li><a href="/login" class="nav-link">Log out</a></li>
+             </ul>
+        </nav>
+        <nav class="mobile-nav">
+             <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
+             <a href="/login"><span class="material-icons-outlined">logout</span></a>
+        </nav>
+    </header>
+    <main class="error-page-content">
+        <div class="error-container">
+            <h1 class="error-code">403</h1>
+            <h2 class="error-title">Dostęp zabroniony</h2>
+            <p class="error-message">
+                Nie masz wystarczających uprawnień, aby uzyskać dostęp do tej strony.
+            </p>
+            <a href="/mybookings" class="back-link">Wróć do moich rezerwacji</a>
+        </div>
+    </main>
+</body>
+</html>

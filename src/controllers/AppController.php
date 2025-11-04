@@ -39,31 +39,47 @@ class AppController {
             include $chosenTemplatePath;
             $output = ob_get_clean();
         } else {
-            // Jeśli szablon nie istnieje (inny niż 404), użyj 404 jako fallback
             if (file_exists($templatePath404)) {
                  ob_start();
                  include $templatePath404;
                  $output = ob_get_clean();
-                 // Ustaw kod 404, jeśli renderujemy stronę 404 jako fallback
                  if ($template !== '404') { 
                      http_response_code(404);
                  }
             } else {
                  $output = "Error: Template '$template' not found and 404.html is missing.";
-                 http_response_code(404); // Nadal zwracamy 404
+                 http_response_code(404);
             }
         }
         echo $output;
     }
 
     /**
-     * === NOWA METODA ===
-     * Publiczna metoda do obsługi błędów 404 Not Found.
-     * Ustawia kod odpowiedzi i renderuje widok 404.
+     * Strona 404 Not Found
      */
     public function notFound(): void
     {
         http_response_code(404);
-        $this->render('404'); // Wywołanie chronionej metody render z wnętrza klasy jest OK
+        $this->render('404');
+    }
+    
+    /**
+     * === NOWA METODA 403 ===
+     * Dostęp zabroniony (użytkownik jest zalogowany, ale nie ma uprawnień)
+     */
+    public function forbidden(): void
+    {
+        http_response_code(403);
+        $this->render('403'); // Renderuje 403.html
+    }
+    
+    /**
+     * === NOWA METODA 400 ===
+     * Nieprawidłowe żądanie (np. źle wypełniony formularz)
+     */
+    public function badRequest(): void
+    {
+        http_response_code(400);
+        $this->render('400'); // Renderuje 400.html
     }
 }

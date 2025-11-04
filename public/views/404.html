@@ -6,40 +6,24 @@
     <title>SPOT - Strony nie znaleziono (404)</title>
     
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
-    <link rel="stylesheet" type="text/css" href="/public/styles/404.css"> <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/public/styles/error.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
 </head>
-<body>
-
-    <header class="main-header">
-        <nav class="main-nav">
-             <ul>
-                 <li><a href="/about" class="nav-link">About</a></li>
-                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
-                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
-                 <li><a href="/login" class="nav-link">Log out</a></li>
-             </ul>
-        </nav>
-        <nav class="mobile-nav">
-             <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
-             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
-             <a href="/login"><span class="material-icons-outlined">logout</span></a>
-        </nav>
-    </header>
-
-    <main class="error-page-content">
-        <div class="error-card">
-            <span class="material-icons-outlined error-icon">error_outline</span>
-            <h1 class="error-title">404</h1>
-            <h2 class="error-subtitle">Strony nie znaleziono</h2>
-            <p class="error-text">
-                Niestety, strona, której szukasz, nie istnieje, została przeniesiona lub wpisałeś zły adres.
-            </p>
-            <a href="/mybookings" class="back-link">Wróć do moich rezerwacji</a>
+<body class="error-page-body">
+    
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Strony nie znaleziono</h2>
+        <p class="error-message">
+            Ups! Wygląda na to, że strona, której szukasz, nie istnieje.
+            <br>Możliwe, że adres został błędnie wpisany lub strona została usunięta.
+        </p>
+        
+        <a href="javascript:history.back()" class="back-link">Wróć do poprzedniej strony</a>
         </div>
-    </main>
-
 </body>
 </html>

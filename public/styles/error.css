@@ -1,0 +1,96 @@
+/* --- Style dla wszystkich stron błędów (403, 404, 500) --- */
+body.error-page-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-gray-light);
+    text-align: center;
+    flex-direction: column;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif; /* Upewniamy się, że font jest załadowany */
+}
+
+/* Karta z błędem */
+.error-container {
+    background-color: var(--background-white);
+    padding: 3rem 4rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 550px;
+    width: 100%;
+}
+
+/* Styl dla kontenera, gdy jest pod nagłówkiem (dla 400 i 403) */
+.error-page-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    min-height: calc(100vh - 60px); /* Pełna wysokość minus nagłówek */
+    text-align: center;
+}
+
+/* Kod błędu (np. "404") */
+.error-code {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+/* Tytuł błędu (np. "Strony nie znaleziono") */
+.error-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+/* Opis błędu */
+.error-message {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+/* Link powrotny */
+.back-link {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+}
+
+.back-link:hover {
+    background-color: var(--dark-blue-text);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 600px) {
+    .error-container {
+        padding: 30px 20px;
+    }
+    .error-code {
+        font-size: 4rem;
+    }
+    .error-title {
+        font-size: 1.5rem;
+    }
+    .error-message {
+        font-size: 1rem;
+    }
+    .back-link {
+        padding: 10px 20px;
+    }
+}
