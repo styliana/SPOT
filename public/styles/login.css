@@ -23,8 +23,7 @@
 
 /* Logo na mobilce (dla register.html) */
 .mobile-logo { display: none; margin-bottom: 2rem; }
-/* Style .logo i .logo-globe usunięte, bo używamy SVG w register.html */
-
+/* Usunięto style .logo, bo nie ma ich w HTML */
 
 /* --- 2. Panel Formularza (Prawa Strona) --- */
 .right-pane {
@@ -44,13 +43,15 @@
     flex-direction: column;
 }
 
-/* Tytuł "Welcome to SPOT!" */
 .page-title {
-    /* Style bazowe są w main.css */
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
     text-align: center;
 }
 
-/* Komunikaty błędów */
+/* === NOWY STYL DLA KOMUNIKATÓW BŁĘDÓW === */
 .message.error {
     background-color: #fee2e2;
     color: #b91c1c;
@@ -62,8 +63,8 @@
     font-weight: 500;
     text-align: left;
 }
+/* === KONIEC NOWEGO STYLU === */
 
-/* Przełącznik Login/Register */
 .toggle-buttons {
     display: flex;
     background-color: var(--primary-blue);
@@ -87,7 +88,6 @@
 .toggle-btn.inactive:hover { background-color: rgba(255,255,255, 0.1); }
 .toggle-btn.active { background-color: var(--light-blue); color: var(--dark-blue-text); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-/* Podtytuł */
 .subtitle {
     color: var(--primary-blue);
     font-size: 1rem;
@@ -96,12 +96,23 @@
     text-align: center;
 }
 
-/* Formularz (style bazowe w main.css) */
 .login-form {
     width: 100%;
 }
 
-/* Dodatki (Remember me / Forgot) */
+/* Style .form-group, input, label są w main.css */
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper input {
+    /* Przywracamy padding, jeśli ikona jest usunięta */
+    padding-right: 1rem; 
+}
+/* Usunięto .eye-icon */
+
 .form-extras {
     display: flex;
     justify-content: space-between;
@@ -117,7 +128,7 @@
     color: var(--text-dark);
 }
 .remember-me input[type="checkbox"] {
-    width: auto; /* Nadpisanie globalnego 100% */
+    width: auto;
     margin-right: 0.5rem;
 }
 .remember-me label {
@@ -134,8 +145,7 @@
 }
 .forgot-password:hover { text-decoration: underline; }
 
-/* Przycisk (style bazowe w main.css) */
-/* .login-btn {} */
+/* Style .login-btn są w main.css */
 
 /* --- RESPONSIVE (Mobile) --- */
 @media (max-width: 800px) {

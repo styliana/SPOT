@@ -1,4 +1,3 @@
-// Czekamy na załadowanie całej zawartości strony
 document.addEventListener('DOMContentLoaded', () => {
     
     // Znajdujemy formularz i interesujące nas pola
