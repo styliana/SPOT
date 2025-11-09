@@ -109,6 +109,11 @@ th
     .mobile-nav .material-icons-outlined {
         font-size: 28px;
     }
+
+    /* Ukryj powitanie na mobilce */
+    .nav-greeting {
+        display: none;
+    }
 }
 
 /* --- 8. Style Typografii --- */
@@ -243,3 +248,11 @@ input[readonly] {
     font-size: 1.25rem;
 }
 
+/* --- 11. Personalizacja (Nowa Sekcja) --- */
+.nav-greeting {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-right: auto; /* Wypycha resztę nawigacji na prawo */
+    padding-left: 0.5rem; /* Mały odstęp od krawędzi */
+}

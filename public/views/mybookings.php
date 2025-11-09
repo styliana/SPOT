@@ -12,6 +12,13 @@
 <body>
 
     <header class="main-header">
+    
+        <div class="nav-greeting">
+            <?php if (isset($_SESSION['user_name'])): ?>
+                Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
+            <?php endif; ?>
+        </div>
+
         <nav class="main-nav">
              <ul>
                  <li><a href="/about" class="nav-link">About</a></li>
