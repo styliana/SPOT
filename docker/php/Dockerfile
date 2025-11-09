@@ -1,4 +1,6 @@
-FROM php:8.3.18RC1-fpm-alpine3.21
+# === POPRAWKA: Używamy stabilnej wersji PHP, a nie RC1 ===
+FROM php:8.3-fpm-alpine
+# =======================================================
 
 ENV RUN_DEPS \
     zlib \
@@ -30,8 +32,7 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
 RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
-
 # Copy the application code
 COPY . /app
 
-VOLUME ["/app"]
+# Usunęliśmy linię VOLUME ["/app"], co jest poprawne

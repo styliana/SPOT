@@ -5,6 +5,11 @@ require_once 'AppController.php';
 class BookingsController extends AppController {
 
     public function mybookings() {
+        // === ZABEZPIECZENIE ===
+        // Wymagamy zalogowania, aby zobaczyć tę stronę
+        $this->requireLogin();
+        // ========================
+
         // W przyszłości tutaj pobierzesz rezerwacje z bazy danych
         // $bookings = $this->bookingRepository->getBookingsForUser($userId);
         

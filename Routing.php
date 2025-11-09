@@ -1,12 +1,16 @@
 <?php
 
+// === POPRAWKA ===
+// Klasa nadrzędna AppController MUSI być załadowana jako pierwsza.
+require_once 'src/controllers/AppController.php';
+
+// Teraz możemy ładować resztę kontrolerów, które z niej korzystają
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/ReservationController.php';
 require_once 'src/controllers/BookingsController.php';
 require_once 'src/controllers/RoomController.php';
 require_once 'src/controllers/AboutController.php';
 require_once 'src/controllers/ProfileController.php';
-require_once 'src/controllers/AppController.php';
 
 
 class Routing {

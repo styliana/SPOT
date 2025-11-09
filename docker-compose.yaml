@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   web:
     build:
@@ -7,9 +5,8 @@ services:
       dockerfile: docker/nginx/Dockerfile
     ports:
       - "8080:80"
-    volumes:
-      - .:/app/
-    links:
+    # BRAK 'volumes' dla web - to jest poprawne
+    depends_on:
       - php
     networks:
       - pg-network
@@ -27,8 +24,11 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+    # 'volumes' dla php MUSI tu być, aby widzieć zmiany na żywo
     volumes:
       - .:/app
+    depends_on:
+      - db
     networks:
       - pg-network
   
@@ -40,6 +40,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
+    depends_on:
+      - db
     networks:
       - pg-network
   

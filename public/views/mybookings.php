@@ -17,13 +17,13 @@
                  <li><a href="/about" class="nav-link">About</a></li>
                  <li><a href="/mybookings" class="nav-link">My bookings</a></li>
                  <li><a href="/myprofile" class="nav-link">My profile</a></li>
-                 <li><a href="/login" class="nav-link">Log out</a></li>
+                 <li><a href="/logout" class="nav-link">Log out</a></li>
              </ul>
         </nav>
         <nav class="mobile-nav">
              <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
              <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
-             <a href="/login"><span class="material-icons-outlined">logout</span></a>
+             <a href="/logout"><span class="material-icons-outlined">logout</span></a>
         </nav>
     </header>
 
@@ -45,45 +45,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td data-label="Select"><input type="checkbox"></td>
-                        <td data-label="Room">Aula A1 (AULA1)</td>
-                        <td data-label="Date">Oct 25, 2025</td>
-                        <td data-label="Time">10:00 - 12:00</td>
-                        <td data-label="Type"><span class="pill pill-blue">Lecture Hall</span></td>
-                        <td data-label="Status"><span class="pill pill-green">Confirmed</span></td>
-                        <td data-label="Actions" class="actions-cell">
-                            <button class="kebab-menu" aria-label="Opcje">
-                                <span class="material-icons-outlined">more_vert</span>
-                            </button>
-                        </td>
-                    </tr>
-                     <tr>
-                         <td data-label="Select"><input type="checkbox"></td>
-                         <td data-label="Room">Pokój Cichej Nauki (STUDYROOM1)</td>
-                         <td data-label="Date">Oct 26, 2025</td>
-                         <td data-label="Time">14:00 - 15:00</td>
-                         <td data-label="Type"><span class="pill pill-gray">Study Room</span></td>
-                         <td data-label="Status"><span class="pill pill-orange">Pending</span></td>
-                         <td data-label="Actions" class="actions-cell">
-                             <button class="kebab-menu" aria-label="Opcje">
-                                 <span class="material-icons-outlined">more_vert</span>
-                             </button>
-                         </td>
-                     </tr>
-                     <tr>
-                         <td data-label="Select"><input type="checkbox"></td>
-                         <td data-label="Room">Pokój ROOM4</td>
-                         <td data-label="Date">Oct 28, 2025</td>
-                         <td data-label="Time">09:00 - 11:00</td>
-                         <td data-label="Type"><span class="pill pill-gray">Lab</span></td>
-                         <td data-label="Status"><span class="pill pill-red">Cancelled</span></td>
-                         <td data-label="Actions" class="actions-cell">
-                             <button class="kebab-menu" aria-label="Opcje">
-                                 <span class="material-icons-outlined">more_vert</span>
-                             </button>
-                         </td>
-                     </tr>
+                    <?php if (isset($bookings) && !empty($bookings)): ?>
+                        <?php foreach ($bookings as $booking): ?>
+                            <tr>
+                                <td data-label="Select"><input type="checkbox"></td>
+                                <td data-label="Room"><?php echo htmlspecialchars($booking['room_name']); ?></td>
+                                <td data-label="Date"><?php echo htmlspecialchars($booking['date']); ?></td>
+                                <td data-label="Time"><?php echo htmlspecialchars($booking['time']); ?></td>
+                                <td data-label="Type"><span class="pill <?php echo htmlspecialchars($booking['type_pill']); ?>"><?php echo htmlspecialchars($booking['type']); ?></span></td>
+                                <td data-label="Status"><span class="pill <?php echo htmlspecialchars($booking['status_pill']); ?>"><?php echo htmlspecialchars($booking['status']); ?></span></td>
+                                <td data-label="Actions" class="actions-cell">
+                                    <button class="kebab-menu" aria-label="Opcje">
+                                        <span class="material-icons-outlined">more_vert</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem;">Nie masz jeszcze żadnych rezerwacji.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

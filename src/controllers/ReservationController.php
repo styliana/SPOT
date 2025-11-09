@@ -6,6 +6,10 @@ class ReservationController extends AppController {
 
     // Użyjmy nazwy trasy 'reservation'
     public function reservation() { 
+        // === ZABEZPIECZENIE ===
+        $this->requireLogin();
+        // ========================
+
         if ($this->isGet()) {
             return $this->render('reservation');
         }

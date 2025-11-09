@@ -18,6 +18,41 @@ class AppController {
         return $this->request === 'POST';
     }
 
+    /**
+     * === ZAKTUALIZOWANA METODA: Przekierowanie ===
+     * Czyni ją odporną na błędy "headers already sent".
+     */
+    protected function redirect(string $url): void
+    {
+        // Upewniamy się, że URL jest poprawny (zaczyna się od /)
+        if ($url !== '' && $url[0] !== '/') {
+            $url = '/' . $url;
+        }
+
+        // Sprawdzamy, czy nagłówki zostały już wysłane
+        if (headers_sent()) {
+            // Jeśli tak, zróbmy fallback na JavaScript (brzydkie, ale działa)
+            echo "<script>window.location.href='$url';</script>";
+        } else {
+            // Jeśli nie, wyślij normalny nagłGłówek
+            header("Location: $url");
+        }
+        exit(); // Zawsze kończymy skrypt po przekierowaniu
+    }
+
+    /**
+     * === NOWA METODA: Wymaganie logowania ===
+     * Sprawdza, czy użytkownik jest zalogowany. Jeśli nie, przekierowuje do /login.
+     */
+    protected function requireLogin(): void
+    {
+        // Sprawdzamy, czy w sesji istnieje klucz 'user_email' (ustawimy go podczas logowania)
+        if (!isset($_SESSION['user_email'])) {
+            $this->redirect('/login');
+        }
+        // Jeśli istnieje, skrypt po prostu idzie dalej.
+    }
+
     protected function render(string $template = null, array $variables = [])
     {
         $templatePathPhp = 'public/views/'. $template.'.php';
