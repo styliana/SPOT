@@ -23,33 +23,41 @@ class ReservationController extends AppController {
             $roomId = $_POST['room_id'];
             $userId = $_SESSION['user_id'];
             
-            // Sprawdzamy, czy to edycja (czy mamy booking_id)
+            // Sprawdzamy, czy to edycja
             $bookingId = $_POST['booking_id'] ?? null;
 
-            // Walidacja dostępności (pomijamy walidację własnej rezerwacji przy edycji - uproszczenie)
-            // W idealnym świecie sprawdzalibyśmy dostępność z wyłączeniem aktualnie edytowanej rezerwacji.
+            // === NOWOŚĆ: Walidacja "Nie w przeszłości" ===
+            try {
+                $bookingStart = new DateTime($date . ' ' . $startTime);
+                $now = new DateTime();
+
+                if ($bookingStart < $now) {
+                    return $this->render('reservation', ['message' => 'Nie można dokonać rezerwacji w przeszłości! Wybierz przyszłą datę.']);
+                }
+            } catch (Exception $e) {
+                // Ignorujemy błędy formatu daty, baza i tak by to odrzuciła
+            }
+            // =============================================
+
+            // Walidacja dostępności
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime);
             
-            // Jeśli edytujemy, to nasza własna rezerwacja może blokować termin. 
-            // Dla uproszczenia: jeśli zmieniamy pokój, sprawdźmy czy wolny.
             if (in_array($roomId, $bookedRooms) && !$bookingId) {
                  return $this->render('reservation', ['message' => 'Ups! Ktoś właśnie zajął ten pokój.']);
             }
 
             if ($bookingId) {
-                // EDYCJA
                 $this->bookingRepository->updateBooking($bookingId, $userId, $roomId, $date, $startTime, $endTime);
             } else {
-                // NOWA REZERWACJA
                 $this->bookingRepository->addBooking($userId, $roomId, $date, $startTime, $endTime);
             }
 
             return $this->redirect('/mybookings');
         }
 
-        // 2. Wyświetlanie strony (GET) - Pobieranie danych do edycji z URL
+        // 2. Wyświetlanie strony (GET)
         $variables = [
-            'booking_id' => $_GET['booking_id'] ?? null, // ID edytowanej rezerwacji
+            'booking_id' => $_GET['booking_id'] ?? null,
             'selected_room_id' => $_GET['room_id'] ?? null,
             'selected_date' => $_GET['date'] ?? '',
             'selected_start' => $_GET['start'] ?? '',

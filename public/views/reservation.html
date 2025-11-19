@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* Styl blokujący mapę, dopóki nie wpiszesz dat */
         .map-disabled-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -26,7 +25,7 @@
             backdrop-filter: blur(2px);
             border-radius: 8px;
             transition: opacity 0.3s;
-            pointer-events: none; /* Domyślnie przepuszcza, JS to zmieni w razie potrzeby */
+            pointer-events: none;
         }
         .map-container-relative {
             position: relative;
@@ -113,13 +112,10 @@
 
             <div class="map-wrapper">
                 <h3 class="subsection-title desktop-only">Choose available room</h3>
-                
                 <div class="map-container-relative" id="map-container">
-                    
                     <div id="map-overlay" class="map-disabled-overlay">
                         <span>Fill in date and time to see availability</span>
                     </div>
-
                     <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
                         <rect id="ROOM1" class="room available" width="127.1" height="44.5" x="90.7" y="151.5" />
                         <rect id="AULA1" class="room available" width="168.2" height="98.3" x="234.3" y="100.6" />
@@ -144,19 +140,22 @@
          const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
 
+         // === NOWOŚĆ: Ustawiamy dzisiejszą datę jako minimum ===
+         const today = new Date().toISOString().split('T')[0];
+         dateInput.setAttribute('min', today);
+         // ======================================================
+
          function checkAvailability() {
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
 
-             // Blokada mapy jeśli brak danych
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
 
-             // Odblokowanie
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
@@ -189,12 +188,11 @@
              input.addEventListener('change', checkAvailability);
          });
 
-         // Kliknięcie w mapę -> Przekierowanie do RoomInfo z parametrami
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
              
-             if (mapOverlay.style.opacity !== '0') return; // Jeśli zablokowana, nie klikaj
+             if (mapOverlay.style.opacity !== '0') return;
 
              if (room.classList.contains('unavailable')) {
                  alert(`Ten pokój jest zajęty.`);
@@ -206,17 +204,14 @@
              const start = startTimeInput.value;
              const end = endTimeInput.value;
 
-             // Przekierowanie do szczegółów z zachowaniem dat
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}`;
          });
 
-         // Obsługa powrotu z RoomInfo (wypełnienie pól)
          const urlParams = new URLSearchParams(window.location.search);
          const selectedRoomId = urlParams.get('room_id');
 
          if (selectedRoomId) {
              if (roomInput) roomInput.value = selectedRoomId;
-             // Podświetlenie wybranego pokoju
              setTimeout(() => {
                 const selectedRoomElement = document.getElementById(selectedRoomId);
                 if (selectedRoomElement) {
