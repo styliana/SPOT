@@ -61,7 +61,7 @@
             <div class="form-wrapper">
                 <form class="reservation-form" action="/reservation" method="POST" id="booking-form">
                     
-                    <input type="hidden" name="booking_id" value="<?php echo isset($booking_id) ? htmlspecialchars($booking_id) : ''; ?>">
+                    <input type="hidden" name="booking_id" id="booking-id-input" value="<?php echo isset($booking_id) ? htmlspecialchars($booking_id) : ''; ?>">
 
                     <?php if (isset($message)): ?>
                         <div class="message error"><?php echo htmlspecialchars($message); ?></div>
@@ -136,19 +136,19 @@
          const dateInput = document.getElementById('date');
          const startTimeInput = document.getElementById('start_time');
          const endTimeInput = document.getElementById('end_time');
+         const bookingIdInput = document.getElementById('booking-id-input');
          const mapOverlay = document.getElementById('map-overlay');
          const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
 
-         // === NOWOŚĆ: Ustawiamy dzisiejszą datę jako minimum ===
          const today = new Date().toISOString().split('T')[0];
          dateInput.setAttribute('min', today);
-         // ======================================================
 
          function checkAvailability() {
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
+             const bookingId = bookingIdInput.value; // Pobieramy ID edycji
 
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
@@ -159,7 +159,13 @@
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
-             const data = { date: date, start_time: start, end_time: end };
+             // Wysyłamy booking_id do API, żeby wykluczyć własną rezerwację
+             const data = { 
+                 date: date, 
+                 start_time: start, 
+                 end_time: end,
+                 booking_id: bookingId 
+             };
 
              fetch('/api/checkAvailability', {
                  method: 'POST',
@@ -168,11 +174,14 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
+                 // 1. Reset wszystkich pokoi na zielono
                  document.querySelectorAll('rect.room').forEach(el => {
                      el.classList.remove('unavailable');
+                     el.classList.remove('room-selected-active'); // Resetujemy też niebieski
                      el.classList.add('available');
                  });
 
+                 // 2. Oznaczamy zajęte na czerwono
                  bookedRooms.forEach(id => {
                      const roomEl = document.getElementById(id);
                      if (roomEl) {
@@ -180,6 +189,17 @@
                          roomEl.classList.add('unavailable');
                      }
                  });
+
+                 // 3. Oznaczamy AKTUALNIE WYBRANY pokój na niebiesko
+                 // (Jeśli jest wpisany w input i nie jest oznaczony jako zajęty)
+                 const currentSelectedId = roomInput.value;
+                 if (currentSelectedId) {
+                     const selectedEl = document.getElementById(currentSelectedId);
+                     if (selectedEl && !selectedEl.classList.contains('unavailable')) {
+                         selectedEl.classList.remove('available');
+                         selectedEl.classList.add('room-selected-active');
+                     }
+                 }
              })
              .catch(error => console.error('Error:', error));
          }
@@ -203,24 +223,13 @@
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
+             const bookingId = bookingIdInput.value;
 
-             window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}`;
+             // Dodajemy booking_id do linku, żeby nie zgubić trybu edycji
+             window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}`;
          });
 
-         const urlParams = new URLSearchParams(window.location.search);
-         const selectedRoomId = urlParams.get('room_id');
-
-         if (selectedRoomId) {
-             if (roomInput) roomInput.value = selectedRoomId;
-             setTimeout(() => {
-                const selectedRoomElement = document.getElementById(selectedRoomId);
-                if (selectedRoomElement) {
-                    selectedRoomElement.classList.remove('available');
-                    selectedRoomElement.classList.add('room-selected-active');
-                }
-             }, 200);
-         }
-         
+         // Inicjalizacja przy wejściu (jeśli to edycja)
          checkAvailability();
      });
      </script>

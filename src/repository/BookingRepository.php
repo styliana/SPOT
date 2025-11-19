@@ -7,7 +7,6 @@ class BookingRepository extends Repository {
 
     public function getBookingsByUserId(int $userId): array {
         $result = [];
-        
         $stmt = $this->database->connect()->prepare('
             SELECT b.*, r.name as room_name, r.type as room_type
             FROM bookings b
@@ -33,7 +32,6 @@ class BookingRepository extends Repository {
                 $booking['status']
             );
         }
-
         return $result;
     }
 
@@ -42,33 +40,16 @@ class BookingRepository extends Repository {
             INSERT INTO bookings (user_id, room_id, date, start_time, end_time, status)
             VALUES (?, ?, ?, ?, ?, ?)
         ');
-
-        $stmt->execute([
-            $userId,
-            $roomId,
-            $date,
-            $startTime,
-            $endTime,
-            'Confirmed'
-        ]);
+        $stmt->execute([$userId, $roomId, $date, $startTime, $endTime, 'Confirmed']);
     }
 
-    // === NOWA METODA: Aktualizacja rezerwacji ===
     public function updateBooking(int $bookingId, int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
         $stmt = $this->database->connect()->prepare('
             UPDATE bookings 
             SET room_id = ?, date = ?, start_time = ?, end_time = ?
             WHERE id = ? AND user_id = ?
         ');
-
-        $stmt->execute([
-            $roomId,
-            $date,
-            $startTime,
-            $endTime,
-            $bookingId,
-            $userId
-        ]);
+        $stmt->execute([$roomId, $date, $startTime, $endTime, $bookingId, $userId]);
     }
 
     public function deleteBooking(int $id): void {
@@ -79,19 +60,30 @@ class BookingRepository extends Repository {
         $stmt->execute();
     }
 
-    public function getBookedRoomIds(string $date, string $startTime, string $endTime): array {
-        $stmt = $this->database->connect()->prepare('
-            SELECT room_id FROM bookings
-            WHERE date = :date
-            AND (
-                (start_time < :end_time) AND (end_time > :start_time)
-            )
-            AND status != \'Cancelled\'
-        ');
+    // === ZMODYFIKOWANA METODA ===
+    // Dodano parametr $excludeBookingId (domyślnie null)
+    public function getBookedRoomIds(string $date, string $startTime, string $endTime, ?int $excludeBookingId = null): array {
+        
+        $sql = 'SELECT room_id FROM bookings
+                WHERE date = :date
+                AND ((start_time < :end_time) AND (end_time > :start_time))
+                AND status != \'Cancelled\'';
+
+        // Jeśli edytujemy, dodajemy warunek: "oprócz tej konkretnej rezerwacji"
+        if ($excludeBookingId) {
+            $sql .= ' AND id != :exclude_id';
+        }
+
+        $stmt = $this->database->connect()->prepare($sql);
 
         $stmt->bindParam(':date', $date, PDO::PARAM_STR);
         $stmt->bindParam(':start_time', $startTime, PDO::PARAM_STR);
         $stmt->bindParam(':end_time', $endTime, PDO::PARAM_STR);
+        
+        if ($excludeBookingId) {
+            $stmt->bindParam(':exclude_id', $excludeBookingId, PDO::PARAM_INT);
+        }
+
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
