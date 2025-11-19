@@ -1,19 +1,44 @@
 <?php
 
-// require_once 'Repository.php'; // To jest zbędne, bo Routing.php już to ładuje, ale jeśli zostawisz, też nie zaszkodzi.
+require_once 'Repository.php';
+require_once __DIR__ . '/../models/User.php';
 
 class UserRepository extends Repository
 {
-    public function getUsers(): ?array
+    public function getUser(string $email): ?User
     {
-        // Pobieramy połączenie z klasy nadrzędnej (Repository)
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.users
+            SELECT * FROM public.users WHERE email = :email
         ');
-        
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $users;
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user == false) {
+            return null;
+        }
+
+        return new User(
+            $user['email'],
+            $user['password'], // W bazie kolumna nazywa się 'password'
+            $user['firstname'], // W bazie: firstname
+            $user['lastname']   // W bazie: lastname
+        );
+    }
+
+    public function addUser(User $user): void
+    {
+        $stmt = $this->database->connect()->prepare('
+            INSERT INTO users (email, password, firstname, lastname)
+            VALUES (?, ?, ?, ?)
+        ');
+
+        $stmt->execute([
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getName(),
+            $user->getSurname()
+        ]);
     }
 }
