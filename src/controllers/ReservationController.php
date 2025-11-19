@@ -37,7 +37,13 @@ class ReservationController extends AppController {
             } catch (Exception $e) {
                 // Ignorujemy błędy formatu daty, baza i tak by to odrzuciła
             }
-            // =============================================
+            
+            $startDateTime = new DateTime($date . ' ' . $startTime);
+            $endDateTime = new DateTime($date . ' ' . $endTime);
+
+            if ($endDateTime <= $startDateTime) {
+                return $this->render('reservation', ['message' => 'Godzina zakończenia musi być późniejsza niż rozpoczęcia!']);
+            }
 
             // Walidacja dostępności
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime);
