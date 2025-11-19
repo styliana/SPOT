@@ -15,7 +15,6 @@ class RoomController extends AppController {
 
     public function room(string $roomId) {
         
-        // Pobieramy dane z bazy
         $room = $this->roomRepository->getRoom($roomId);
 
         if (!$room) {
@@ -23,10 +22,6 @@ class RoomController extends AppController {
              return $this->render('404');
         }
 
-        // Przekazujemy obiekt Room do widoku. 
-        // Uwaga: w widoku roominfo.php musimy teraz używać metod (np. $room->getName()) zamiast tablicy ($room['name'])!
-        // DLA UŁATWIENIA: Przekonwertuję to na tablicę tutaj, żebyś nie musiał zmieniać widoku.
-        
         $roomData = [
             'id' => $room->getId(),
             'name' => $room->getName(),
@@ -35,6 +30,6 @@ class RoomController extends AppController {
             'description' => $room->getDescription()
         ];
 
-        return $this->render('room_info', ['room' => $roomData]);
+        return $this->render('roominfo', ['room' => $roomData]);
     }
 }

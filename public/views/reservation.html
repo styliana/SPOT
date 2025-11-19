@@ -14,13 +14,11 @@
 <body>
     
     <header class="main-header">
-        
         <div class="nav-greeting">
             <?php if (isset($_SESSION['user_name'])): ?>
                 Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
             <?php endif; ?>
         </div>
-
         <nav class="main-nav">
              <ul>
                  <li><a href="/about" class="nav-link">About</a></li>
@@ -35,11 +33,19 @@
              <a href="/logout"><span class="material-icons-outlined">logout</span></a>
         </nav>
     </header>
+
     <main class="reservation-page-content">
         <h2 class="page-title">Add a reservation</h2>
         <div class="content-grid">
             <div class="form-wrapper">
                 <form class="reservation-form" action="/reservation" method="POST">
+                    
+                    <?php if (isset($message)): ?>
+                        <div class="message success" style="background-color: #d1fae5; color: #067647; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                            <?php echo htmlspecialchars($message); ?>
+                        </div>
+                    <?php endif; ?>
+                    
                     <div class="form-group">
                         <label for="date">Enter date</label>
                         <div class="input-with-icon">
@@ -81,19 +87,44 @@
             </div>
         </div>
     </main>
+
     <script>
      document.addEventListener('DOMContentLoaded', () => {
+         // 1. Logika klikania w mapę (przenosi do roominfo)
          const svgMap = document.getElementById('room-layer');
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
+             
+             // Zablokowane pokoje nie są klikalne
              if (room.classList.contains('unavailable')) {
-                 alert(`Pokój ${room.id} (${room.dataset.roomName || room.id}) jest zajęty.`);
+                 alert(`Pokój ${room.id} jest zajęty.`);
                  return;
              }
+             
+             // Przekierowanie do szczegółów pokoju
              const roomId = room.id;
              window.location.href = `/room/${roomId}`;
          });
+
+         // 2. Logika powrotu z wybranym pokojem (podświetlenie i input)
+         const urlParams = new URLSearchParams(window.location.search);
+         const selectedRoomId = urlParams.get('room_id');
+
+         if (selectedRoomId) {
+             // Wypełnij input
+             const input = document.getElementById('room-id');
+             if (input) input.value = selectedRoomId;
+
+             // Znajdź pokój na mapie i pokoloruj go
+             const selectedRoomElement = document.getElementById(selectedRoomId);
+             if (selectedRoomElement) {
+                 // Usuwamy klasę 'available', żeby nasz kolor miał priorytet
+                 selectedRoomElement.classList.remove('available');
+                 // Dodajemy klasę specjalną
+                 selectedRoomElement.classList.add('room-selected-active');
+             }
+         }
      });
      </script>
 </body>

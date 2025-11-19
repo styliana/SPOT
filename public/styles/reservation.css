@@ -125,3 +125,20 @@ body {
     
     /*NA RAZIE  Usunięto cieniowanie na dole */
 }
+
+
+/* --- 7. Aktywny wybór pokoju (po powrocie z RoomInfo) --- */
+.room.room-selected-active {
+    fill: var(--primary-blue) !important; /* Niebieski */
+    stroke: var(--dark-blue-text);
+    stroke-width: 3px;
+    fill-opacity: 0.8;
+    animation: pulse-selection 2s infinite; /* Opcjonalnie: dodaje pulsowanie */
+}
+
+/* Delikatna animacja dla lepszego efektu */
+@keyframes pulse-selection {
+    0% { fill-opacity: 0.7; }
+    50% { fill-opacity: 1.0; }
+    100% { fill-opacity: 0.7; }
+}

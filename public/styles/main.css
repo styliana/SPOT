@@ -7,25 +7,44 @@
 
 /* --- 2. Zmienne (Paleta Kolorów) --- */
 :root {
-    /* Kolory Główne */
-    --primary-blue: #1622a5;
-    --light-blue: #57B1E1; /* ew. ebe1ff */
-    --dark-blue-text: #1622a5;
-    --dark-blue-header: #1622a5; /* Kolor nagłówka */
-
-    /* Motyw Jasny (Domyślny) */
+    /* Główne kolory */
+    --primary-blue: #0A6BEF;
+    --accent-blue: #0855BB;
+    --primary-blue-light: #E0EEFF;
+    --light-blue: #57B1E1;
+    
+    /* Tekst i Nagłówki */
+    --dark-blue-text: #212B36;
+    --dark-blue-header: #1622a5;
     --text-dark: #1f2937;
     --text-light: #6b7280;
-    --background-white: #ffffff;
-    --background-gray-light: #f9fafb;
-    --border-gray: #d1d5db;
+    --text-gray: #9ca3af;
+
+    /* Tła */
+    --white: #FFFFFF;
+    --background-white: #FFFFFF;
+    --background-gray-light: #F5F7FA;
+    --input-background: #F0F2F5;
+    
+    /* Obramowania i inne */
+    --border-gray: #D1D5DB;
+
+    /* Pigułki (Pills) */
+    --pill-gray: #E5E7EB; 
+    --pill-green: #D1FAE5;
+    --pill-orange: #FFEDD5;
+    --pill-red: #fee2e2;
+
+    /* Fonty */
+    --font-poppins: 'Poppins', sans-serif;
+    --font-roboto: 'Roboto', sans-serif;
 }
 
-/* --- 3. Style Domyślne (body, html) --- */
+/* --- 3. Style Domyślne --- */
 body, html {
     height: 100%;
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    background-color: var(--background-white);
+    font-family: var(--font-roboto);
+    background-color: var(--background-gray-light);
     color: var(--text-dark);
     font-weight: 400;
     line-height: 1.6;
@@ -40,18 +59,18 @@ body, html {
 .login-btn,
 .submit-btn,
 .choose-room-button,
-.edit-profile-button, /* Dodano */
+.edit-profile-button,
 .fab,
 .kebab-menu,
 th
 {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-poppins);
 }
 
 /* --- 5. Komponent: Nagłówek/Menu (Header) --- */
 .main-header {
     background-color: var(--dark-blue-header);
-    color: white;
+    color: var(--white);
     padding: 0 2rem;
     display: flex;
     align-items: center;
@@ -59,16 +78,23 @@ th
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.main-nav {
-    margin-left: auto; /* Wypycha nawigację na prawo */
+.nav-greeting {
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-right: auto;
+    padding-left: 0.5rem;
+    font-family: var(--font-poppins);
 }
+
 .main-nav ul {
     list-style: none;
     display: flex;
     gap: 2rem;
 }
+
 .main-nav a {
-    color: white;
+    color: var(--white);
     text-decoration: none;
     font-weight: 500;
     font-size: 1rem;
@@ -80,21 +106,17 @@ th
     color: var(--light-blue);
 }
 
-/* --- 6. Nawigacja Mobilna --- */
-.mobile-nav {
-    display: none;
-}
+.mobile-nav { display: none; }
 
-/* --- 7. Responsywność Globalnych Komponentów --- */
+/* --- 6. Responsywność Nagłówka --- */
 @media (max-width: 768px) {
     .main-header {
         justify-content: center;
         padding: 0 1rem;
         height: 60px;
     }
-    .main-nav {
-        display: none;
-    }
+    .main-nav { display: none; }
+    .nav-greeting { display: none; }
     .mobile-nav {
         display: flex;
         justify-content: space-around;
@@ -102,21 +124,16 @@ th
         width: 100%;
     }
     .mobile-nav a {
-        color: white;
+        color: var(--white);
         text-decoration: none;
         padding: 0.5rem;
     }
     .mobile-nav .material-icons-outlined {
         font-size: 28px;
     }
-
-    /* Ukryj powitanie na mobilce */
-    .nav-greeting {
-        display: none;
-    }
 }
 
-/* --- 8. Style Typografii --- */
+/* --- 7. Typografia i Elementy --- */
 .page-title {
     font-size: 2rem;
     font-weight: 700;
@@ -131,23 +148,22 @@ th
     margin-bottom: 1rem;
 }
 
-/* --- 9. Pigułki (do main.css) --- */
+/* Pigułki */
 .pill {
     display: inline-block;
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.8rem;
     font-weight: 600;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-roboto);
 }
-.pill-blue { background-color: var(--light-blue); color: var(--dark-blue-text); }
-.pill-green { background-color: #d1fae5; color: #067647; }
-.pill-orange { background-color: #ffedd5; color: #b45309; }
-.pill-red { background-color: #fee2e2; color: #b91c1c; }
-.pill-gray { background-color: #f3f4f6; color: #4b5563; }
+.pill-blue { background-color: var(--primary-blue-light); color: var(--primary-blue); }
+.pill-green { background-color: var(--pill-green); color: #067647; }
+.pill-orange { background-color: var(--pill-orange); color: #b45309; }
+.pill-red { background-color: var(--pill-red); color: #b91c1c; }
+.pill-gray { background-color: var(--pill-gray); color: #4b5563; }
 
-
-/* --- 10. Komponent: Formularze (Globalne) --- */
+/* --- 8. Formularze i Przyciski --- */
 .form-group {
     margin-bottom: 1.25rem;
     text-align: left;
@@ -155,13 +171,12 @@ th
 
 .form-group label {
     display: block;
-    font-size: 0.875rem; /* Z login.css */
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
 }
 
-/* Domyślny input tekstowy, email, hasło, data, czas */
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"],
@@ -171,47 +186,45 @@ th
     padding: 0.8rem 1rem;
     font-size: 1rem;
     border: 1px solid var(--light-blue);
-    border-radius: 2rem; /* Zaokrąglenie z login.css */
+    border-radius: 2rem;
     background-color: var(--background-white);
     transition: border-color 0.2s, box-shadow 0.2s;
-    font-family: 'Roboto', sans-serif; /* Upewniamy się, że inputy też mają font */
+    font-family: var(--font-roboto);
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--primary-blue);
     background-color: var(--background-white);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 3px rgba(10, 107, 239, 0.2);
 }
 
-/* Wrapper dla inputów z ikonami (hasło, data, czas) */
 .input-with-icon {
     position: relative;
     display: flex;
     align-items: center;
 }
 .input-with-icon input {
-    padding-right: 3rem; /* Miejsce na ikonę */
+    padding-right: 3rem;
 }
 .input-with-icon .input-icon,
 .input-with-icon .eye-icon {
     position: absolute;
     right: 1rem;
     color: var(--text-light);
-    pointer-events: none; /* Domyślnie ikona nie jest klikalna */
+    pointer-events: none;
 }
 .input-with-icon .eye-icon {
-    pointer-events: auto; /* Ikona oka jest klikalna */
+    pointer-events: auto;
     cursor: pointer;
 }
 
-/* Styl dla inputów readonly (np. pole "Room") */
 input[readonly] {
-    background-color: var(--background-gray-light) !important; /* Ważne, aby nadpisać hover/focus */
+    background-color: var(--background-gray-light) !important;
     cursor: not-allowed;
 }
 
-/* Domyślny przycisk formularza (login, submit, register) */
+/* Przyciski */
 .login-btn,
 .submit-btn,
 .choose-room-button,
@@ -220,39 +233,32 @@ input[readonly] {
     padding: 0.8rem 1rem;
     font-size: 1rem;
     font-weight: 600;
-    color: white;
+    color: var(--white);
     background-color: var(--primary-blue);
     border: none;
     border-radius: 2rem;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 12px rgba(10, 107, 239, 0.2);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
+
 .login-btn:hover,
 .submit-btn:hover,
 .choose-room-button:hover,
 .edit-profile-button:hover {
-    background-color: var(--dark-blue-text);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+    background-color: var(--accent-blue);
+    box-shadow: 0 6px 16px rgba(10, 107, 239, 0.3);
 }
 
-/* Specjalny przycisk z ikoną */
 .edit-profile-button {
-    display: inline-flex; /* Zmieniamy na inline-flex */
-    width: auto; /* Szerokość auto */
+    display: inline-flex;
+    width: auto;
     align-items: center;
     gap: 0.5rem;
 }
 .edit-profile-button .material-icons-outlined {
     font-size: 1.25rem;
-}
-
-/* --- 11. Personalizacja (Nowa Sekcja) --- */
-.nav-greeting {
-    color: white;
-    font-size: 0.95rem;
-    font-weight: 500;
-    margin-right: auto; /* Wypycha resztę nawigacji na prawo */
-    padding-left: 0.5rem; /* Mały odstęp od krawędzi */
 }
