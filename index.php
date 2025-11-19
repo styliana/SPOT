@@ -41,4 +41,7 @@ Routing::get('about', 'AboutController@about');
 Routing::get('room/{roomId}', 'RoomController@room');
 Routing::get('users', 'UserController@users');
 
+Routing::get('edit_profile', 'ProfileController@edit');
+Routing::post('edit_profile', 'ProfileController@update');
+
 Routing::run($path);

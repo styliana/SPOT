@@ -8,7 +8,10 @@ class UserRepository extends Repository
     public function getUser(string $email): ?User
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.users WHERE email = :email
+            SELECT u.*, r.name as role_name 
+            FROM users u 
+            LEFT JOIN roles r ON u.id_role = r.id
+            WHERE email = :email
         ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
@@ -19,40 +22,39 @@ class UserRepository extends Repository
             return null;
         }
 
-        // === TU BYŁ BŁĄD ===
-        // Musimy przekazać wszystkie parametry do konstruktora User:
-        // email, hasło, imię, nazwisko, ROLA, ID
         return new User(
             $user['email'],
             $user['password'],
-            $user['firstname'],
-            $user['lastname'],
-            'student',   // Domyślna rola (bo na razie nie mamy jej w bazie)
-            $user['id']  // <--- KLUCZOWE! Przekazujemy ID z bazy
+            $user['name'],
+            $user['surname'],
+            $user['role_name'] ?? 'student',
+            $user['id']
         );
     }
 
     public function addUser(User $user): void
     {
         $stmt = $this->database->connect()->prepare('
-            INSERT INTO users (email, password, firstname, lastname)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO users (email, password, name, surname, id_role)
+            VALUES (?, ?, ?, ?, (SELECT id FROM roles WHERE name = ?))
         ');
 
         $stmt->execute([
             $user->getEmail(),
             $user->getPassword(),
             $user->getName(),
-            $user->getSurname()
+            $user->getSurname(),
+            $user->getRole()
         ]);
     }
     
-    // Opcjonalnie: metoda do pobierania wszystkich userów (dla /users)
     public function getUsers(): array
     {
         $result = [];
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.users
+            SELECT u.*, r.name as role_name 
+            FROM users u 
+            LEFT JOIN roles r ON u.id_role = r.id
         ');
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,12 +63,57 @@ class UserRepository extends Repository
             $result[] = new User(
                 $user['email'],
                 $user['password'],
-                $user['firstname'],
-                $user['lastname'],
-                'student',
+                $user['name'],
+                $user['surname'],
+                $user['role_name'] ?? 'student',
                 $user['id']
             );
         }
         return $result;
+    }
+
+    // === NOWA METODA: Pobieranie po ID ===
+    public function getUserById(int $id): ?User
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT u.*, r.name as role_name 
+            FROM users u 
+            LEFT JOIN roles r ON u.id_role = r.id
+            WHERE u.id = :id
+        ');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user == false) {
+            return null;
+        }
+
+        return new User(
+            $user['email'],
+            $user['password'],
+            $user['name'],
+            $user['surname'],
+            $user['role_name'] ?? 'student',
+            $user['id']
+        );
+    }
+
+    // === NOWA METODA: Aktualizacja danych ===
+    public function updateUser(User $user): void
+    {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE users 
+            SET name = ?, surname = ?, password = ?
+            WHERE id = ?
+        ');
+
+        $stmt->execute([
+            $user->getName(),
+            $user->getSurname(),
+            $user->getPassword(),
+            $user->getId()
+        ]);
     }
 }

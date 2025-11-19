@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPOT - My Profile</title>
+    <title>SPOT - Mój Profil</title>
     <link rel="stylesheet" type="text/css" href="public/styles/main.css">
-    <link rel="stylesheet" type="text/css" href="public/styles/profile.css"> <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="public/styles/profile.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -13,13 +14,11 @@
 <body>
     
     <header class="main-header">
-        
         <div class="nav-greeting">
             <?php if (isset($_SESSION['user_name'])): ?>
                 Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
             <?php endif; ?>
         </div>
-
         <nav class="main-nav">
              <ul>
                  <li><a href="/about" class="nav-link">About</a></li>
@@ -36,41 +35,43 @@
     </header>
 
     <main class="profile-page-content">
+        
+        <?php if(isset($message)): ?>
+            <div class="message success" style="background-color: #d1fae5; color: #067647; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; text-align: center;">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+
         <h2 class="page-title">My Profile</h2>
 
         <div class="profile-container">
             <div class="profile-card">
                 
                 <div class="profile-avatar">
-                    <?php if (isset($user['avatar_url']) && $user['avatar_url']): ?>
-                        <img src="<?php echo htmlspecialchars($user['avatar_url']); ?>" alt="User Avatar" class="avatar-image">
-                    <?php else: ?>
-                        <span class="material-icons-outlined avatar-placeholder">account_circle</span>
-                    <?php endif; ?>
+                    <span class="material-icons-outlined avatar-placeholder">account_circle</span>
                 </div>
 
-                <h3 class="user-name"><?php echo htmlspecialchars($user['name']); ?></h3>
-                <p class="user-email"><?php echo htmlspecialchars($user['email']); ?></p>
+                <h3 class="user-name">
+                    <?php echo htmlspecialchars($user->getName()) . ' ' . htmlspecialchars($user->getSurname()); ?>
+                </h3>
+                <p class="user-email"><?php echo htmlspecialchars($user->getEmail()); ?></p>
 
                 <hr class="profile-separator">
 
                 <div class="profile-details">
                     <div class="detail-item">
-                        <span class="detail-label">Department:</span>
-                        <span class="detail-value"><?php echo htmlspecialchars($user['department']); ?></span>
-                    </div>
-                    <div class="detail-item">
                         <span class="detail-label">Role:</span>
-                        <span class="detail-value"><?php echo htmlspecialchars($user['role']); ?></span>
+                        <span class="detail-value">
+                            <span class="pill pill-blue"><?php echo htmlspecialchars(ucfirst($user->getRole())); ?></span>
+                        </span>
                     </div>
-                    </div>
+                </div>
 
-                <button class="edit-profile-button">
+                <a href="/edit_profile" class="edit-profile-button" style="text-decoration: none; justify-content: center;">
                      <span class="material-icons-outlined">edit</span> Edit Profile
-                </button> 
+                </a> 
             </div>
         </div>
     </main>
-
 </body>
 </html>
