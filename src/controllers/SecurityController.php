@@ -42,7 +42,13 @@ class SecurityController extends AppController {
         $_SESSION['user_email'] = $user->getEmail();
         $_SESSION['user_name'] = $user->getName();
         $_SESSION['user_surname'] = $user->getSurname();
-        $_SESSION['user_role'] = $user->getRole(); // Tu będzie np. 'student' lub 'admin'
+        $_SESSION['user_role'] = $user->getRole(); 
+
+        // === NOWOŚĆ: Przekierowanie zależne od roli ===
+        if ($user->getRole() === 'admin') {
+            return $this->redirect('/admin_users');
+        }
+        // ==============================================
 
         return $this->redirect('/mybookings');
     }
@@ -72,8 +78,6 @@ class SecurityController extends AppController {
              return $this->render('register', ['message' => 'Taki email jest już zajęty!']);
         }
 
-        // Tworzymy użytkownika. Domyślnie przekazujemy 'student' jako rolę.
-        // Repozytorium zamieni ten string na odpowiednie ID z tabeli roles.
         $user = new User($email, password_hash($password, PASSWORD_BCRYPT), $name, $surname, 'student');
 
         $this->userRepository->addUser($user);

@@ -262,3 +262,37 @@ input[readonly] {
 .edit-profile-button .material-icons-outlined {
     font-size: 1.25rem;
 }
+
+
+
+/* --- 9. Style widoku admina --- */
+/* Styl nagłówka Admina - Ciemny Grafit/Fiolet */
+.admin-header {
+    background-color: #2d3748 !important; /* Ciemny kolor */
+    border-bottom: 3px solid #e53e3e; /* Czerwony pasek na dole */
+}
+.admin-badge {
+    background-color: #e53e3e;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    margin-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+/* Styl tabeli admina */
+.admin-table-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-top: 2rem;
+}
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

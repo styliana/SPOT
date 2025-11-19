@@ -88,4 +88,37 @@ class BookingRepository extends Repository {
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function getAllBookings(): array {
+        $result = [];
+        // Pobieramy wszystkie rezerwacje + dane usera + dane pokoju
+        $stmt = $this->database->connect()->prepare('
+            SELECT b.*, r.name as room_name, r.type as room_type, u.email as user_email
+            FROM bookings b
+            LEFT JOIN rooms r ON b.room_id = r.id
+            LEFT JOIN users u ON b.user_id = u.id
+            ORDER BY b.date DESC, b.start_time ASC
+        ');
+        $stmt->execute();
+        $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($bookings as $booking) {
+            // Mały hack: przekazujemy email usera w nazwie pokoju, żeby widzieć kto zarezerwował
+            // w prostym modelu Booking. W idealnym świecie rozbudowalibyśmy model Booking.
+            $roomDisplay = ($booking['room_name'] ?? 'Unknown') . ' (' . ($booking['user_email'] ?? 'Unknown') . ')';
+            
+            $result[] = new Booking(
+                $booking['id'],
+                $booking['user_id'],
+                $booking['room_id'],
+                $roomDisplay, // Tutaj wrzucamy info o pokoju I userze
+                $booking['room_type'] ?? 'Inne',
+                $booking['date'],
+                $booking['start_time'],
+                $booking['end_time'],
+                $booking['status']
+            );
+        }
+        return $result;
+    }
 }
