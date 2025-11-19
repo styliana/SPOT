@@ -6,24 +6,16 @@ require_once __DIR__ . '/../models/Room.php';
 class RoomRepository extends Repository {
 
     public function getRoom(string $id): ?Room {
-        $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.rooms WHERE id = :id
-        ');
+        $stmt = $this->database->connect()->prepare('SELECT * FROM public.rooms WHERE id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
-
         $room = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($room == false) {
-            return null;
-        }
+        if ($room == false) return null;
 
         return new Room(
-            $room['id'],
-            $room['name'],
-            $room['workspaces'],
-            $room['type'],
-            $room['description']
+            $room['id'], $room['name'], $room['workspaces'],
+            $room['type'], $room['description']
         );
     }
 
@@ -35,11 +27,8 @@ class RoomRepository extends Repository {
 
         foreach ($rooms as $room) {
             $result[] = new Room(
-                $room['id'],
-                $room['name'],
-                $room['workspaces'],
-                $room['type'],
-                $room['description']
+                $room['id'], $room['name'], $room['workspaces'],
+                $room['type'], $room['description']
             );
         }
         return $result;
@@ -51,12 +40,12 @@ class RoomRepository extends Repository {
             VALUES (?, ?, ?, ?, ?)
         ');
         $stmt->execute([
-            $room->getId(), $room->getName(), $room->getWorkspaces(), $room->getType(), $room->getDescription()
+            $room->getId(), $room->getName(), $room->getWorkspaces(),
+            $room->getType(), $room->getDescription()
         ]);
     }
 
     public function deleteRoom(string $id): void {
-        // Najpierw usuń rezerwacje na ten pokój
         $stmt = $this->database->connect()->prepare('DELETE FROM bookings WHERE room_id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_STR);
         $stmt->execute();

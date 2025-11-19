@@ -18,17 +18,11 @@ class UserRepository extends Repository
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user == false) {
-            return null;
-        }
+        if ($user == false) return null;
 
         return new User(
-            $user['email'],
-            $user['password'],
-            $user['name'],
-            $user['surname'],
-            $user['role_name'] ?? 'student',
-            $user['id']
+            $user['email'], $user['password'], $user['name'], $user['surname'],
+            $user['role_name'] ?? 'student', $user['id']
         );
     }
 
@@ -38,17 +32,13 @@ class UserRepository extends Repository
             INSERT INTO users (email, password, name, surname, id_role)
             VALUES (?, ?, ?, ?, (SELECT id FROM roles WHERE name = ?))
         ');
-
         $stmt->execute([
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getName(),
-            $user->getSurname(),
-            $user->getRole()
+            $user->getEmail(), $user->getPassword(), $user->getName(), $user->getSurname(), $user->getRole()
         ]);
     }
 
-    // === NOWOŚĆ: Pobieranie wszystkich userów (dla Admina) ===
+    // === METODY DLA ADMINA (których brakowało) ===
+
     public function getAllUsers(): array
     {
         $result = [];
@@ -63,46 +53,13 @@ class UserRepository extends Repository
 
         foreach ($users as $user) {
             $result[] = new User(
-                $user['email'],
-                $user['password'],
-                $user['name'],
-                $user['surname'],
-                $user['role_name'] ?? 'student',
-                $user['id']
+                $user['email'], $user['password'], $user['name'], $user['surname'],
+                $user['role_name'] ?? 'student', $user['id']
             );
         }
         return $result;
     }
 
-    // === NOWOŚĆ: Usuwanie usera (dla Admina) ===
-    public function deleteUser(int $id): void {
-        // Najpierw usuwamy rezerwacje użytkownika
-        $stmt = $this->database->connect()->prepare('DELETE FROM bookings WHERE user_id = :id');
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Potem usuwamy użytkownika
-        $stmt = $this->database->connect()->prepare('DELETE FROM users WHERE id = :id');
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-    
-    // === NOWOŚĆ: Zmiana roli (dla Admina) ===
-    public function updateUserRole(int $userId, string $newRoleName): void {
-        $stmt = $this->database->connect()->prepare('
-            UPDATE users 
-            SET id_role = (SELECT id FROM roles WHERE name = :role)
-            WHERE id = :id
-        ');
-        $stmt->bindParam(':role', $newRoleName, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-    
-    public function getUsers(): array {
-        return $this->getAllUsers(); // Alias dla kompatybilności
-    }
-    
     public function getUserById(int $id): ?User
     {
         $stmt = $this->database->connect()->prepare('
@@ -113,36 +70,55 @@ class UserRepository extends Repository
         ');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user == false) {
-            return null;
-        }
-
+        if ($user == false) return null;
         return new User(
-            $user['email'],
-            $user['password'],
-            $user['name'],
-            $user['surname'],
-            $user['role_name'] ?? 'student',
-            $user['id']
+            $user['email'], $user['password'], $user['name'], $user['surname'],
+            $user['role_name'] ?? 'student', $user['id']
         );
     }
 
     public function updateUser(User $user): void
     {
         $stmt = $this->database->connect()->prepare('
-            UPDATE users 
-            SET name = ?, surname = ?, password = ?
-            WHERE id = ?
+            UPDATE users SET name = ?, surname = ?, password = ? WHERE id = ?
         ');
-
         $stmt->execute([
-            $user->getName(),
-            $user->getSurname(),
-            $user->getPassword(),
-            $user->getId()
+            $user->getName(), $user->getSurname(), $user->getPassword(), $user->getId()
         ]);
     }
+
+    // Metoda do edycji przez admina (bez hasła)
+    public function updateUserByAdmin(int $id, string $name, string $surname, string $email): void {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE users 
+            SET name = :name, surname = :surname, email = :email
+            WHERE id = :id
+        ');
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':surname', $surname, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function updateUserRole(int $userId, string $newRoleName): void {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE users SET id_role = (SELECT id FROM roles WHERE name = :role) WHERE id = :id
+        ');
+        $stmt->bindParam(':role', $newRoleName, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function deleteUser(int $id): void {
+        $stmt = $this->database->connect()->prepare('DELETE FROM bookings WHERE user_id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt = $this->database->connect()->prepare('DELETE FROM users WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    
+    public function getUsers(): array { return $this->getAllUsers(); }
 }

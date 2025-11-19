@@ -6,15 +6,15 @@
     <title>SPOT - Mój Profil</title>
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
     <link rel="stylesheet" type="text/css" href="/public/styles/profile.css">
+    <link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     
     <?php
-        // Sprawdzamy rolę użytkownika
+        // Sprawdzamy, czy zalogowany jest admin
         $isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
     ?>
 
@@ -22,7 +22,7 @@
         
         <div class="nav-greeting">
             <?php if ($isAdmin): ?>
-                ADMIN PANEL <span class="admin-badge">MASTER MODE</span>
+                ADMIN PANEL <span class="admin-badge">MASTER</span>
             <?php else: ?>
                 <?php if (isset($_SESSION['user_name'])): ?>
                     Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
@@ -36,7 +36,7 @@
                      <li><a href="/admin_users" class="nav-link">Users</a></li>
                      <li><a href="/admin_rooms" class="nav-link">Rooms</a></li>
                      <li><a href="/admin_bookings" class="nav-link">Bookings</a></li>
-                     <li><a href="/myprofile" class="nav-link" style="font-weight:bold;">My Profile</a></li>
+                     <li><a href="/myprofile" class="nav-link active" style="font-weight:bold;">My Profile</a></li>
                  <?php else: ?>
                      <li><a href="/about" class="nav-link">About</a></li>
                      <li><a href="/mybookings" class="nav-link">My bookings</a></li>
@@ -48,10 +48,10 @@
         
         <nav class="mobile-nav">
             <?php if ($isAdmin): ?>
-                 <a href="/admin_users"><span class="material-icons-outlined">people</span></a>
+                 <a href="/admin_users"><span class="material-icons-outlined">group</span></a>
                  <a href="/admin_bookings"><span class="material-icons-outlined">event_note</span></a>
             <?php else: ?>
-                 <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
+                 <a href="/myprofile"><span class="material-icons-outlined">person</span></a>
                  <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
             <?php endif; ?>
              <a href="/logout"><span class="material-icons-outlined">logout</span></a>
@@ -86,10 +86,13 @@
                     <div class="detail-item">
                         <span class="detail-label">Role:</span>
                         <span class="detail-value">
-                            <?php $pillClass = ($user->getRole() === 'admin') ? 'pill-red' : 'pill-blue'; ?>
-                            <span class="pill <?php echo $pillClass; ?>">
-                                <?php echo htmlspecialchars(ucfirst($user->getRole())); ?>
-                            </span>
+                            <?php 
+                                $role = $user->getRole();
+                                $pillClass = 'pill-blue';
+                                if ($role === 'admin') $pillClass = 'pill-red';
+                                if ($role === 'teacher') $pillClass = 'pill-purple'; // fioletowy (trzeba dodać w CSS jeśli chcesz)
+                            ?>
+                            <span class="pill <?php echo $pillClass; ?>"><?php echo htmlspecialchars(ucfirst($role)); ?></span>
                         </span>
                     </div>
                 </div>

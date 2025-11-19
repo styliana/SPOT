@@ -54,4 +54,7 @@ Routing::post('admin_delete_room', 'AdminController@admin_delete_room');
 Routing::post('admin_delete_booking', 'AdminController@admin_delete_booking');
 Routing::post('admin_change_role', 'AdminController@admin_change_role');
 
+Routing::get('admin_edit_user', 'AdminController@admin_edit_user');
+Routing::post('admin_update_user', 'AdminController@admin_update_user');
+
 Routing::run($path);
