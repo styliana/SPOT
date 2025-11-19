@@ -11,33 +11,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* 1. Tło strony */
+        /* Tło strony */
         body {
-            background-color: #f3f4f6 !important; /* Jasnoszary */
+            background-color: #f3f4f6 !important;
         }
 
-        /* 2. Kontener Centrujący */
+        /* Główny kontener */
         .room-info-page-content {
             display: flex;
             justify-content: center;
-            padding: 4rem 1rem;
-            min-height: 80vh;
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+            min-height: 100vh;
         }
 
-        /* 3. Biała Karta (To co się rozjechało) */
+        /* Biała Karta (Box) */
         .room-card {
             background-color: #ffffff;
             width: 100%;
-            max-width: 600px; /* Zgrabna szerokość */
+            max-width: 600px;
             padding: 3rem;
-            border-radius: 20px; /* Zaokrąglone rogi */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Cień */
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             position: relative;
             text-align: center;
             margin-top: 1rem;
         }
 
-        /* 4. Przycisk Wstecz */
+        /* Przycisk Wstecz */
         .back-link-wrapper {
             position: absolute;
             top: 1.5rem;
@@ -59,7 +60,7 @@
             color: #0A6BEF;
         }
 
-        /* 5. Nagłówek Pokoju */
+        /* Nagłówek */
         .room-header {
             margin-bottom: 2rem;
             border-bottom: 1px solid #e5e7eb;
@@ -73,9 +74,6 @@
             border-radius: 50%;
             margin-bottom: 1rem;
         }
-        .room-icon-circle span {
-            font-size: 40px;
-        }
         .room-name {
             font-family: 'Poppins', sans-serif;
             font-size: 1.8rem;
@@ -84,7 +82,7 @@
             margin: 0.5rem 0;
         }
 
-        /* 6. Szczegóły (Lista) */
+        /* Szczegóły */
         .room-details {
             text-align: left;
             margin-bottom: 2.5rem;
@@ -111,7 +109,7 @@
             font-size: 1rem;
         }
 
-        /* 7. Przycisk Wyboru */
+        /* Przycisk Wyboru */
         .choose-room-btn {
             display: block;
             width: 100%;
@@ -128,6 +126,16 @@
             background-color: #0855BB;
             transform: translateY(-2px);
         }
+        
+        /* Pigułka */
+        .pill {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
     </style>
 </head>
 <body>
@@ -156,18 +164,34 @@
     <main class="room-info-page-content">
         
         <div class="room-card">
+            
+            <?php
+                // === LOGIKA PRZEKAZYWANIA DANYCH ===
+                // Pobieramy dane z URL (które przyszły z mapy)
+                $date = $_GET['date'] ?? '';
+                $start = $_GET['start'] ?? '';
+                $end = $_GET['end'] ?? '';
+                
+                // Budujemy link powrotny (dla strzałki w tył)
+                // Dzięki temu jak klikniesz Wstecz, dane w formularzu też zostaną!
+                $backLink = "/reservation?date=$date&start=$start&end=$end";
+
+                // Budujemy link wyboru (dla przycisku Choose)
+                $chooseLink = "/reservation?room_id=" . htmlspecialchars($room['id']) . 
+                              "&date=$date&start=$start&end=$end";
+            ?>
+
             <div class="back-link-wrapper">
-                <a href="/reservation" class="back-button">
+                <a href="<?php echo $backLink; ?>" class="back-button">
                     <span class="material-icons-outlined">arrow_back</span>
                 </a>
             </div>
 
             <div class="room-header">
                 <div class="room-icon-circle">
-                    <span class="material-icons-outlined">meeting_room</span>
+                    <span class="material-icons-outlined" style="font-size: 40px;">meeting_room</span>
                 </div>
                 <h2 class="room-name"><?php echo htmlspecialchars($room['name']); ?></h2>
-                
                 <span class="pill pill-blue"><?php echo htmlspecialchars($room['type']); ?></span>
             </div>
 
@@ -183,7 +207,7 @@
                 </div>
             </div>
 
-            <a href="/reservation?room_id=<?php echo htmlspecialchars($room['id']); ?>" class="choose-room-btn">
+            <a href="<?php echo $chooseLink; ?>" class="choose-room-btn">
                 Choose this room
             </a>
 

@@ -10,6 +10,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .map-disabled-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-weight: 600;
+            backdrop-filter: blur(2px);
+            border-radius: 8px;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .map-container-relative {
+            position: relative;
+        }
+    </style>
 </head>
 <body>
     
@@ -28,7 +49,7 @@
              </ul>
         </nav>
         <nav class="mobile-nav">
-             <a href="#"><span class="material-icons-outlined">person_outline</span></a>
+             <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
              <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
              <a href="/logout"><span class="material-icons-outlined">logout</span></a>
         </nav>
@@ -38,50 +59,68 @@
         <h2 class="page-title">Add a reservation</h2>
         <div class="content-grid">
             <div class="form-wrapper">
-                <form class="reservation-form" action="/reservation" method="POST">
+                <form class="reservation-form" action="/reservation" method="POST" id="booking-form">
                     
                     <?php if (isset($message)): ?>
-                        <div class="message success" style="background-color: #d1fae5; color: #067647; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
-                            <?php echo htmlspecialchars($message); ?>
-                        </div>
+                        <div class="message error"><?php echo htmlspecialchars($message); ?></div>
                     <?php endif; ?>
                     
                     <div class="form-group">
-                        <label for="date">Enter date</label>
+                        <label for="date">Date</label>
                         <div class="input-with-icon">
-                            <input id="date" type="date" name="date" required>
+                            <input id="date" type="date" name="date" required 
+                                   value="<?php echo htmlspecialchars($selected_date ?? ''); ?>">
                             <span class="material-icons-outlined input-icon">calendar_month</span>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="time">Enter time</label>
+                        <label for="start_time">Start Time</label>
                         <div class="input-with-icon">
-                            <input id="time" type="time" name="time" required>
+                            <input id="start_time" type="time" name="start_time" required
+                                   value="<?php echo htmlspecialchars($selected_start ?? ''); ?>">
                             <span class="material-icons-outlined input-icon">schedule</span>
                         </div>
                     </div>
-                    <div class="form-spacer"></div>
+
                     <div class="form-group">
-                        <label for="room-id">Room</label>
+                        <label for="end_time">End Time</label>
                         <div class="input-with-icon">
-                            <input id="room-id" type="text" name="room_id" placeholder="Wybierz pokój z mapy" readonly>
+                            <input id="end_time" type="time" name="end_time" required
+                                   value="<?php echo htmlspecialchars($selected_end ?? ''); ?>">
+                            <span class="material-icons-outlined input-icon">schedule</span>
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn">Submit</button>
+
+                    <div class="form-spacer"></div>
+
+                    <div class="form-group">
+                        <label for="room-id">Selected Room</label>
+                        <div class="input-with-icon">
+                            <input id="room-id" type="text" name="room_id" placeholder="Select room from map" 
+                                   value="<?php echo htmlspecialchars($selected_room_id ?? ''); ?>" readonly required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Book now</button>
                 </form>
             </div>
+
             <div class="map-wrapper">
                 <h3 class="subsection-title desktop-only">Choose available room</h3>
-                <div id="map-container">
+                <div class="map-container-relative" id="map-container">
+                    <div id="map-overlay" class="map-disabled-overlay">
+                        <span>Fill in date and time to see availability</span>
+                    </div>
                     <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-                        <rect id="ROOM1" class="room available" data-room-name="Pokój ROOM1" width="127.1" height="44.5" x="90.7" y="151.5" />
-                        <rect id="AULA1" class="room available" data-room-name="Aula A1" width="168.2" height="98.3" x="234.3" y="100.6" />
-                        <rect id="ROOM2" class="room available" data-room-name="Pokój ROOM2" width="73.7" height="53.0" x="92.9" y="212.8" />
-                        <rect id="ROOM3" class="room unavailable" data-room-name="Pokój ROOM3 (Zajęty)" width="154.4" height="47.6" x="416.4" y="146.0" />
-                        <rect id="ROOM4" class="room available" data-room-name="Pokój ROOM4" width="63.7" height="142.1" x="102.9" y="377.3" />
-                        <rect id="ROOM5" class="room available" data-room-name="Pokój ROOM5" width="184.4" height="65.3" x="179.8" y="451.0" />
-                        <rect id="STUDYROOM1" class="room available" data-room-name="Pokój Cichej Nauki" width="58.4" height="72.2" x="307.3" y="370.3" />
-                        <rect id="AULA2" class="room unavailable" data-room-name="Aula A2 (Zajęta)" width="196.7" height="154.4" x="448.7" y="363.4" />
+                        <rect id="ROOM1" class="room available" width="127.1" height="44.5" x="90.7" y="151.5" />
+                        <rect id="AULA1" class="room available" width="168.2" height="98.3" x="234.3" y="100.6" />
+                        <rect id="ROOM2" class="room available" width="73.7" height="53.0" x="92.9" y="212.8" />
+                        <rect id="ROOM3" class="room available" width="154.4" height="47.6" x="416.4" y="146.0" />
+                        <rect id="ROOM4" class="room available" width="63.7" height="142.1" x="102.9" y="377.3" />
+                        <rect id="ROOM5" class="room available" width="184.4" height="65.3" x="179.8" y="451.0" />
+                        <rect id="STUDYROOM1" class="room available" width="58.4" height="72.2" x="307.3" y="370.3" />
+                        <rect id="AULA2" class="room available" width="196.7" height="154.4" x="448.7" y="363.4" />
                     </svg>
                 </div>
             </div>
@@ -90,41 +129,91 @@
 
     <script>
      document.addEventListener('DOMContentLoaded', () => {
-         // 1. Logika klikania w mapę (przenosi do roominfo)
+         const dateInput = document.getElementById('date');
+         const startTimeInput = document.getElementById('start_time');
+         const endTimeInput = document.getElementById('end_time');
+         const mapOverlay = document.getElementById('map-overlay');
+         const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
+
+         function checkAvailability() {
+             const date = dateInput.value;
+             const start = startTimeInput.value;
+             const end = endTimeInput.value;
+
+             if (!date || !start || !end) {
+                 mapOverlay.style.opacity = '1';
+                 mapOverlay.style.pointerEvents = 'auto';
+                 return;
+             }
+
+             mapOverlay.style.opacity = '0';
+             mapOverlay.style.pointerEvents = 'none';
+
+             const data = { date: date, start_time: start, end_time: end };
+
+             fetch('/api/checkAvailability', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(data)
+             })
+             .then(response => response.json())
+             .then(bookedRooms => {
+                 document.querySelectorAll('rect.room').forEach(el => {
+                     el.classList.remove('unavailable');
+                     el.classList.add('available');
+                 });
+
+                 bookedRooms.forEach(id => {
+                     const roomEl = document.getElementById(id);
+                     if (roomEl) {
+                         roomEl.classList.remove('available');
+                         roomEl.classList.add('unavailable');
+                     }
+                 });
+             })
+             .catch(error => console.error('Error:', error));
+         }
+
+         [dateInput, startTimeInput, endTimeInput].forEach(input => {
+             input.addEventListener('change', checkAvailability);
+         });
+
+         // --- KLUCZOWA ZMIANA TUTAJ ---
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
              
-             // Zablokowane pokoje nie są klikalne
+             if (mapOverlay.style.opacity !== '0') return;
              if (room.classList.contains('unavailable')) {
-                 alert(`Pokój ${room.id} jest zajęty.`);
+                 alert(`Ten pokój jest zajęty.`);
                  return;
              }
              
-             // Przekierowanie do szczegółów pokoju
              const roomId = room.id;
-             window.location.href = `/room/${roomId}`;
+             // Pobieramy wartości z inputów
+             const date = dateInput.value;
+             const start = startTimeInput.value;
+             const end = endTimeInput.value;
+
+             // Przekazujemy je w URL do strony pokoju
+             window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}`;
          });
 
-         // 2. Logika powrotu z wybranym pokojem (podświetlenie i input)
          const urlParams = new URLSearchParams(window.location.search);
          const selectedRoomId = urlParams.get('room_id');
-
          if (selectedRoomId) {
-             // Wypełnij input
-             const input = document.getElementById('room-id');
-             if (input) input.value = selectedRoomId;
-
-             // Znajdź pokój na mapie i pokoloruj go
-             const selectedRoomElement = document.getElementById(selectedRoomId);
-             if (selectedRoomElement) {
-                 // Usuwamy klasę 'available', żeby nasz kolor miał priorytet
-                 selectedRoomElement.classList.remove('available');
-                 // Dodajemy klasę specjalną
-                 selectedRoomElement.classList.add('room-selected-active');
-             }
+             if (roomInput) roomInput.value = selectedRoomId;
+             setTimeout(() => {
+                const selectedRoomElement = document.getElementById(selectedRoomId);
+                if (selectedRoomElement) {
+                    selectedRoomElement.classList.remove('available');
+                    selectedRoomElement.classList.add('room-selected-active');
+                }
+             }, 200);
          }
+         
+         checkAvailability();
      });
      </script>
 </body>

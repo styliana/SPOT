@@ -19,11 +19,16 @@ class UserRepository extends Repository
             return null;
         }
 
+        // === TU BYŁ BŁĄD ===
+        // Musimy przekazać wszystkie parametry do konstruktora User:
+        // email, hasło, imię, nazwisko, ROLA, ID
         return new User(
             $user['email'],
-            $user['password'], // W bazie kolumna nazywa się 'password'
-            $user['firstname'], // W bazie: firstname
-            $user['lastname']   // W bazie: lastname
+            $user['password'],
+            $user['firstname'],
+            $user['lastname'],
+            'student',   // Domyślna rola (bo na razie nie mamy jej w bazie)
+            $user['id']  // <--- KLUCZOWE! Przekazujemy ID z bazy
         );
     }
 
@@ -40,5 +45,28 @@ class UserRepository extends Repository
             $user->getName(),
             $user->getSurname()
         ]);
+    }
+    
+    // Opcjonalnie: metoda do pobierania wszystkich userów (dla /users)
+    public function getUsers(): array
+    {
+        $result = [];
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM public.users
+        ');
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($users as $user) {
+            $result[] = new User(
+                $user['email'],
+                $user['password'],
+                $user['firstname'],
+                $user['lastname'],
+                'student',
+                $user['id']
+            );
+        }
+        return $result;
     }
 }

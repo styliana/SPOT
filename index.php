@@ -33,6 +33,8 @@ Routing::get('logout', 'SecurityController@logout');
 Routing::get('reservation', 'ReservationController@reservation');
 Routing::post('reservation', 'ReservationController@reservation');
 
+Routing::post('api/checkAvailability', 'ReservationController@checkAvailability');
+
 Routing::get('mybookings', 'BookingsController@mybookings');
 Routing::get('myprofile', 'ProfileController@myprofile');
 Routing::get('about', 'AboutController@about');

@@ -30,6 +30,13 @@ class RoomController extends AppController {
             'description' => $room->getDescription()
         ];
 
-        return $this->render('roominfo', ['room' => $roomData]);
+        // === NOWOŚĆ: Przekazujemy parametry daty/czasu do widoku ===
+        $queryParams = [
+            'date' => $_GET['date'] ?? '',
+            'start' => $_GET['start'] ?? '',
+            'end' => $_GET['end'] ?? ''
+        ];
+
+        return $this->render('roominfo', ['room' => $roomData, 'params' => $queryParams]);
     }
 }
