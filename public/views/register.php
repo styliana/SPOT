@@ -46,15 +46,19 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="username">User name</label>
-                        <input id="username" type="text" name="username" required>
+                        <label for="name">First Name</label>
+                        <input id="name" type="text" name="name" required>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label for="surname">Last Name</label>
+                        <input id="surname" type="text" name="surname" required>
+                    </div>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="password-wrapper">
                             <input id="password" type="password" name="password" required>
-                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
