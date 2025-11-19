@@ -1,131 +1,134 @@
-/* --- 1. Układ Strony --- */
-.room-info-page-content {
-    width: 100%;
-    max-width: 800px;
-    margin: 4rem auto;
-    padding: 2rem;
+/* Tło strony specyficzne dla tego widoku */
+body {
+    background-color: var(--background-gray-light);
+}
+
+/* Główny kontener centrujący */
+.room-info-container {
     display: flex;
     justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    min-height: 100vh;
 }
 
-/* --- 2. Karta Pokoju --- */
+/* Biała Karta */
 .room-card {
-    background-color: var(--white); /* Białe tło */
+    background-color: var(--white);
     width: 100%;
+    max-width: 600px;
     padding: 3rem;
-    border-radius: 20px; /* Zaokrąglone rogi */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Cień */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     position: relative;
+    text-align: center;
+    margin-top: 1rem;
 }
 
-/* --- 3. Przycisk Wstecz --- */
-.back-link-wrapper {
+/* Przycisk Wstecz */
+.back-button-wrapper {
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: 1.5rem;
+    left: 1.5rem;
 }
 
-.back-button {
+.back-btn {
+    text-decoration: none;
+    color: var(--text-light);
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    color: var(--text-light);
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s;
 }
 
-.back-button:hover {
+.back-btn:hover {
     background-color: var(--input-background);
     color: var(--primary-blue);
 }
 
-.back-button .material-icons-outlined {
-    font-size: 24px;
-}
-
-/* --- 4. Nagłówek i Tytuł --- */
-.room-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+/* Sekcja Nagłówka */
+.room-header-section {
     border-bottom: 1px solid var(--border-gray);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.room-icon {
+.big-icon {
     font-size: 48px;
     color: var(--primary-blue);
     background-color: var(--primary-blue-light);
-    padding: 1rem;
+    padding: 16px;
     border-radius: 50%;
     margin-bottom: 1rem;
     display: inline-block;
 }
 
-.room-name {
+.room-title-text {
     font-family: var(--font-poppins);
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--dark-blue-text);
     margin: 0.5rem 0;
 }
 
-.room-type-badge {
-    margin-top: 0.5rem;
-}
-
-/* --- 5. Szczegóły (Grid) --- */
-.room-details {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.detail-label {
+/* Pigułka (Typ pokoju) */
+.pill {
+    padding: 5px 12px;
+    border-radius: 15px;
     font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-light);
     font-weight: 600;
+    background-color: var(--primary-blue-light);
+    color: var(--primary-blue);
+    display: inline-block;
 }
 
-.detail-value {
-    font-size: 1.1rem;
-    color: var(--text-dark);
-    font-weight: 500;
-    line-height: 1.6;
-}
-
-/* --- 6. Przycisk Akcji --- */
-.choose-room-button {
+/* Wiersze ze szczegółami */
+.detail-row {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    /* Reszta styli (kolor, radius) idzie z main.css */
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px dashed var(--border-gray);
+    text-align: left;
 }
 
-/* --- 7. Responsywność --- */
-@media (max-width: 600px) {
-    .room-info-page-content {
-        padding: 1rem;
-    }
-    .room-card {
-        padding: 2rem 1.5rem;
-    }
-    .room-header {
-        margin-top: 2rem;
-    }
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.lbl {
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.val {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 1rem;
+}
+
+/* Główny Przycisk Akcji */
+.action-btn {
+    display: block;
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 1rem;
+    border-radius: 50px;
+    transition: background 0.3s, transform 0.1s;
+    margin-top: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(10, 107, 239, 0.3);
+}
+
+.action-btn:hover {
+    background-color: var(--accent-blue);
+    transform: translateY(-2px);
 }
