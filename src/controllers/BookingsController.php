@@ -1,54 +1,69 @@
 <?php
 
 require_once 'AppController.php';
+require_once __DIR__ . '/../repository/BookingRepository.php';
 
 class BookingsController extends AppController {
 
-    public function mybookings() {
-        // === ZABEZPIECZENIE ===
-        // Wymagamy zalogowania, aby zobaczyć tę stronę
-        $this->requireLogin();
-        // ========================
+    private $bookingRepository;
 
-        // W przyszłości tutaj pobierzesz rezerwacje z bazy danych
-        // $bookings = $this->bookingRepository->getBookingsForUser($userId);
+    public function __construct()
+    {
+        parent::__construct();
+        $this->bookingRepository = new BookingRepository();
+    }
+
+    public function mybookings() {
+        // 1. Sprawdzamy, czy użytkownik jest zalogowany
+        $this->requireLogin();
         
-        // === FAZA 1: "Fałszywe" dane rezerwacji ===
-        $bookingsData = [
-            [
-                'id' => 1,
-                'room_name' => 'Aula A1 (AULA1)',
-                'date' => 'Oct 25, 2025',
-                'time' => '10:00 - 12:00',
-                'type' => 'Lecture Hall',
-                'type_pill' => 'pill-blue',
-                'status' => 'Confirmed',
-                'status_pill' => 'pill-green'
-            ],
-            [
-                'id' => 2,
-                'room_name' => 'Pokój Cichej Nauki (STUDYROOM1)',
-                'date' => 'Oct 26, 2025',
-                'time' => '14:00 - 15:00',
-                'type' => 'Study Room',
-                'type_pill' => 'pill-gray',
-                'status' => 'Pending',
-                'status_pill' => 'pill-orange'
-            ],
-            [
-                'id' => 3,
-                'room_name' => 'Pokój ROOM4',
-                'date' => 'Oct 28, 2025',
-                'time' => '09:00 - 11:00',
-                'type' => 'Lab',
-                'type_pill' => 'pill-gray',
-                'status' => 'Cancelled',
-                'status_pill' => 'pill-red'
-            ]
-        ];
-        // === KONIEC FAŁSZYWYCH DANYCH ===
+        // 2. Pobieramy ID użytkownika z sesji
+        $userId = $_SESSION['user_id'];
+
+        // 3. Pobieramy rezerwacje z bazy danych
+        $bookingsObjects = $this->bookingRepository->getBookingsByUserId($userId);
         
-        // Renderujemy widok, przekazując mu tablicę z rezerwacjami
+        // 4. Mapujemy obiekty na tablicę dla widoku
+        $bookingsData = [];
+        
+        foreach ($bookingsObjects as $booking) {
+            // Ustalamy kolor statusu
+            $statusPill = 'pill-gray';
+            if ($booking->getStatus() === 'Confirmed') {
+                $statusPill = 'pill-green';
+            } elseif ($booking->getStatus() === 'Cancelled') {
+                $statusPill = 'pill-red';
+            } elseif ($booking->getStatus() === 'Pending') {
+                $statusPill = 'pill-orange';
+            }
+
+            $bookingsData[] = [
+                'id' => $booking->getId(),
+                'room_id' => $booking->getRoomId(), // Potrzebne do linku edycji
+                'room_name' => $booking->getRoomName(),
+                'date' => $booking->getDate(),
+                'time' => $booking->getTimeRange(),
+                'type' => $booking->getRoomType(),
+                'type_pill' => 'pill-blue', 
+                'status' => $booking->getStatus(),
+                'status_pill' => $statusPill
+            ];
+        }
+        
+        // 5. Renderujemy widok
         return $this->render('mybookings', ['bookings' => $bookingsData]);
+    }
+
+    public function delete() {
+        $this->requireLogin();
+
+        if (!$this->isPost()) {
+            return $this->redirect('/mybookings');
+        }
+
+        $bookingId = $_POST['id'];
+        $this->bookingRepository->deleteBooking($bookingId);
+
+        return $this->redirect('/mybookings');
     }
 }

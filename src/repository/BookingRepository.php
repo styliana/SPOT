@@ -53,6 +53,32 @@ class BookingRepository extends Repository {
         ]);
     }
 
+    // === NOWA METODA: Aktualizacja rezerwacji ===
+    public function updateBooking(int $bookingId, int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE bookings 
+            SET room_id = ?, date = ?, start_time = ?, end_time = ?
+            WHERE id = ? AND user_id = ?
+        ');
+
+        $stmt->execute([
+            $roomId,
+            $date,
+            $startTime,
+            $endTime,
+            $bookingId,
+            $userId
+        ]);
+    }
+
+    public function deleteBooking(int $id): void {
+        $stmt = $this->database->connect()->prepare('
+            DELETE FROM bookings WHERE id = :id
+        ');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
     public function getBookedRoomIds(string $date, string $startTime, string $endTime): array {
         $stmt = $this->database->connect()->prepare('
             SELECT room_id FROM bookings

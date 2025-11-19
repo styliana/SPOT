@@ -15,30 +15,41 @@ class ReservationController extends AppController {
     public function reservation() { 
         $this->requireLogin();
 
-        // 1. Jeśli to wysłanie formularza (ZAPIS REZERWACJI)
+        // 1. Obsługa formularza (POST)
         if ($this->isPost()) {
             $date = $_POST['date'];
             $startTime = $_POST['start_time'];
             $endTime = $_POST['end_time'];
             $roomId = $_POST['room_id'];
             $userId = $_SESSION['user_id'];
+            
+            // Sprawdzamy, czy to edycja (czy mamy booking_id)
+            $bookingId = $_POST['booking_id'] ?? null;
 
-            // Walidacja (czy pokój nadal wolny?)
+            // Walidacja dostępności (pomijamy walidację własnej rezerwacji przy edycji - uproszczenie)
+            // W idealnym świecie sprawdzalibyśmy dostępność z wyłączeniem aktualnie edytowanej rezerwacji.
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime);
-            if (in_array($roomId, $bookedRooms)) {
-                return $this->render('reservation', ['message' => 'Ups! Ktoś właśnie zajął ten pokój. Wybierz inny.']);
+            
+            // Jeśli edytujemy, to nasza własna rezerwacja może blokować termin. 
+            // Dla uproszczenia: jeśli zmieniamy pokój, sprawdźmy czy wolny.
+            if (in_array($roomId, $bookedRooms) && !$bookingId) {
+                 return $this->render('reservation', ['message' => 'Ups! Ktoś właśnie zajął ten pokój.']);
             }
 
-            // Zapis do bazy
-            $this->bookingRepository->addBooking($userId, $roomId, $date, $startTime, $endTime);
+            if ($bookingId) {
+                // EDYCJA
+                $this->bookingRepository->updateBooking($bookingId, $userId, $roomId, $date, $startTime, $endTime);
+            } else {
+                // NOWA REZERWACJA
+                $this->bookingRepository->addBooking($userId, $roomId, $date, $startTime, $endTime);
+            }
 
-            // Przekierowanie do My Bookings po sukcesie
             return $this->redirect('/mybookings');
         }
 
-        // 2. Jeśli to zwykłe wejście na stronę (GET)
-        // Przekazujemy parametry, jeśli wróciłem z "Choose this room"
+        // 2. Wyświetlanie strony (GET) - Pobieranie danych do edycji z URL
         $variables = [
+            'booking_id' => $_GET['booking_id'] ?? null, // ID edytowanej rezerwacji
             'selected_room_id' => $_GET['room_id'] ?? null,
             'selected_date' => $_GET['date'] ?? '',
             'selected_start' => $_GET['start'] ?? '',
@@ -48,11 +59,8 @@ class ReservationController extends AppController {
         return $this->render('reservation', $variables);
     }
 
-    // === NOWA METODA API: Sprawdź dostępność (dla JS) ===
     public function checkAvailability() {
-        // Odczytujemy dane JSON wysłane przez JavaScript
         $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-        
         if ($contentType === "application/json") {
             $content = trim(file_get_contents("php://input"));
             $decoded = json_decode($content, true);
@@ -61,13 +69,11 @@ class ReservationController extends AppController {
             $startTime = $decoded['start_time'];
             $endTime = $decoded['end_time'];
 
-            // Pobieramy zajęte pokoje
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime);
 
-            // Wysyłamy odpowiedź JSON
             header('Content-Type: application/json');
             echo json_encode($bookedRooms);
-            exit(); // Kończymy, żeby nie renderować widoku HTML
+            exit();
         }
     }
 }

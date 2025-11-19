@@ -4,8 +4,8 @@ class Booking {
     private $id;
     private $userId;
     private $roomId;
-    private $roomName; // Dodatkowe pole z JOINa
-    private $roomType; // Dodatkowe pole z JOINa
+    private $roomName;
+    private $roomType;
     private $date;
     private $startTime;
     private $endTime;
@@ -27,12 +27,18 @@ class Booking {
     }
 
     public function getId(): int { return $this->id; }
+    public function getUserId(): int { return $this->userId; }
+    
+    // === TEJ METODY BRAKOWAŁO ===
+    public function getRoomId(): string { return $this->roomId; }
+    // ============================
+
     public function getRoomName(): string { return $this->roomName; }
     public function getRoomType(): string { return $this->roomType; }
     public function getDate(): string { return $this->date; }
     
-    // Formatowanie czasu (usuwa sekundy)
     public function getTimeRange(): string { 
+        // Formatowanie czasu (usuwa sekundy)
         return substr($this->startTime, 0, 5) . ' - ' . substr($this->endTime, 0, 5); 
     }
     

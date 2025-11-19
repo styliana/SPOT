@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
+        /* Styl blokujący mapę, dopóki nie wpiszesz dat */
         .map-disabled-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -25,7 +26,7 @@
             backdrop-filter: blur(2px);
             border-radius: 8px;
             transition: opacity 0.3s;
-            pointer-events: none;
+            pointer-events: none; /* Domyślnie przepuszcza, JS to zmieni w razie potrzeby */
         }
         .map-container-relative {
             position: relative;
@@ -56,11 +57,13 @@
     </header>
 
     <main class="reservation-page-content">
-        <h2 class="page-title">Add a reservation</h2>
+        <h2 class="page-title"><?php echo isset($booking_id) ? 'Edit reservation' : 'Add a reservation'; ?></h2>
         <div class="content-grid">
             <div class="form-wrapper">
                 <form class="reservation-form" action="/reservation" method="POST" id="booking-form">
                     
+                    <input type="hidden" name="booking_id" value="<?php echo isset($booking_id) ? htmlspecialchars($booking_id) : ''; ?>">
+
                     <?php if (isset($message)): ?>
                         <div class="message error"><?php echo htmlspecialchars($message); ?></div>
                     <?php endif; ?>
@@ -102,16 +105,21 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="submit-btn">Book now</button>
+                    <button type="submit" class="submit-btn">
+                        <?php echo isset($booking_id) ? 'Save changes' : 'Book now'; ?>
+                    </button>
                 </form>
             </div>
 
             <div class="map-wrapper">
                 <h3 class="subsection-title desktop-only">Choose available room</h3>
+                
                 <div class="map-container-relative" id="map-container">
+                    
                     <div id="map-overlay" class="map-disabled-overlay">
                         <span>Fill in date and time to see availability</span>
                     </div>
+
                     <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
                         <rect id="ROOM1" class="room available" width="127.1" height="44.5" x="90.7" y="151.5" />
                         <rect id="AULA1" class="room available" width="168.2" height="98.3" x="234.3" y="100.6" />
@@ -141,14 +149,16 @@
              const start = startTimeInput.value;
              const end = endTimeInput.value;
 
+             // Blokada mapy jeśli brak danych
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
-                 mapOverlay.style.pointerEvents = 'auto';
+                 mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
 
+             // Odblokowanie
              mapOverlay.style.opacity = '0';
-             mapOverlay.style.pointerEvents = 'none';
+             mapOverlay.style.pointerEvents = 'none'; 
 
              const data = { date: date, start_time: start, end_time: end };
 
@@ -179,31 +189,34 @@
              input.addEventListener('change', checkAvailability);
          });
 
-         // --- KLUCZOWA ZMIANA TUTAJ ---
+         // Kliknięcie w mapę -> Przekierowanie do RoomInfo z parametrami
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
              
-             if (mapOverlay.style.opacity !== '0') return;
+             if (mapOverlay.style.opacity !== '0') return; // Jeśli zablokowana, nie klikaj
+
              if (room.classList.contains('unavailable')) {
                  alert(`Ten pokój jest zajęty.`);
                  return;
              }
              
              const roomId = room.id;
-             // Pobieramy wartości z inputów
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
 
-             // Przekazujemy je w URL do strony pokoju
+             // Przekierowanie do szczegółów z zachowaniem dat
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}`;
          });
 
+         // Obsługa powrotu z RoomInfo (wypełnienie pól)
          const urlParams = new URLSearchParams(window.location.search);
          const selectedRoomId = urlParams.get('room_id');
+
          if (selectedRoomId) {
              if (roomInput) roomInput.value = selectedRoomId;
+             // Podświetlenie wybranego pokoju
              setTimeout(() => {
                 const selectedRoomElement = document.getElementById(selectedRoomId);
                 if (selectedRoomElement) {
