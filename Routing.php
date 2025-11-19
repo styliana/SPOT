@@ -8,6 +8,10 @@ require_once __DIR__ . '/src/db/Database.php';
 require_once __DIR__ . '/src/models/User.php'; // DODANO
 require_once __DIR__ . '/src/repository/Repository.php';
 require_once __DIR__ . '/src/repository/UserRepository.php';
+require_once __DIR__ . '/src/models/Room.php';
+require_once __DIR__ . '/src/models/Booking.php';
+require_once __DIR__ . '/src/repository/RoomRepository.php';
+require_once __DIR__ . '/src/repository/BookingRepository.php';
 
 // === 3. KONTROLERY ===
 require_once __DIR__ . '/src/controllers/SecurityController.php';

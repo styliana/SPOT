@@ -11,8 +11,7 @@ class SecurityController extends AppController {
     public function __construct()
     {
         parent::__construct();
-        $userRepository = new UserRepository();
-        $this->userRepository = $userRepository;
+        $this->userRepository = new UserRepository();
     }
 
     public function login()
@@ -24,15 +23,12 @@ class SecurityController extends AppController {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // 1. Pobieramy użytkownika z bazy
         $user = $this->userRepository->getUser($email);
 
-        // 2. Sprawdzamy czy użytkownik istnieje
         if (!$user) {
             return $this->render('login', ['message' => 'Użytkownik o tym emailu nie istnieje!']);
         }
 
-        // 3. Weryfikujemy hasło (porównujemy wpisane z hashem z bazy)
         if ($user->getEmail() !== $email) {
             return $this->render('login', ['message' => 'Użytkownik o tym emailu nie istnieje!']);
         }
@@ -41,13 +37,14 @@ class SecurityController extends AppController {
             return $this->render('login', ['message' => 'Błędne hasło!']);
         }
 
-        // 4. Logujemy (zapisujemy w sesji)
+        // Sesja
+        $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();
-        $_SESSION['user_name'] = $user->getName(); // Imię do wyświetlania "Hello, Jan!"
-        
-        // Przekierowanie
-        $url = "http://$_SERVER[HTTP_HOST]";
-        header("Location: {$url}/mybookings");
+        $_SESSION['user_name'] = $user->getName();
+        $_SESSION['user_surname'] = $user->getSurname();
+        $_SESSION['user_role'] = $user->getRole(); // Tu będzie np. 'student' lub 'admin'
+
+        return $this->redirect('/mybookings');
     }
 
     public function register()
@@ -59,21 +56,26 @@ class SecurityController extends AppController {
         $email = $_POST['email'];
         $password = $_POST['password'];
         $confirmedPassword = $_POST['confirm_password'];
-        $username = $_POST['username']; // Traktujemy to jako imię (firstname) w tym przykładzie
+        $name = $_POST['name'];
+        $surname = $_POST['surname'];
 
         if ($password !== $confirmedPassword) {
             return $this->render('register', ['message' => 'Hasła nie są identyczne!']);
         }
 
-        // TODO: Tutaj warto dodać sprawdzanie, czy email już istnieje (getUser)
+        if (empty($email) || empty($name) || empty($surname) || empty($password)) {
+             return $this->render('register', ['message' => 'Wszystkie pola są wymagane!']);
+        }
 
-        // HASZOWANIE HASŁA
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $existingUser = $this->userRepository->getUser($email);
+        if ($existingUser) {
+             return $this->render('register', ['message' => 'Taki email jest już zajęty!']);
+        }
 
-        // Tworzymy obiekt (email, hasło, imię, nazwisko - na razie puste nazwisko)
-        $user = new User($email, $hashedPassword, $username, 'User');
+        // Tworzymy użytkownika. Domyślnie przekazujemy 'student' jako rolę.
+        // Repozytorium zamieni ten string na odpowiednie ID z tabeli roles.
+        $user = new User($email, password_hash($password, PASSWORD_BCRYPT), $name, $surname, 'student');
 
-        // Zapisujemy w bazie PostgreSQL
         $this->userRepository->addUser($user);
 
         return $this->render('login', ['message' => 'Rejestracja udana! Zaloguj się.']);
@@ -83,6 +85,6 @@ class SecurityController extends AppController {
     {
         session_unset();
         session_destroy();
-        return $this->render('login', ['message' => 'Wylogowano poprawnie.']);
+        return $this->redirect('/login');
     }
 }
