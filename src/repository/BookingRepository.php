@@ -35,63 +35,36 @@ class BookingRepository extends Repository {
         return $result;
     }
 
-    public function addBooking(int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
+    // === NOWA METODA: Potrzebna, aby Admin mógł edytować cudzą rezerwację ===
+    public function getBookingById(int $id): ?Booking {
         $stmt = $this->database->connect()->prepare('
-            INSERT INTO bookings (user_id, room_id, date, start_time, end_time, status)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ');
-        $stmt->execute([$userId, $roomId, $date, $startTime, $endTime, 'Confirmed']);
-    }
-
-    public function updateBooking(int $bookingId, int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
-        $stmt = $this->database->connect()->prepare('
-            UPDATE bookings 
-            SET room_id = ?, date = ?, start_time = ?, end_time = ?
-            WHERE id = ? AND user_id = ?
-        ');
-        $stmt->execute([$roomId, $date, $startTime, $endTime, $bookingId, $userId]);
-    }
-
-    public function deleteBooking(int $id): void {
-        $stmt = $this->database->connect()->prepare('
-            DELETE FROM bookings WHERE id = :id
+            SELECT b.*, r.name as room_name, r.type as room_type
+            FROM bookings b
+            LEFT JOIN rooms r ON b.room_id = r.id
+            WHERE b.id = :id
         ');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
+        $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$booking) return null;
+
+        return new Booking(
+            $booking['id'],
+            $booking['user_id'],
+            $booking['room_id'],
+            $booking['room_name'] ?? 'Unknown',
+            $booking['room_type'] ?? 'Inne',
+            $booking['date'],
+            $booking['start_time'],
+            $booking['end_time'],
+            $booking['status']
+        );
     }
 
-    // === ZMODYFIKOWANA METODA ===
-    // Dodano parametr $excludeBookingId (domyślnie null)
-    public function getBookedRoomIds(string $date, string $startTime, string $endTime, ?int $excludeBookingId = null): array {
-        
-        $sql = 'SELECT room_id FROM bookings
-                WHERE date = :date
-                AND ((start_time < :end_time) AND (end_time > :start_time))
-                AND status != \'Cancelled\'';
-
-        // Jeśli edytujemy, dodajemy warunek: "oprócz tej konkretnej rezerwacji"
-        if ($excludeBookingId) {
-            $sql .= ' AND id != :exclude_id';
-        }
-
-        $stmt = $this->database->connect()->prepare($sql);
-
-        $stmt->bindParam(':date', $date, PDO::PARAM_STR);
-        $stmt->bindParam(':start_time', $startTime, PDO::PARAM_STR);
-        $stmt->bindParam(':end_time', $endTime, PDO::PARAM_STR);
-        
-        if ($excludeBookingId) {
-            $stmt->bindParam(':exclude_id', $excludeBookingId, PDO::PARAM_INT);
-        }
-
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_COLUMN);
-    }
-
+    // === DLA ADMINA: Pobierz wszystkie rezerwacje ===
     public function getAllBookings(): array {
         $result = [];
-        // Pobieramy wszystkie rezerwacje + dane usera + dane pokoju
         $stmt = $this->database->connect()->prepare('
             SELECT b.*, r.name as room_name, r.type as room_type, u.email as user_email
             FROM bookings b
@@ -103,15 +76,14 @@ class BookingRepository extends Repository {
         $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($bookings as $booking) {
-            // Mały hack: przekazujemy email usera w nazwie pokoju, żeby widzieć kto zarezerwował
-            // w prostym modelu Booking. W idealnym świecie rozbudowalibyśmy model Booking.
+            // Wyświetlamy też email usera, żeby admin wiedział czyje to
             $roomDisplay = ($booking['room_name'] ?? 'Unknown') . ' (' . ($booking['user_email'] ?? 'Unknown') . ')';
             
             $result[] = new Booking(
                 $booking['id'],
                 $booking['user_id'],
                 $booking['room_id'],
-                $roomDisplay, // Tutaj wrzucamy info o pokoju I userze
+                $roomDisplay, 
                 $booking['room_type'] ?? 'Inne',
                 $booking['date'],
                 $booking['start_time'],
@@ -120,5 +92,53 @@ class BookingRepository extends Repository {
             );
         }
         return $result;
+    }
+
+    public function addBooking(int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
+        $stmt = $this->database->connect()->prepare('
+            INSERT INTO bookings (user_id, room_id, date, start_time, end_time, status)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ');
+        $stmt->execute([$userId, $roomId, $date, $startTime, $endTime, 'Confirmed']);
+    }
+
+    // === UPDATE: Pozwala zachować oryginalnego właściciela (user_id) ===
+    public function updateBooking(int $bookingId, int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE bookings 
+            SET room_id = ?, date = ?, start_time = ?, end_time = ?, user_id = ?, created_at = NOW()
+            WHERE id = ?
+        ');
+        $stmt->execute([$roomId, $date, $startTime, $endTime, $userId, $bookingId]);
+    }
+
+    public function deleteBooking(int $id): void {
+        $stmt = $this->database->connect()->prepare('DELETE FROM bookings WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    // === SPRAWDZANIE DOSTĘPNOŚCI (z wykluczeniem edytowanej) ===
+    public function getBookedRoomIds(string $date, string $startTime, string $endTime, ?int $excludeBookingId = null): array {
+        $sql = 'SELECT room_id FROM bookings 
+                WHERE date = :date 
+                AND ((start_time < :end_time) AND (end_time > :start_time))
+                AND status != \'Cancelled\'';
+
+        if ($excludeBookingId) {
+            $sql .= ' AND id != :exclude_id';
+        }
+
+        $stmt = $this->database->connect()->prepare($sql);
+        $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+        $stmt->bindParam(':start_time', $startTime, PDO::PARAM_STR);
+        $stmt->bindParam(':end_time', $endTime, PDO::PARAM_STR);
+        
+        if ($excludeBookingId) {
+            $stmt->bindParam(':exclude_id', $excludeBookingId, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 }

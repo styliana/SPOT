@@ -7,33 +7,20 @@
     <link rel="stylesheet" type="text/css" href="public/styles/main.css">
     <link rel="stylesheet" type="text/css" href="public/styles/reservation.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         .map-disabled-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.7);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            font-weight: 600;
-            backdrop-filter: blur(2px);
-            border-radius: 8px;
-            transition: opacity 0.3s;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.7); z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-light); font-weight: 600; backdrop-filter: blur(2px);
+            border-radius: 8px; transition: opacity 0.3s; pointer-events: none;
         }
-        .map-container-relative {
-            position: relative;
-        }
+        .map-container-relative { position: relative; }
     </style>
 </head>
 <body>
-    
     <header class="main-header">
         <div class="nav-greeting">
             <?php if (isset($_SESSION['user_name'])): ?>
@@ -62,6 +49,7 @@
                 <form class="reservation-form" action="/reservation" method="POST" id="booking-form">
                     
                     <input type="hidden" name="booking_id" id="booking-id-input" value="<?php echo isset($booking_id) ? htmlspecialchars($booking_id) : ''; ?>">
+                    <input type="hidden" name="booking_owner_id" id="booking-owner-input" value="<?php echo isset($booking_owner_id) ? htmlspecialchars($booking_owner_id) : ''; ?>">
 
                     <?php if (isset($message)): ?>
                         <div class="message error"><?php echo htmlspecialchars($message); ?></div>
@@ -75,7 +63,6 @@
                             <span class="material-icons-outlined input-icon">calendar_month</span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="start_time">Start Time</label>
                         <div class="input-with-icon">
@@ -84,7 +71,6 @@
                             <span class="material-icons-outlined input-icon">schedule</span>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="end_time">End Time</label>
                         <div class="input-with-icon">
@@ -93,9 +79,7 @@
                             <span class="material-icons-outlined input-icon">schedule</span>
                         </div>
                     </div>
-
                     <div class="form-spacer"></div>
-
                     <div class="form-group">
                         <label for="room-id">Selected Room</label>
                         <div class="input-with-icon">
@@ -103,7 +87,6 @@
                                    value="<?php echo htmlspecialchars($selected_room_id ?? ''); ?>" readonly required>
                         </div>
                     </div>
-
                     <button type="submit" class="submit-btn">
                         <?php echo isset($booking_id) ? 'Save changes' : 'Book now'; ?>
                     </button>
@@ -113,9 +96,7 @@
             <div class="map-wrapper">
                 <h3 class="subsection-title desktop-only">Choose available room</h3>
                 <div class="map-container-relative" id="map-container">
-                    <div id="map-overlay" class="map-disabled-overlay">
-                        <span>Fill in date and time to see availability</span>
-                    </div>
+                    <div id="map-overlay" class="map-disabled-overlay"><span>Fill in date and time to see availability</span></div>
                     <svg id="room-layer" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
                         <rect id="ROOM1" class="room available" width="127.1" height="44.5" x="90.7" y="151.5" />
                         <rect id="AULA1" class="room available" width="168.2" height="98.3" x="234.3" y="100.6" />
@@ -136,7 +117,10 @@
          const dateInput = document.getElementById('date');
          const startTimeInput = document.getElementById('start_time');
          const endTimeInput = document.getElementById('end_time');
+         
          const bookingIdInput = document.getElementById('booking-id-input');
+         const bookingOwnerInput = document.getElementById('booking-owner-input'); // Nowy input
+         
          const mapOverlay = document.getElementById('map-overlay');
          const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
@@ -148,24 +132,17 @@
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
-             const bookingId = bookingIdInput.value; // Pobieramy ID edycji
+             const bookingId = bookingIdInput.value;
 
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
-
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
-             // Wysyłamy booking_id do API, żeby wykluczyć własną rezerwację
-             const data = { 
-                 date: date, 
-                 start_time: start, 
-                 end_time: end,
-                 booking_id: bookingId 
-             };
+             const data = { date: date, start_time: start, end_time: end, booking_id: bookingId };
 
              fetch('/api/checkAvailability', {
                  method: 'POST',
@@ -174,24 +151,15 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
-                 // 1. Reset wszystkich pokoi na zielono
                  document.querySelectorAll('rect.room').forEach(el => {
                      el.classList.remove('unavailable');
-                     el.classList.remove('room-selected-active'); // Resetujemy też niebieski
+                     el.classList.remove('room-selected-active');
                      el.classList.add('available');
                  });
-
-                 // 2. Oznaczamy zajęte na czerwono
                  bookedRooms.forEach(id => {
                      const roomEl = document.getElementById(id);
-                     if (roomEl) {
-                         roomEl.classList.remove('available');
-                         roomEl.classList.add('unavailable');
-                     }
+                     if (roomEl) { roomEl.classList.remove('available'); roomEl.classList.add('unavailable'); }
                  });
-
-                 // 3. Oznaczamy AKTUALNIE WYBRANY pokój na niebiesko
-                 // (Jeśli jest wpisany w input i nie jest oznaczony jako zajęty)
                  const currentSelectedId = roomInput.value;
                  if (currentSelectedId) {
                      const selectedEl = document.getElementById(currentSelectedId);
@@ -211,25 +179,42 @@
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
-             
              if (mapOverlay.style.opacity !== '0') return;
-
-             if (room.classList.contains('unavailable')) {
-                 alert(`Ten pokój jest zajęty.`);
-                 return;
-             }
+             if (room.classList.contains('unavailable')) { alert(`Ten pokój jest zajęty.`); return; }
              
              const roomId = room.id;
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
              const bookingId = bookingIdInput.value;
+             const ownerId = bookingOwnerInput.value; // Pobieramy ID właściciela
 
-             // Dodajemy booking_id do linku, żeby nie zgubić trybu edycji
-             window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}`;
+             // Przekazujemy owner_id w URL, żeby nie zgubić go po powrocie z RoomInfo!
+             // Ale uwaga: roominfo.php musi to obsłużyć.
+             // Na razie zróbmy wersję prostą: jeśli klikasz na mapę, to i tak wracasz tu.
+             // Zatem RoomController i roominfo.php też muszą przekazywać booking_owner_id (dla spójności).
+             
+             // Na potrzeby szybkiej naprawy: roominfo.php musi dostać ten parametr.
+             // Zaktualizujmy link:
+             window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
-         // Inicjalizacja przy wejściu (jeśli to edycja)
+         const urlParams = new URLSearchParams(window.location.search);
+         const selectedRoomId = urlParams.get('room_id');
+         // Jeśli wróciliśmy z URL, wypełniamy owner_id (jeśli jest w URL)
+         const urlOwnerId = urlParams.get('owner_id');
+         if (urlOwnerId) bookingOwnerInput.value = urlOwnerId;
+
+         if (selectedRoomId) {
+             if (roomInput) roomInput.value = selectedRoomId;
+             setTimeout(() => {
+                const selectedRoomElement = document.getElementById(selectedRoomId);
+                if (selectedRoomElement) {
+                    selectedRoomElement.classList.remove('available');
+                    selectedRoomElement.classList.add('room-selected-active');
+                }
+             }, 200);
+         }
          checkAvailability();
      });
      </script>

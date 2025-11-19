@@ -11,12 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        /* Tło strony */
         body {
             background-color: #f3f4f6 !important;
         }
-
-        /* Główny kontener */
         .room-info-page-content {
             display: flex;
             justify-content: center;
@@ -24,8 +21,6 @@
             padding-bottom: 2rem;
             min-height: 100vh;
         }
-
-        /* Biała Karta (Box) */
         .room-card {
             background-color: #ffffff;
             width: 100%;
@@ -37,8 +32,6 @@
             text-align: center;
             margin-top: 1rem;
         }
-
-        /* Przycisk Wstecz */
         .back-link-wrapper {
             position: absolute;
             top: 1.5rem;
@@ -59,8 +52,6 @@
             background-color: #f3f4f6;
             color: #0A6BEF;
         }
-
-        /* Nagłówek */
         .room-header {
             margin-bottom: 2rem;
             border-bottom: 1px solid #e5e7eb;
@@ -81,8 +72,6 @@
             color: #1f2937;
             margin: 0.5rem 0;
         }
-
-        /* Szczegóły */
         .room-details {
             text-align: left;
             margin-bottom: 2.5rem;
@@ -108,8 +97,6 @@
             color: #1f2937;
             font-size: 1rem;
         }
-
-        /* Przycisk Wyboru */
         .choose-room-btn {
             display: block;
             width: 100%;
@@ -126,8 +113,6 @@
             background-color: #0855BB;
             transform: translateY(-2px);
         }
-        
-        /* Pigułka */
         .pill {
             padding: 5px 12px;
             border-radius: 15px;
@@ -166,19 +151,18 @@
         <div class="room-card">
             
             <?php
-                // === LOGIKA PRZEKAZYWANIA DANYCH ===
-                // Pobieramy dane z URL (które przyszły z mapy)
+                // === LOGIKA ZACHOWANIA DANYCH I WŁAŚCICIELA ===
                 $date = $_GET['date'] ?? '';
                 $start = $_GET['start'] ?? '';
                 $end = $_GET['end'] ?? '';
+                $bookingId = $_GET['booking_id'] ?? '';
+                $ownerId = $_GET['owner_id'] ?? ''; // <-- WAŻNE: Przekazujemy to dalej
                 
-                // Budujemy link powrotny (dla strzałki w tył)
-                // Dzięki temu jak klikniesz Wstecz, dane w formularzu też zostaną!
-                $backLink = "/reservation?date=$date&start=$start&end=$end";
+                // Budujemy parametry URL
+                $params = "date=$date&start=$start&end=$end&booking_id=$bookingId&owner_id=$ownerId";
 
-                // Budujemy link wyboru (dla przycisku Choose)
-                $chooseLink = "/reservation?room_id=" . htmlspecialchars($room['id']) . 
-                              "&date=$date&start=$start&end=$end";
+                $backLink = "/reservation?" . $params;
+                $chooseLink = "/reservation?room_id=" . htmlspecialchars($room['id']) . "&" . $params;
             ?>
 
             <div class="back-link-wrapper">
