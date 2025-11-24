@@ -1,11 +1,26 @@
 <?php
 
+// Wymagamy repozytorium do czyszczenia archiwalnych rezerwacji
+require_once __DIR__ . '/../repository/BookingRepository.php'; 
+
 class AppController {
     private $request;
+    private $bookingRepository;
 
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
+        
+        // Inicjalizacja repozytorium
+        $this->bookingRepository = new BookingRepository(); 
+
+        // === LOGIKA CZYSZCZENIA ARCHIWALNYCH REZERWACJI ===
+        // Uruchamiamy czyszczenie tylko raz na 10 minut (600 sekund) na sesję.
+        if (!isset($_SESSION['last_cleanup_time']) || $_SESSION['last_cleanup_time'] < time() - 600) {
+             $this->bookingRepository->cleanArchivedBookings();
+             $_SESSION['last_cleanup_time'] = time();
+        }
+        // ==================================================
     }
 
     protected function isGet(): bool

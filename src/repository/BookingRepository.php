@@ -118,6 +118,18 @@ class BookingRepository extends Repository {
         $stmt->execute();
     }
 
+    // === NOWA METODA: Czyszczenie archiwalnych rezerwacji (wykonywane przez AppController) ===
+    public function cleanArchivedBookings(): void {
+        // Usuwa rezerwacje, których data+czas zakończenia jest mniejsza niż aktualny timestamp
+        $stmt = $this->database->connect()->prepare('
+            DELETE FROM bookings
+            WHERE (date::text || \' \' || end_time::text)::timestamp < CURRENT_TIMESTAMP
+            AND status != \'Cancelled\'
+        ');
+        $stmt->execute();
+    }
+    // =======================================================================================
+
     // === SPRAWDZANIE DOSTĘPNOŚCI (z wykluczeniem edytowanej) ===
     public function getBookedRoomIds(string $date, string $startTime, string $endTime, ?int $excludeBookingId = null): array {
         $sql = 'SELECT room_id FROM bookings 
