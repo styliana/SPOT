@@ -112,17 +112,17 @@
         </div>
     </main>
 
-    <script>
+ <script>
      document.addEventListener('DOMContentLoaded', () => {
          const dateInput = document.getElementById('date');
          const startTimeInput = document.getElementById('start_time');
          const endTimeInput = document.getElementById('end_time');
+         const roomInput = document.getElementById('room-id');
          
          const bookingIdInput = document.getElementById('booking-id-input');
          const bookingOwnerInput = document.getElementById('booking-owner-input');
          
          const mapOverlay = document.getElementById('map-overlay');
-         const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
          const messageDiv = document.querySelector('.form-wrapper .message.error');
 
@@ -139,21 +139,20 @@
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
-             // Jeśli pole jest puste (tworzenie), ustawiamy null, żeby PHP się nie pogubił
              const bookingId = bookingIdInput.value ? bookingIdInput.value : null; 
 
-             // Walidacja: czy wszystkie pola są wypełnione?
+             // Jeśli brakuje daty/czasu, zakrywamy mapę
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
-             // Jeśli są wypełnione, odkrywamy mapę
+             
+             // Odkrywamy mapę
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
              const data = { date: date, start_time: start, end_time: end, booking_id: bookingId };
-             console.log("Checking availability for:", data);
 
              fetch('/api/checkAvailability', {
                  method: 'POST',
@@ -162,49 +161,39 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
-                 console.log("Booked rooms from DB:", bookedRooms);
-
-                 // 1. RESETUJEMY STAN WSZYSTKICH POKOI
+                 // 1. CZYŚCIMY STAN WSZYSTKICH POKOI
                  document.querySelectorAll('rect.room').forEach(el => {
-                     el.classList.remove('unavailable');
+                     el.classList.remove('unavailable', 'room-selected-active');
                      el.classList.add('available');
-                     // Ważne: czyścimy style inline, które mogły zostać po poprzednim sprawdzeniu
                      el.style.fill = ""; 
                      el.style.pointerEvents = "";
                      el.style.cursor = "";
                  });
 
-                 // 2. OZNACZAMY ZAJĘTE POKOJE
+                 // 2. OZNACZAMY ZAJĘTE POKOJE (Czerwone)
                  if (Array.isArray(bookedRooms)) {
                      bookedRooms.forEach(rawId => {
                          const dbIdUpper = rawId.trim().toUpperCase();
-                         
-                         // Szukamy pokoju na mapie (ignorując wielkość liter)
-                         const roomEl = Array.from(document.querySelectorAll('rect.room'))
-                                             .find(r => r.id.toUpperCase() === dbIdUpper);
+                         const roomEl = document.getElementById(dbIdUpper);
                          
                          if (roomEl) {
-                             roomEl.classList.remove('available');
+                             roomEl.classList.remove('available', 'room-selected-active');
                              roomEl.classList.add('unavailable');
-
-                             // Wymuszamy wygląd "zajęty" bezpośrednio
-                             roomEl.style.fill = 'rgba(220, 38, 38, 0.85)'; // Czerwony
-                             roomEl.style.cursor = 'not-allowed';
-                             roomEl.style.pointerEvents = 'none'; // Blokada klikania
-
-                             // Jeśli użytkownik wybrał ten pokój zanim się zorientował, że jest zajęty -> czyścimy wybór
-                             if (roomInput.value.toUpperCase() === roomEl.id.toUpperCase()) {
-                                 roomEl.classList.remove('room-selected-active');
+                             
+                             // Jeśli zajęty pokój był wybrany w inpucie -> usuwamy wybór
+                             if (roomInput.value.toUpperCase() === dbIdUpper) {
                                  roomInput.value = "";
                              }
                          }
                      });
                  }
 
-                 // 3. PRZYWRACAMY ZAZNACZENIE (jeśli pokój nadal jest wolny)
+                 // 3. OZNACZAMY WYBRANY POKÓJ (Zielony)
+                 // Pobieramy ID z inputa (który został wypełniony przez PHP lub kliknięcie)
                  const currentSelectedId = roomInput.value;
                  if (currentSelectedId) {
                      const selectedEl = document.getElementById(currentSelectedId);
+                     // Podświetlamy tylko jeśli pokój nie jest oznaczony jako zajęty
                      if (selectedEl && !selectedEl.classList.contains('unavailable')) {
                          selectedEl.classList.remove('available');
                          selectedEl.classList.add('room-selected-active');
@@ -214,21 +203,17 @@
              .catch(error => console.error('Error fetching availability:', error));
          }
 
-         // UŻYWAMY 'input' ZAMIAST 'change' DLA NATYCHMIASTOWEJ REAKCJI
+         // Nasłuchiwanie zmian
          [dateInput, startTimeInput, endTimeInput].forEach(input => {
              input.addEventListener('input', checkAvailability);
          });
 
-         // Obsługa kliknięcia w mapę
+         // Kliknięcie w mapę
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
-             
-             // Jeśli mapa jest wyszarzona lub pokój zajęty - nic nie rób
              if (mapOverlay.style.opacity !== '0') return;
-             if (room.classList.contains('unavailable') || room.style.pointerEvents === 'none') {
-                 return;
-             }
+             if (room.classList.contains('unavailable')) return;
              
              const roomId = room.id;
              const date = dateInput.value;
@@ -237,28 +222,13 @@
              const bookingId = bookingIdInput.value; 
              const ownerId = bookingOwnerInput.value; 
 
-             // Przechodzimy do szczegółów pokoju
+             // Przekierowanie do roominfo
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
-         // Inicjalizacja przy ładowaniu (ważne dla edycji)
-         const urlParams = new URLSearchParams(window.location.search);
-         const selectedRoomId = urlParams.get('room_id');
-         const urlOwnerId = urlParams.get('owner_id');
-         if (urlOwnerId) bookingOwnerInput.value = urlOwnerId;
-
-         if (selectedRoomId) {
-             if (roomInput) roomInput.value = selectedRoomId;
-             setTimeout(() => {
-                const selectedRoomElement = document.getElementById(selectedRoomId);
-                if (selectedRoomElement && !selectedRoomElement.classList.contains('unavailable')) {
-                    selectedRoomElement.classList.remove('available');
-                    selectedRoomElement.classList.add('room-selected-active');
-                }
-             }, 200);
-         }
-         
-         // Uruchamiamy sprawdzenie od razu (na wypadek, gdyby przeglądarka zapamiętała dane w polach)
+         // INICJALIZACJA PRZY STARCIE
+         // Uruchamiamy checkAvailability(), co automatycznie pobierze wartość z inputa (wypełnionego przez PHP)
+         // i nałoży zielony kolor na odpowiedni pokój.
          checkAvailability();
      });
      </script>
