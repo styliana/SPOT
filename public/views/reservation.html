@@ -119,20 +119,33 @@
          const endTimeInput = document.getElementById('end_time');
          
          const bookingIdInput = document.getElementById('booking-id-input');
-         const bookingOwnerInput = document.getElementById('booking-owner-input'); // Nowy input
+         const bookingOwnerInput = document.getElementById('booking-owner-input');
          
          const mapOverlay = document.getElementById('map-overlay');
          const roomInput = document.getElementById('room-id');
          const svgMap = document.getElementById('room-layer');
+         
+         // Pobieramy referencję do diva z błędem z PHP
+         const messageDiv = document.querySelector('.form-wrapper .message.error');
 
          const today = new Date().toISOString().split('T')[0];
          dateInput.setAttribute('min', today);
 
+         function clearMessage() {
+             if (messageDiv) {
+                 messageDiv.style.display = 'none';
+             }
+         }
+
          function checkAvailability() {
+             // Czyścimy stary komunikat błędu natychmiast po zmianie danych
+             clearMessage();
+             
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
-             const bookingId = bookingIdInput.value;
+             // KLUCZOWE: ID rezerwacji do zignorowania
+             const bookingId = bookingIdInput.value; 
 
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
@@ -142,6 +155,7 @@
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
+             // PRZEKAZUJEMY bookingId do serwera
              const data = { date: date, start_time: start, end_time: end, booking_id: bookingId };
 
              fetch('/api/checkAvailability', {
@@ -186,22 +200,16 @@
              const date = dateInput.value;
              const start = startTimeInput.value;
              const end = endTimeInput.value;
-             const bookingId = bookingIdInput.value;
-             const ownerId = bookingOwnerInput.value; // Pobieramy ID właściciela
+             const bookingId = bookingIdInput.value; // ID rezerwacji
+             const ownerId = bookingOwnerInput.value; // ID właściciela
 
-             // Przekazujemy owner_id w URL, żeby nie zgubić go po powrocie z RoomInfo!
-             // Ale uwaga: roominfo.php musi to obsłużyć.
-             // Na razie zróbmy wersję prostą: jeśli klikasz na mapę, to i tak wracasz tu.
-             // Zatem RoomController i roominfo.php też muszą przekazywać booking_owner_id (dla spójności).
-             
-             // Na potrzeby szybkiej naprawy: roominfo.php musi dostać ten parametr.
-             // Zaktualizujmy link:
+             // PRZEKAZUJEMY wszystkie parametry do widoku RoomInfo
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
          const urlParams = new URLSearchParams(window.location.search);
          const selectedRoomId = urlParams.get('room_id');
-         // Jeśli wróciliśmy z URL, wypełniamy owner_id (jeśli jest w URL)
+         // Wypełniamy pola ID z URL, jeśli istnieją (np. po edycji)
          const urlOwnerId = urlParams.get('owner_id');
          if (urlOwnerId) bookingOwnerInput.value = urlOwnerId;
 
@@ -215,6 +223,8 @@
                 }
              }, 200);
          }
+         
+         // Uruchamiamy sprawdzanie przy ładowaniu, aby załadować kolory
          checkAvailability();
      });
      </script>
