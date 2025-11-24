@@ -80,6 +80,31 @@ body {
     overflow: hidden;
 }
 
+/* Kontener relatywny dla mapy (przeniesione z HTML) */
+.map-container-relative {
+    position: relative;
+}
+
+/* Nakładka blokująca mapę (przeniesione z HTML) */
+.map-disabled-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-weight: 600;
+    backdrop-filter: blur(2px);
+    border-radius: 8px;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
 #room-layer {
     position: absolute;
     top: 0;
@@ -117,6 +142,27 @@ body {
     stroke: #14532d !important; /* Ciemna obwódka */
     stroke-width: 2px !important;
     fill-opacity: 1 !important;
+}
+
+/* === NOWE: PODPISY POKOI === */
+.room-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    fill: #374151;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none; /* Kliknięcia przechodzą przez tekst */
+    font-weight: 600;
+    opacity: 0.8;
+    user-select: none;
+}
+
+/* Kontrast dla zajętych lub wybranych */
+.room.unavailable + .room-label,
+.room.room-selected-active + .room-label {
+    fill: #000;
+    font-weight: 800;
+    opacity: 1;
 }
 
 /* --- 6. RESPONSIVE --- */

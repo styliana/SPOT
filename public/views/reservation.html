@@ -8,17 +8,6 @@
     <link rel="stylesheet" type="text/css" href="/public/styles/reservation.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    
-    <style>
-        .map-disabled-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.7); z-index: 10;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-light); font-weight: 600; backdrop-filter: blur(2px);
-            border-radius: 8px; transition: opacity 0.3s; pointer-events: none;
-        }
-        .map-container-relative { position: relative; }
-    </style>
 </head>
 <body>
     <header class="main-header">
@@ -112,7 +101,7 @@
         </div>
     </main>
 
- <script>
+    <script>
      document.addEventListener('DOMContentLoaded', () => {
          const dateInput = document.getElementById('date');
          const startTimeInput = document.getElementById('start_time');
@@ -133,6 +122,27 @@
              if (messageDiv) messageDiv.style.display = 'none';
          }
 
+         // === NOWOŚĆ: Generowanie podpisów na mapie ===
+         function generateRoomLabels() {
+             const rooms = svgMap.querySelectorAll('rect.room');
+             rooms.forEach(room => {
+                 const x = parseFloat(room.getAttribute('x'));
+                 const y = parseFloat(room.getAttribute('y'));
+                 const w = parseFloat(room.getAttribute('width'));
+                 const h = parseFloat(room.getAttribute('height'));
+                 const id = room.id;
+
+                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                 text.setAttribute('x', x + w / 2);
+                 text.setAttribute('y', y + h / 2);
+                 text.setAttribute('class', 'room-label');
+                 text.textContent = id; 
+
+                 svgMap.appendChild(text);
+             });
+         }
+         generateRoomLabels();
+
          function checkAvailability() {
              clearMessage();
              
@@ -141,14 +151,11 @@
              const end = endTimeInput.value;
              const bookingId = bookingIdInput.value ? bookingIdInput.value : null; 
 
-             // Jeśli brakuje daty/czasu, zakrywamy mapę
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
-             
-             // Odkrywamy mapę
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
@@ -161,7 +168,7 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
-                 // 1. CZYŚCIMY STAN WSZYSTKICH POKOI
+                 // 1. Reset
                  document.querySelectorAll('rect.room').forEach(el => {
                      el.classList.remove('unavailable', 'room-selected-active');
                      el.classList.add('available');
@@ -170,7 +177,7 @@
                      el.style.cursor = "";
                  });
 
-                 // 2. OZNACZAMY ZAJĘTE POKOJE (Czerwone)
+                 // 2. Zajęte pokoje
                  if (Array.isArray(bookedRooms)) {
                      bookedRooms.forEach(rawId => {
                          const dbIdUpper = rawId.trim().toUpperCase();
@@ -179,8 +186,6 @@
                          if (roomEl) {
                              roomEl.classList.remove('available', 'room-selected-active');
                              roomEl.classList.add('unavailable');
-                             
-                             // Jeśli zajęty pokój był wybrany w inpucie -> usuwamy wybór
                              if (roomInput.value.toUpperCase() === dbIdUpper) {
                                  roomInput.value = "";
                              }
@@ -188,12 +193,10 @@
                      });
                  }
 
-                 // 3. OZNACZAMY WYBRANY POKÓJ (Zielony)
-                 // Pobieramy ID z inputa (który został wypełniony przez PHP lub kliknięcie)
+                 // 3. Wybrany pokój (ZIELONY)
                  const currentSelectedId = roomInput.value;
                  if (currentSelectedId) {
                      const selectedEl = document.getElementById(currentSelectedId);
-                     // Podświetlamy tylko jeśli pokój nie jest oznaczony jako zajęty
                      if (selectedEl && !selectedEl.classList.contains('unavailable')) {
                          selectedEl.classList.remove('available');
                          selectedEl.classList.add('room-selected-active');
@@ -203,12 +206,10 @@
              .catch(error => console.error('Error fetching availability:', error));
          }
 
-         // Nasłuchiwanie zmian
          [dateInput, startTimeInput, endTimeInput].forEach(input => {
              input.addEventListener('input', checkAvailability);
          });
 
-         // Kliknięcie w mapę
          svgMap.addEventListener("click", (e) => {
              const room = e.target.closest("rect.room");
              if (!room) return;
@@ -222,13 +223,10 @@
              const bookingId = bookingIdInput.value; 
              const ownerId = bookingOwnerInput.value; 
 
-             // Przekierowanie do roominfo
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
-         // INICJALIZACJA PRZY STARCIE
-         // Uruchamiamy checkAvailability(), co automatycznie pobierze wartość z inputa (wypełnionego przez PHP)
-         // i nałoży zielony kolor na odpowiedni pokój.
+         // Uruchomienie na starcie
          checkAvailability();
      });
      </script>

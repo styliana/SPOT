@@ -27,7 +27,7 @@
             padding: 4px;
             display: flex;
             align-items: center;
-            text-decoration: none; /* Ważne dla linku a */
+            text-decoration: none; 
         }
         .icon-btn.delete:hover {
             color: #ef4444;
@@ -85,22 +85,12 @@
                     <?php if (isset($bookings) && !empty($bookings)): ?>
                         <?php foreach ($bookings as $booking): ?>
                             <?php 
-                                // Parsowanie czasu do URL (usuwamy " - " i dzielimy)
                                 $times = explode(' - ', $booking['time']);
                                 $start = $times[0] ?? '';
                                 $end = $times[1] ?? '';
                                 
-                                // Budowanie linku edycji z parametrami
-                                // Przekazujemy ID rezerwacji, ID pokoju (trzeba by je mieć w modelu, ale tu upraszczamy używając nazwy lub trzeba dodać room_id do BookingsController)
-                                // UWAGA: BookingsController w mybookings() nie przekazuje room_id, tylko room_name. 
-                                // To małe ograniczenie. Zakładam, że room_name w bazie to ID pokoju (np. ROOM1). Jeśli nie, trzeba poprawić BookingsController.
-                                // W naszej bazie room_id to np. 'ROOM1', a name to 'Pokój ROOM1'.
-                                // Poprawka: musimy użyć ID pokoju. Ale w tabeli wyświetlasz nazwę.
-                                // Najlepiej byłoby, gdyby BookingController przekazywał też surowe 'room_id'.
-                                
-                                // Szybki fix: Zakładamy, że room_id jest częścią obiektu, ale kontroler go nie przekazuje w tablicy. 
-                                // Zaraz poprawię BookingsController w opisie poniżej, żeby przekazywał 'room_id'.
-                                $roomId = $booking['raw_room_id'] ?? ''; 
+                                // === POPRAWKA: Używamy 'room_id' (przekazywanego przez kontroler) ===
+                                $roomId = $booking['room_id'] ?? ''; 
                                 
                                 $editUrl = "/reservation?booking_id=" . $booking['id'] . 
                                            "&room_id=" . $roomId .
