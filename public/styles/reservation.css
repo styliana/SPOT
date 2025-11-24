@@ -21,8 +21,7 @@ body {
     grid-template-columns: minmax(350px, 1fr) 2fr;
     gap: 2rem;
     align-items: start;
-    grid-template-areas:
-        "form map";
+    grid-template-areas: "form map";
 }
 
 .form-wrapper {
@@ -35,18 +34,13 @@ body {
     flex-direction: column;
 }
 
-/* Kolumna prawa: Mapa */
 .map-wrapper {
     grid-area: map;
     min-width: 400px;
     align-self: start;
 }
 
-/* .subsection-title (style w main.css) */
-
 /* --- 4. Elementy Formularza --- */
-/* Style bazowe .form-group, label, input są w main.css */
-
 .reservation-form {
     display: flex;
     flex-direction: column;
@@ -59,29 +53,25 @@ body {
     min-height: 2rem;
 }
 
-/* Przycisk (style bazowe w main.css) */
 .submit-btn {
     margin-top: 1rem;
 }
 
-/* Ikona w input-with-icon dla mapy */
 .input-with-icon .add-icon {
     position: absolute;
     right: 1rem;
-    color: var(--primary-blue); /* Niebieski plusik */
+    color: var(--primary-blue);
     font-weight: 600;
     font-size: 1.5rem;
     pointer-events: auto;
     cursor: pointer;
 }
 
-
 /* --- 5. Style Mapy Interaktywnej --- */
 #map-container {
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 3;
-    /* background-image: url('../images/twoja-mapa.png'); */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -98,13 +88,38 @@ body {
     height: 100%;
 }
 
-.room { fill: rgba(0, 0, 0, 0); stroke: rgba(0,0,0,0.5); stroke-width: 1px; cursor: pointer; transition: fill 0.2s ease-in-out; }
-.room.available:hover { fill: rgba(0, 255, 0, 0.4); }
-.room.unavailable { fill: rgba(255, 0, 0, 0.5); cursor: not-allowed; }
-.room.selected { fill: rgba(59, 130, 246, 0.6); stroke: var(--primary-blue); stroke-width: 2px; }
+/* === KLUCZOWE STYLE DLA POKOI === */
 
+.room { 
+    fill: rgba(255, 255, 255, 0); 
+    stroke: rgba(0,0,0,0.5); 
+    stroke-width: 1px; 
+    cursor: pointer; 
+    transition: fill 0.2s ease-in-out; 
+}
 
-/* --- 6. RESPONSIVE (Mobile) --- */
+/* HOVER - Tylko dla dostępnych (niezaznaczonych) */
+.room.available:hover { 
+    fill: rgba(74, 222, 128, 0.4) !important; /* Delikatna zieleń przy najechaniu */
+}
+
+/* ZAJĘTY (CZERWONY) - Solidny kolor */
+.room.unavailable { 
+    fill: rgba(220, 38, 38, 0.85) !important; /* Czerwony */
+    stroke: #b91c1c !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* WYBRANY (ZIELONY) - Solidny kolor "na stałe" */
+.room.room-selected-active {
+    fill: rgba(22, 163, 74, 0.85) !important; /* Mocny Zielony (Green-600) */
+    stroke: #14532d !important; /* Ciemna obwódka */
+    stroke-width: 2px !important;
+    fill-opacity: 1 !important;
+}
+
+/* --- 6. RESPONSIVE --- */
 @media (max-width: 800px) {
     body { background-color: var(--background-white); }
     .reservation-page-content { padding: 1.5rem; }
@@ -115,30 +130,11 @@ body {
     .form-group { margin-bottom: 1.25rem; }
     .form-spacer { display: none; }
     .map-wrapper { width: 100%; margin: 1.5rem 0; order: 2; }
-    /* Poprawka selektora, aby uwzględnić .form-spacer */
-    .form-wrapper .form-group:nth-child(-n+2) { order: 1; } /* date, time */
-    .form-wrapper .form-group:nth-child(n+4) { order: 3; } /* room */
-    .form-wrapper .submit-btn { order: 3; } /* submit */
+    
+    .form-wrapper .form-group:nth-child(-n+2) { order: 1; }
+    .form-wrapper .form-group:nth-child(n+4) { order: 3; }
+    .form-wrapper .submit-btn { order: 3; }
     
     .desktop-only { display: none; }
     #map-container { aspect-ratio: 1 / 1; border: 1px solid #eee; }
-    
-    /*NA RAZIE  Usunięto cieniowanie na dole */
-}
-
-
-/* --- 7. Aktywny wybór pokoju (po powrocie z RoomInfo) --- */
-.room.room-selected-active {
-    fill: var(--primary-blue) !important; /* Niebieski */
-    stroke: var(--dark-blue-text);
-    stroke-width: 3px;
-    fill-opacity: 0.8;
-    animation: pulse-selection 2s infinite; /* Opcjonalnie: dodaje pulsowanie */
-}
-
-/* Delikatna animacja dla lepszego efektu */
-@keyframes pulse-selection {
-    0% { fill-opacity: 0.7; }
-    50% { fill-opacity: 1.0; }
-    100% { fill-opacity: 0.7; }
 }

@@ -22,36 +22,33 @@ class ReservationController extends AppController {
             $endTime = $_POST['end_time'];
             $roomId = $_POST['room_id'];
             
-            // Pobieramy ID rezerwacji
             $bookingId = $_POST['booking_id'] ?? null;
             if ($bookingId === '') $bookingId = null;
 
-            // === KLUCZOWE: KTO JEST WŁAŚCICIELEM? ===
-            // Jeśli edytujemy, bierzemy ID z ukrytego pola (to właściciel rezerwacji)
-            // Jeśli to nowa rezerwacja, bierzemy ID z sesji (zalogowany user)
             $ownerId = $_POST['booking_owner_id'] ?? $_SESSION['user_id'];
             if ($ownerId === '') $ownerId = $_SESSION['user_id'];
-            // ========================================
 
             try {
                 $bookingStart = new DateTime($date . ' ' . $startTime);
                 $bookingEnd = new DateTime($date . ' ' . $endTime);
                 $now = new DateTime();
-                if ($bookingStart < $now) return $this->render('reservation', ['message' => 'Nie można rezerwować w przeszłości!']);
-                if ($bookingEnd <= $bookingStart) return $this->render('reservation', ['message' => 'Koniec musi być po starcie!']);
+                
+                if ($bookingStart < $now) return $this->renderWithData('Nie można rezerwować w przeszłości!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                if ($bookingEnd <= $bookingStart) return $this->renderWithData('Koniec musi być po starcie!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             } catch (Exception $e) {}
 
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, $bookingId);
-            if (in_array($roomId, $bookedRooms)) return $this->render('reservation', ['message' => 'Pokój zajęty!']);
+            
+            if (in_array($roomId, $bookedRooms)) {
+                return $this->renderWithData('Ten pokój jest już zajęty!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+            }
 
             if ($bookingId) {
-                // Aktualizujemy dla WŁAŚCICIELA (ownerId), a nie dla admina
                 $this->bookingRepository->updateBooking((int)$bookingId, (int)$ownerId, $roomId, $date, $startTime, $endTime);
             } else {
                 $this->bookingRepository->addBooking((int)$ownerId, $roomId, $date, $startTime, $endTime);
             }
 
-            // Przekierowanie zależne od roli ADMINA (zalogowanego)
             if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
                 return $this->redirect('/admin_bookings');
             } else {
@@ -61,9 +58,9 @@ class ReservationController extends AppController {
 
         // --- WYŚWIETLANIE (GET) ---
         $bookingId = $_GET['booking_id'] ?? null;
-        $bookingOwnerId = null;
+        if ($bookingId === '') $bookingId = null;
 
-        // Jeśli edytujemy, pobierzmy oryginalnego właściciela z bazy!
+        $bookingOwnerId = null;
         if ($bookingId) {
             $existingBooking = $this->bookingRepository->getBookingById($bookingId);
             if ($existingBooking) {
@@ -73,7 +70,7 @@ class ReservationController extends AppController {
 
         $variables = [
             'booking_id' => $bookingId,
-            'booking_owner_id' => $bookingOwnerId, // Przekazujemy do widoku
+            'booking_owner_id' => $bookingOwnerId,
             'selected_room_id' => $_GET['room_id'] ?? null,
             'selected_date' => $_GET['date'] ?? '',
             'selected_start' => $_GET['start'] ?? '',
@@ -84,18 +81,40 @@ class ReservationController extends AppController {
     }
 
     public function checkAvailability() {
-        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-        if ($contentType === "application/json") {
-            $content = trim(file_get_contents("php://input"));
-            $decoded = json_decode($content, true);
-            $date = $decoded['date'];
-            $startTime = $decoded['start_time'];
-            $endTime = $decoded['end_time'];
-            $bookingId = $decoded['booking_id'] ?? null;
-            $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, $bookingId);
-            header('Content-Type: application/json');
-            echo json_encode($bookedRooms);
-            exit();
+        // Zawsze ustawiamy nagłówek JSON
+        header('Content-Type: application/json');
+
+        // Pobieramy surowe dane wejściowe (ignorujemy nagłówki przeglądarki, żeby było bezpieczniej)
+        $content = file_get_contents("php://input");
+        $decoded = json_decode($content, true);
+        
+        if (is_array($decoded)) {
+            $date = $decoded['date'] ?? null;
+            $startTime = $decoded['start_time'] ?? null;
+            $endTime = $decoded['end_time'] ?? null;
+            $bookingId = $decoded['booking_id'] ?? null; // Może być null
+
+            if ($date && $startTime && $endTime) {
+                $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, $bookingId);
+                echo json_encode($bookedRooms);
+                exit();
+            }
         }
+        
+        // Jeśli dane są niekompletne, zwracamy pustą tablicę
+        echo json_encode([]);
+        exit();
+    }
+
+    private function renderWithData($message, $date, $start, $end, $roomId, $bookingId, $ownerId) {
+        return $this->render('reservation', [
+            'message' => $message,
+            'selected_date' => $date,
+            'selected_start' => $start,
+            'selected_end' => $end,
+            'selected_room_id' => $roomId,
+            'booking_id' => $bookingId,
+            'booking_owner_id' => $ownerId
+        ]);
     }
 }
