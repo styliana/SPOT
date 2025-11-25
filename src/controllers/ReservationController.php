@@ -20,7 +20,9 @@ class ReservationController extends AppController {
             $date = $_POST['date'];
             $startTime = $_POST['start_time'];
             $endTime = $_POST['end_time'];
-            $roomId = $_POST['room_id'];
+            
+            // 1. Pobieramy ID pokoju i usuwamy białe znaki (spacje)
+            $roomId = isset($_POST['room_id']) ? trim($_POST['room_id']) : '';
             
             $bookingId = $_POST['booking_id'] ?? null;
             if ($bookingId === '') $bookingId = null;
@@ -28,27 +30,37 @@ class ReservationController extends AppController {
             $ownerId = $_POST['booking_owner_id'] ?? $_SESSION['user_id'];
             if ($ownerId === '') $ownerId = $_SESSION['user_id'];
 
+            // === POPRAWKA: Najpierw sprawdzamy, czy pokój został wybrany! ===
+            // To musi być pierwszy warunek, żeby nie wyświetliło "Zajęty" dla pustego pola.
+            if (empty($roomId)) {
+                return $this->renderWithData('Please choose the room from the map.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+            }
+
             try {
                 $bookingStart = new DateTime($date . ' ' . $startTime);
                 $bookingEnd = new DateTime($date . ' ' . $endTime);
                 $now = new DateTime();
                 
-                if ($bookingStart < $now) return $this->renderWithData('Nie można rezerwować w przeszłości!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
-                if ($bookingEnd <= $bookingStart) return $this->renderWithData('Koniec musi być po starcie!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                // Walidacja daty i czasu
+                if ($bookingStart < $now) return $this->renderWithData('Tou cannot book in the past time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                if ($bookingEnd <= $bookingStart) return $this->renderWithData('End time should be later than the start time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             } catch (Exception $e) {}
 
+            // Sprawdzanie dostępności w bazie
             $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, (int)$bookingId);
             
             if (in_array($roomId, $bookedRooms)) {
-                return $this->renderWithData('Ten pokój jest już zajęty!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                return $this->renderWithData('Unfortunately, this room is unavailable at given time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
 
+            // Zapis / Aktualizacja
             if ($bookingId) {
                 $this->bookingRepository->updateBooking((int)$bookingId, (int)$ownerId, $roomId, $date, $startTime, $endTime);
             } else {
                 $this->bookingRepository->addBooking((int)$ownerId, $roomId, $date, $startTime, $endTime);
             }
 
+            // Przekierowanie po sukcesie
             if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
                 return $this->redirect('/admin_bookings');
             } else {
@@ -57,6 +69,7 @@ class ReservationController extends AppController {
         }
 
         // --- WYŚWIETLANIE (GET) ---
+        // (Reszta kodu bez zmian, służy do wyświetlania formularza)
         $bookingId = $_GET['booking_id'] ?? null;
         if ($bookingId === '') $bookingId = null;
 
@@ -70,7 +83,6 @@ class ReservationController extends AppController {
             }
         }
 
-        // Priorytetyzacja danych: URL > Baza danych > Puste
         $selectedRoomId = $_GET['room_id'] ?? null;
         $selectedDate   = $_GET['date'] ?? null;
         $selectedStart  = $_GET['start'] ?? null;
@@ -81,7 +93,6 @@ class ReservationController extends AppController {
             if (!$selectedDate)   $selectedDate = $existingBooking->getDate();
             
             if (!$selectedStart || !$selectedEnd) {
-                // Rozdzielamy format "HH:MM - HH:MM"
                 $times = explode(' - ', $existingBooking->getTimeRange());
                 if (!$selectedStart) $selectedStart = $times[0] ?? '';
                 if (!$selectedEnd)   $selectedEnd   = $times[1] ?? '';

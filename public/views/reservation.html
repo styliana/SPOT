@@ -44,6 +44,8 @@
                         <div class="message error"><?php echo htmlspecialchars($message); ?></div>
                     <?php endif; ?>
                     
+                    <div class="message error js-error" style="display: none;"></div>
+                    
                     <div class="form-group">
                         <label for="date">Date</label>
                         <div class="input-with-icon">
@@ -76,7 +78,7 @@
                                    value="<?php echo htmlspecialchars($selected_room_id ?? ''); ?>" readonly required>
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" id="submit-btn">
                         <?php echo isset($booking_id) ? 'Save changes' : 'Book now'; ?>
                     </button>
                 </form>
@@ -107,22 +109,45 @@
          const startTimeInput = document.getElementById('start_time');
          const endTimeInput = document.getElementById('end_time');
          const roomInput = document.getElementById('room-id');
+         const submitBtn = document.getElementById('submit-btn');
          
          const bookingIdInput = document.getElementById('booking-id-input');
          const bookingOwnerInput = document.getElementById('booking-owner-input');
          
          const mapOverlay = document.getElementById('map-overlay');
          const svgMap = document.getElementById('room-layer');
-         const messageDiv = document.querySelector('.form-wrapper .message.error');
+         // Szukamy diva do błędów JS, a jeśli go nie ma, używamy tego PHP-owego
+         const jsErrorDiv = document.querySelector('.js-error');
+         const phpErrorDiv = document.querySelector('.form-wrapper .message.error:not(.js-error)');
+         const messageDiv = jsErrorDiv || phpErrorDiv;
 
          const today = new Date().toISOString().split('T')[0];
          dateInput.setAttribute('min', today);
 
-         function clearMessage() {
-             if (messageDiv) messageDiv.style.display = 'none';
+         // === USPRAWNIENIE 1: Domyślna data ===
+         if (!dateInput.value) {
+             dateInput.value = today;
          }
 
-         // === NOWOŚĆ: Generowanie podpisów na mapie ===
+         function showMessage(msg) {
+             if (messageDiv) {
+                 messageDiv.style.display = 'block';
+                 messageDiv.textContent = msg;
+                 // Jeśli używamy diva PHP, upewnijmy się, że wygląda dobrze
+                 if (!messageDiv.classList.contains('js-error')) {
+                     messageDiv.classList.add('message', 'error');
+                 }
+             }
+         }
+
+         function clearMessage() {
+             if (messageDiv) {
+                 messageDiv.style.display = 'none';
+                 messageDiv.textContent = '';
+             }
+         }
+
+         // Generowanie podpisów na mapie
          function generateRoomLabels() {
              const rooms = svgMap.querySelectorAll('rect.room');
              rooms.forEach(room => {
@@ -151,11 +176,23 @@
              const end = endTimeInput.value;
              const bookingId = bookingIdInput.value ? bookingIdInput.value : null; 
 
+             // 1. Sprawdzenie czy pola są wypełnione
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
+
+             // === USPRAWNIENIE 2: Walidacja godzin (Client-Side) ===
+             if (start >= end) {
+                 showMessage('Godzina zakończenia musi być późniejsza niż rozpoczęcia.');
+                 mapOverlay.style.opacity = '1';
+                 mapOverlay.style.pointerEvents = 'auto';
+                 roomInput.value = ''; // Czyścimy wybór pokoju, bo godziny są błędne
+                 return; // Przerywamy, nie wysyłamy zapytania do serwera
+             }
+
+             // Jeśli walidacja przeszła, odblokowujemy mapę wizualnie (choć dane wciąż się ładują)
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
@@ -168,7 +205,7 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
-                 // 1. Reset
+                 // Reset widoku pokoi
                  document.querySelectorAll('rect.room').forEach(el => {
                      el.classList.remove('unavailable', 'room-selected-active');
                      el.classList.add('available');
@@ -177,7 +214,7 @@
                      el.style.cursor = "";
                  });
 
-                 // 2. Zajęte pokoje
+                 // Oznaczanie zajętych pokoi
                  if (Array.isArray(bookedRooms)) {
                      bookedRooms.forEach(rawId => {
                          const dbIdUpper = rawId.trim().toUpperCase();
@@ -193,17 +230,23 @@
                      });
                  }
 
-                 // 3. Wybrany pokój (ZIELONY)
+                 // Przywracanie zaznaczenia wybranego pokoju (jeśli wciąż dostępny)
                  const currentSelectedId = roomInput.value;
                  if (currentSelectedId) {
                      const selectedEl = document.getElementById(currentSelectedId);
                      if (selectedEl && !selectedEl.classList.contains('unavailable')) {
                          selectedEl.classList.remove('available');
                          selectedEl.classList.add('room-selected-active');
+                     } else {
+                         // Jeśli wybrany pokój stał się niedostępny przy zmianie godziny
+                         roomInput.value = "";
                      }
                  }
              })
-             .catch(error => console.error('Error fetching availability:', error));
+             .catch(error => {
+                 console.error('Error fetching availability:', error);
+                 showMessage('Wystąpił błąd podczas sprawdzania dostępności.');
+             });
          }
 
          [dateInput, startTimeInput, endTimeInput].forEach(input => {
@@ -226,8 +269,17 @@
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
-         // Uruchomienie na starcie
+         // Uruchomienie na starcie (żeby załadować domyślną datę i ew. dostępność)
          checkAvailability();
+         
+         // Dodatkowa walidacja przy submicie (na wypadek manipulacji HTML)
+         const form = document.getElementById('booking-form');
+         form.addEventListener('submit', (e) => {
+             if (startTimeInput.value >= endTimeInput.value) {
+                 e.preventDefault();
+                 showMessage('Godzina zakończenia musi być późniejsza niż rozpoczęcia.');
+             }
+         });
      });
      </script>
 </body>
