@@ -12,14 +12,15 @@ services:
       - pg-network
   
   db:
-    build:
-      context: .
-      dockerfile: docker/db/Dockerfile
-    ports:
-      - "5433:5432"
-    networks:
+      build:
+        context: .
+        dockerfile: docker/db/Dockerfile
+      ports:
+        - "5433:5432"
+      volumes:
+        - pg-data:/var/lib/postgresql/data
+      networks:
       - pg-network
-  
   php:
     build:
       context: .
