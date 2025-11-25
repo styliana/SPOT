@@ -9,4 +9,17 @@ class Repository {
     {
         $this->database = new Database();
     }
+
+    // === Metody do obsługi Transakcji ===
+    public function beginTransaction() {
+        $this->database->connect()->beginTransaction();
+    }
+
+    public function commit() {
+        $this->database->connect()->commit();
+    }
+
+    public function rollBack() {
+        $this->database->connect()->rollBack();
+    }
 }

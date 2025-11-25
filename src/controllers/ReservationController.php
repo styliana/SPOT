@@ -15,13 +15,10 @@ class ReservationController extends AppController {
     public function reservation() { 
         $this->requireLogin();
 
-        // --- ZAPIS (POST) ---
         if ($this->isPost()) {
             $date = $_POST['date'];
             $startTime = $_POST['start_time'];
             $endTime = $_POST['end_time'];
-            
-            // 1. Pobieramy ID pokoju i usuwamy białe znaki (spacje)
             $roomId = isset($_POST['room_id']) ? trim($_POST['room_id']) : '';
             
             $bookingId = $_POST['booking_id'] ?? null;
@@ -30,46 +27,58 @@ class ReservationController extends AppController {
             $ownerId = $_POST['booking_owner_id'] ?? $_SESSION['user_id'];
             if ($ownerId === '') $ownerId = $_SESSION['user_id'];
 
-            // === POPRAWKA: Najpierw sprawdzamy, czy pokój został wybrany! ===
-            // To musi być pierwszy warunek, żeby nie wyświetliło "Zajęty" dla pustego pola.
             if (empty($roomId)) {
-                return $this->renderWithData('Please choose the room from the map.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                return $this->renderWithData('Proszę wybrać pokój z mapy!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
 
+            // --- POCZĄTEK TRANSAKCJI ---
             try {
+                $this->bookingRepository->beginTransaction();
+
+                // 1. Walidacja logiczna (daty)
                 $bookingStart = new DateTime($date . ' ' . $startTime);
                 $bookingEnd = new DateTime($date . ' ' . $endTime);
                 $now = new DateTime();
                 
-                // Walidacja daty i czasu
-                if ($bookingStart < $now) return $this->renderWithData('Tou cannot book in the past time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
-                if ($bookingEnd <= $bookingStart) return $this->renderWithData('End time should be later than the start time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
-            } catch (Exception $e) {}
+                if ($bookingStart < $now) throw new Exception('Nie można rezerwować w przeszłości!');
+                if ($bookingEnd <= $bookingStart) throw new Exception('Godzina zakończenia musi być późniejsza niż rozpoczęcia!');
 
-            // Sprawdzanie dostępności w bazie
-            $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, (int)$bookingId);
-            
-            if (in_array($roomId, $bookedRooms)) {
-                return $this->renderWithData('Unfortunately, this room is unavailable at given time.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
-            }
+                // 2. Sprawdzenie dostępności w bazie (wewnątrz transakcji)
+                // W idealnym świecie użylibyśmy tu "SELECT FOR UPDATE", ale zwykły select w transakcji też jest krokiem naprzód
+                $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, (int)$bookingId);
+                
+                if (in_array($roomId, $bookedRooms)) {
+                    throw new Exception('Niestety, ten pokój został właśnie zajęty.');
+                }
 
-            // Zapis / Aktualizacja
-            if ($bookingId) {
-                $this->bookingRepository->updateBooking((int)$bookingId, (int)$ownerId, $roomId, $date, $startTime, $endTime);
-            } else {
-                $this->bookingRepository->addBooking((int)$ownerId, $roomId, $date, $startTime, $endTime);
-            }
+                // 3. Zapis / Aktualizacja
+                if ($bookingId) {
+                    $this->bookingRepository->updateBooking((int)$bookingId, (int)$ownerId, $roomId, $date, $startTime, $endTime);
+                } else {
+                    $this->bookingRepository->addBooking((int)$ownerId, $roomId, $date, $startTime, $endTime);
+                }
 
-            // Przekierowanie po sukcesie
-            if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
-                return $this->redirect('/admin_bookings');
-            } else {
-                return $this->redirect('/mybookings');
+                // --- ZATWIERDZENIE TRANSAKCJI ---
+                $this->bookingRepository->commit();
+
+                // Przekierowanie po sukcesie
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+                    return $this->redirect('/admin_bookings');
+                } else {
+                    return $this->redirect('/mybookings');
+                }
+
+            } catch (Exception $e) {
+                // --- WYCOFANIE TRANSAKCJI W RAZIE BŁĘDU ---
+                $this->bookingRepository->rollBack();
+                
+                // Wyświetlenie błędu użytkownikowi
+                return $this->renderWithData($e->getMessage(), $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
         }
 
         // --- WYŚWIETLANIE (GET) ---
-        // (Reszta kodu bez zmian, służy do wyświetlania formularza)
+        // ... (reszta kodu bez zmian, skopiuj z poprzedniej wersji) ...
         $bookingId = $_GET['booking_id'] ?? null;
         if ($bookingId === '') $bookingId = null;
 
@@ -110,31 +119,23 @@ class ReservationController extends AppController {
 
         return $this->render('reservation', $variables);
     }
-
+    
+    // ... reszta metod (checkAvailability, renderWithData) bez zmian ...
     public function checkAvailability() {
         header('Content-Type: application/json');
-
         $content = file_get_contents("php://input");
         $decoded = json_decode($content, true);
-        
         if (is_array($decoded)) {
             $date = $decoded['date'] ?? null;
             $startTime = $decoded['start_time'] ?? null;
             $endTime = $decoded['end_time'] ?? null;
             $bookingId = $decoded['booking_id'] ?? null;
-
             if ($date && $startTime && $endTime) {
-                $bookedRooms = $this->bookingRepository->getBookedRoomIds(
-                    $date, 
-                    $startTime, 
-                    $endTime, 
-                    $bookingId ? (int)$bookingId : null
-                );
+                $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, $bookingId ? (int)$bookingId : null);
                 echo json_encode($bookedRooms);
                 exit();
             }
         }
-        
         echo json_encode([]);
         exit();
     }
