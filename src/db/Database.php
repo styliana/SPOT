@@ -7,8 +7,7 @@ class Database {
     private $password;
     private $host;
     private $database;
-    // Dodajemy właściwość do trzymania połączenia
-    private $connection = null;
+    private $connection = null; // Cache połączenia
 
     public function __construct()
     {
@@ -20,7 +19,7 @@ class Database {
 
     public function connect()
     {
-        // Jeśli połączenie już istnieje, zwracamy je (Singleton per request)
+        // Singleton: jeśli połączenie już jest, zwróć je zamiast tworzyć nowe
         if ($this->connection !== null) {
             return $this->connection;
         }
@@ -31,12 +30,9 @@ class Database {
                 $this->username,
                 $this->password
             );
-
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            // Zapisujemy połączenie
-            $this->connection = $conn;
-            
+            $this->connection = $conn; // Zapisz połączenie
             return $conn;
         }
         catch(PDOException $e) {

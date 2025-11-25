@@ -10,7 +10,7 @@ class Repository {
         $this->database = new Database();
     }
 
-    // === Metody do obsługi Transakcji ===
+    // === TRANSAKCJE ===
     public function beginTransaction() {
         $this->database->connect()->beginTransaction();
     }
