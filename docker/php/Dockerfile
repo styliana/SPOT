@@ -1,13 +1,14 @@
-# === POPRAWKA: Używamy stabilnej wersji PHP, a nie RC1 ===
+# == Używamy stabilnej wersji PHP, a nie RC1 ===
 FROM php:8.3-fpm-alpine
-# =======================================================
 
 ENV RUN_DEPS \
     zlib \
     libzip \
     libpng \
     libjpeg-turbo \
-    postgresql-libs
+    postgresql-libs \
+    bash \
+    curl
 
 ENV BUILD_DEPS \
     zlib-dev \
@@ -24,14 +25,18 @@ ENV PHP_EXTENSIONS \
     pgsql \
     pdo_pgsql
 
+# Instalujemy zależności systemowe oraz Composera
 RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j "$(nproc)" $PHP_EXTENSIONS \
-    && apk del .build-deps
+    && apk del .build-deps \
+    && apk add --no-cache $RUN_DEPS
 
-RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
+# Instalacja Composera
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+
 # Copy the application code
 COPY . /app
 

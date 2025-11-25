@@ -49,31 +49,9 @@ CREATE TABLE bookings_audit_log (
     reason TEXT
 );
 
--- 2. DANE (INSERTS) - PRZYWRACANIE DANYCH
-
--- Role
-INSERT INTO roles (name) VALUES ('student'), ('teacher'), ('admin');
-
--- Pokoje (Zgodne z Twoją mapą SVG)
-INSERT INTO rooms (id, name, workspaces, type, description) VALUES 
-('ROOM1', 'Sala 101', 30, 'Classroom', 'Standardowa sala ćwiczeniowa'),
-('ROOM2', 'Sala 102', 20, 'Classroom', 'Mała sala lekcyjna'),
-('ROOM3', 'Lab Komputerowy', 15, 'Lab', 'Laboratorium wyposażone w komputery PC'),
-('ROOM4', 'Sala Cicha', 5, 'Study', 'Miejsce do cichej nauki'),
-('ROOM5', 'Sala Projektowa', 10, 'Project', 'Sala ze stołami do pracy grupowej'),
-('AULA1', 'Aula Główna', 150, 'Lecture Hall', 'Główna aula wykładowa z projektorem'),
-('AULA2', 'Mała Aula', 80, 'Lecture Hall', 'Mniejsza aula na piętrze'),
-('STUDYROOM1', 'Pokój Nauki', 4, 'Study', 'Prywatny pokój do nauki');
-
--- Użytkownicy (Hasło to: 'password')
--- Admin: admin@spot.edu
--- Student: student@spot.edu
-INSERT INTO users (name, surname, email, password, id_role) VALUES 
-('Admin', 'System', 'admin@spot.edu', '$2y$10$n1M.iM07qC2.W5sQ.O.ORO/u1.1/u1.1/u1.1/u1.1/u1.1', (SELECT id FROM roles WHERE name = 'admin')),
-('Jan', 'Kowalski', 'student@spot.edu', '$2y$10$n1M.iM07qC2.W5sQ.O.ORO/u1.1/u1.1/u1.1/u1.1/u1.1', (SELECT id FROM roles WHERE name = 'student'));
 
 
--- 3. WIDOKI (VIEWS)
+-- 2. WIDOKI (VIEWS)
 
 CREATE OR REPLACE VIEW vw_booking_details AS
 SELECT 
@@ -100,7 +78,7 @@ LEFT JOIN bookings b ON r.id = b.room_id
 GROUP BY r.name;
 
 
--- 4. WYZWALACZ (TRIGGER)
+-- 3. WYZWALACZ (TRIGGER)
 
 CREATE OR REPLACE FUNCTION log_booking_deletion()
 RETURNS TRIGGER AS $$
