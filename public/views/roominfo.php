@@ -6,10 +6,8 @@
     <title>SPOT - <?php echo htmlspecialchars($room['name']); ?></title>
     
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
+        <?php include __DIR__ . '/components/global_head_links.php'; ?>
+        
     <style>
         body {
             background-color: #f3f4f6 !important;

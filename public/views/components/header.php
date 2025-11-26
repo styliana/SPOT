@@ -38,6 +38,7 @@ $isHomePage = ($_SERVER['REQUEST_URI'] === '/');
                  <li><a href="/admin_users" class="nav-link <?php echo (isActive('admin_users') || $isHomePage) ? 'active' : ''; ?>">Users</a></li>
                  <li><a href="/admin_rooms" class="nav-link <?php echo isActive('admin_rooms'); ?>">Rooms</a></li>
                  <li><a href="/admin_bookings" class="nav-link <?php echo isActive('admin_bookings'); ?>">Bookings</a></li>
+                    <li><a href="/myprofile" class="nav-link <?php echo isActive('myprofile'); ?>">My Profile</a></li>
              <?php else: ?>
                  <li><a href="/about" class="nav-link <?php echo isActive('about'); ?>">About</a></li>
                  <li><a href="/mybookings" class="nav-link <?php echo (isActive('mybookings') || $isHomePage) ? 'active' : ''; ?>">My bookings</a></li>
