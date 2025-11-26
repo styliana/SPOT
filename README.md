@@ -1,12 +1,118 @@
 © Aleksandra Gołek | All rights reserved.
 This work is legally protected and requires permission for use.
-# What is SPOT? ✨ (work in progress... starting coding phase)
+## What is SPOT? ✨
 
 > Smart Place Organization Tool | "Your campus. Your space. Your SPOT."
 
 **Say goodbye to booking conflicts, uncertainty, and the hassle of manually searching for available rooms. SPOT (Smart Place Organization Tool) is a revolutionary platform for academic space management, designed for the prestige and dynamism of the modern university.**
 
 SPOT combines an elegant interface with a powerful organizational engine that automates the booking process for rooms, labs, and lecture halls. It's a tool that brings order and peace of mind, allowing the entire academic community to focus on what matters most: learning, development, and collaboration.
+## 🚀 Start-up
+
+1.  Make sure you have Docker installed.
+2.  Clone the repo and go to project directory.
+3.  Launch the app with:
+    ```bash
+    docker-compose up --build
+    ```
+4.  **App:** `http://localhost:8080`
+5.  **PgAdmin:** `http://localhost:5050` (Login: `admin@example.com`, Hasło: `admin`)
+
+**Default login:**
+* **Student:** `student@spot.com` 
+* **Admin:** `admin@example.com`
+
+## 🏗 Architecture & Structure
+
+App is based on **MVC (Model-View-Controller)**. All traffic is managed by `index.php` (Front Controller) and class `Routing`.
+
+**Layer diagram:**
+```mermaid
+graph TD
+    User((Użytkownik)) --> Browser[Przeglądarka / JS Fetch]
+    Browser -- HTTP Request --> Nginx[Nginx :8080]
+    Nginx -- FastCGI --> PHP[Kontener PHP :9000]
+    
+    subgraph Backend PHP
+    PHP --> Router[Routing.php]
+    Router --> Controller[Controller]
+    Controller --> Model[Model]
+    Controller --> View[View / Template]
+    Model --> Repo[Repository]
+    end
+    
+    Repo -- PDO --> DB[(PostgreSQL :5432)]
+```
+
+## Database
+### Entity Relationship Diagram (ERD)
+## 🗄 Database
+
+### Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    ROLES {
+        int id PK "Unique identifier"
+        string name "Role name (student, admin)"
+    }
+
+    USERS {
+        int id PK "Unique identifier"
+        string email UK "Login email"
+        string password "Hashed password"
+        string name "First name"
+        string surname "Last name"
+        int id_role FK "Foreign key to ROLES"
+        timestamp created_at "Creation date"
+    }
+
+    USER_DETAILS {
+        int user_id PK,FK "Links to USERS"
+        string phone_number "Contact number"
+        string faculty "Faculty name"
+        string student_card_id "ID Card number"
+    }
+
+    ROOMS {
+        string id PK "Room code (e.g. ROOM1)"
+        string name "Display name"
+        int workspaces "Seat capacity"
+        string type "Type (Lab, Lecture Hall)"
+        text description "Optional details"
+    }
+
+    BOOKINGS {
+        int id PK "Booking ID"
+        int user_id FK "Who booked"
+        string room_id FK "Which room"
+        date date "Reservation date"
+        time start_time "Start"
+        time end_time "End"
+        string status "Confirmed/Cancelled"
+    }
+
+    BOOKINGS_AUDIT_LOG {
+        int log_id PK "Log ID"
+        int booking_id "Deleted booking ID"
+        string reason "Reason for deletion"
+        timestamp deleted_at "Time of deletion"
+    }
+
+    %% Relacje
+    ROLES ||--|{ USERS : "defines permissions for"
+    USERS ||--|| USER_DETAILS : "has details"
+    USERS ||--o{ BOOKINGS : "makes"
+    ROOMS ||--o{ BOOKINGS : "is reserved in"
+```
+
+### Relationships
+.........
+
+## Advanced SQL elements
+* Views: vw_booking_details (details with table joining), vw_room_stats (usage stats).
+* Trigger: trg_log_booking_delete - automatically logs deleted bookings to the table bookings_audit_log.
+* Procedure: clean_archived_bookings - deletes old bookings (from the past).
 
 <h3>PROGRAMMED VIEWS</h3>
 
