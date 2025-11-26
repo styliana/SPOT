@@ -11,7 +11,7 @@
 </head>
 <body>
 
-        <?php include __DIR__ . '/components/header.php'; ?>
+<?php include __DIR__ . '/components/header.php'; ?>
 
 
     <main class="reservation-page-content">

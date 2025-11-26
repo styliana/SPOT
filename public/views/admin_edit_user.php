@@ -39,9 +39,7 @@
 </head>
 <body>
     
-    <header class="main-header admin-header">
-        <div class="nav-greeting">ADMIN PANEL <span class="admin-badge">MASTER</span></div>
-    </header>
+<?php include __DIR__ . '/components/header.php'; ?>
 
     <div class="admin-container">
         <div class="edit-form-card">
