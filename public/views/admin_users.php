@@ -62,7 +62,6 @@
                  <li><a href="/admin_users" class="nav-link active">Users</a></li>
                  <li><a href="/admin_rooms" class="nav-link">Rooms</a></li>
                  <li><a href="/admin_bookings" class="nav-link">Bookings</a></li>
-                 <li><a href="/myprofile" class="nav-link">My Profile</a></li>
                  <li><a href="/logout" class="nav-link">Log out</a></li>
              </ul>
         </nav>

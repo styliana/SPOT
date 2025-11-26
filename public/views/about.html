@@ -12,21 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="main-header">
-        <nav class="main-nav">
-             <ul>
-                 <li><a href="/reservation" class="nav-link">Add reservation</a></li>
-                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
-                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
-                 <li><a href="/logout" class="nav-link">Log out</a></li>
-             </ul>
-        </nav>
-        <nav class="mobile-nav">
-             <a href="/reservation"><span class="material-icons-outlined">add</span></a>
-             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
-             <a href="/logout"><span class="material-icons-outlined">logout</span></a>
-        </nav>
-    </header>
+    
+<?php include __DIR__ . '/components/header.php'; ?>
+
     <main class="about-page-content">
         <h1>About SPOT</h1>
         <section class="about-section">

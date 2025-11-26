@@ -125,26 +125,7 @@
 </head>
 <body>
     
-    <header class="main-header">
-        <div class="nav-greeting">
-            <?php if (isset($_SESSION['user_name'])): ?>
-                Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
-            <?php endif; ?>
-        </div>
-        <nav class="main-nav">
-             <ul>
-                 <li><a href="/about" class="nav-link">About</a></li>
-                 <li><a href="/mybookings" class="nav-link">My bookings</a></li>
-                 <li><a href="/myprofile" class="nav-link">My profile</a></li>
-                 <li><a href="/logout" class="nav-link">Log out</a></li>
-             </ul>
-        </nav>
-        <nav class="mobile-nav">
-             <a href="/myprofile"><span class="material-icons-outlined">person_outline</span></a>
-             <a href="/mybookings"><span class="material-icons-outlined">description</span></a>
-             <a href="/logout"><span class="material-icons-outlined">logout</span></a>
-        </nav>
-    </header>
+    <?php include __DIR__ . '/components/header.php'; ?>
 
     <main class="room-info-page-content">
         

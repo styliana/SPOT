@@ -13,12 +13,15 @@
 </head>
 <body>
     
-    <?php
-        // Sprawdzamy, czy zalogowany jest admin
-        $isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
-    ?>
+<?php
+// Sprawdzamy, czy zalogowany jest admin
+// Ta sekcja musi pozostać, bo komponent header.php jej potrzebuje!
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'); 
+?>
 
-    <header class="main-header <?php echo $isAdmin ? 'admin-header' : ''; ?>">
+<?php include __DIR__ . '/components/header.php'; ?> 
+
+<main class="profile-page-content">
         
         <div class="nav-greeting">
             <?php if ($isAdmin): ?>
