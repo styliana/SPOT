@@ -32,7 +32,7 @@ class ReservationController extends AppController {
 
             // === WALIDACJA: Czy wybrano pokój? ===
             if (empty($roomId)) {
-                return $this->renderWithData('Proszę wybrać pokój z mapy!', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
+                return $this->renderWithData('Please,choose the room from the map.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
 
             // === TRANSAKCJA (Wymóg regulaminowy) ===
@@ -45,14 +45,28 @@ class ReservationController extends AppController {
                 $now = new DateTime();
                 
                 // Walidacja logiczna daty i czasu
-                if ($bookingStart < $now) throw new Exception('Nie można rezerwować w przeszłości!');
-                if ($bookingEnd <= $bookingStart) throw new Exception('Godzina zakończenia musi być późniejsza niż rozpoczęcia!');
+                if ($bookingStart < $now) {
+                    throw new Exception('You cannot book in the past time.');
+                }
+                
+                if ($bookingEnd <= $bookingStart) {
+                    throw new Exception('End time should be later than the start time.');
+                }
+
+                //Walidacja minimalnego czasu trwania (15 min)
+                // Obliczamy różnicę
+                $interval = $bookingStart->diff($bookingEnd);
+                // Zamieniamy różnicę na minuty (godziny * 60 + minuty)
+                if (($interval->h * 60 + $interval->i) < 15) {
+                     throw new Exception('Booking should last at least 15 minutes.');
+                }
+                
 
                 // Sprawdzanie dostępności w bazie (wewnątrz transakcji)
                 $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, (int)$bookingId);
                 
                 if (in_array($roomId, $bookedRooms)) {
-                    throw new Exception('Niestety, ten pokój jest już zajęty w wybranych godzinach.');
+                    throw new Exception('This room is already booked for the selected time slot.');
                 }
 
                 // Zapis / Aktualizacja
