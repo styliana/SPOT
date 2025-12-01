@@ -8,17 +8,15 @@
 /* --- 2. Zmienne (Paleta Kolorów) --- */
 :root {
     /* Główne kolory */
-    --primary-blue: #0A6BEF;
-    --accent-blue: #0855BB;
+    
+    --primary-blue: #1622a5; 
+    --accent-blue: #101985; 
     --primary-blue-light: #E0EEFF;
     --light-blue: #57B1E1;
     
     /* Tekst i Nagłówki */
     --dark-blue-text: #212B36;
-    --dark-blue-header: #1622a5;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --text-gray: #9ca3af;
+    --dark-blue-header: #1622a5; /* To jest ten kolor, który chciałeś */
 
     /* Tła */
     --white: #FFFFFF;
