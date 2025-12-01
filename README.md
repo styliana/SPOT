@@ -235,10 +235,9 @@ Procedure:
 <img src="https://github.com/user-attachments/assets/0ad12fc4-e9f4-426b-986a-9ef27a175c73" width="100%" /> </td> <td valign="top"> <strong>Admin view: manage users.</strong>
 
 
-<img src="https://github.com/user-attachments/assets/b0d896b2-3a6d-44ec-ad9f-1c3b1a049413" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Admin view: manage rooms. Delete a room.</strong>
+<img src="https://github.com/user-attachments/assets/b0d896b2-3a6d-44ec-ad9f-1c3b1a049413" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Admin view: manage users' bookings. Delete a reservation.</strong>
 
 
-<img src="https://github.com/user-attachments/assets/f53cf7d2-c693-49ee-a29f-a1dd4ce3bbb1" width="100%" /> </td> <td valign="top"> <strong>Admin view: manage bookings.</strong>
 
 
 <img src="https://github.com/user-attachments/assets/a6de9ded-3e0f-43c2-9920-13aba38be565" width="100%" /> </td> <td valign="top"> <strong>Log out. Successfully redirected to log in page and user logged out.</strong>
