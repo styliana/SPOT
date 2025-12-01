@@ -137,78 +137,122 @@ Procedure:
 
 
 
+Oto Twoja sekcja Test Scenario przeformatowana na układ 2 kolumny, z zachowaniem oryginalnych opisów i obrazów.
+
+HTML
+
 ## 🧪 Test Scenario
-<table> <tr> <td width="33%" valign="top"> <strong>Log in.</strong>
 
-
-<img src="https://github.com/user-attachments/assets/69ba7c31-ff53-492e-ae40-43e6b46f10a5" width="100%" /> </td> <td width="33%" valign="top"> <strong>Log in. (Mobile view)</strong>
-
-
-<img src="https://github.com/user-attachments/assets/6ce20199-40b8-4db2-aad1-73e193f2e8ab" width="100%" /> </td> <td width="33%" valign="top"> <strong>Invalid password.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/0da7a96a-bf89-4a65-9bad-f8e077ecca3e" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>See current bookings.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/0a8fb53a-f2e6-4072-9a6a-eda483b3c28a" width="100%" /> </td> <td valign="top"> <strong>Adding reservation.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/6c622866-5835-4a4f-884d-b50670ba0f1a" width="100%" /> </td> <td valign="top"> <strong>Trying to add reservation with no chosen room.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/19caaec0-f1d4-4322-b4cf-443f38e53c95" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Choosing the room from the map and details display.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/a2350e45-e0c0-4665-8baf-190af1217164" width="100%" /> </td> <td valign="top"> <strong>Valid date, time and room. Proceeding to make a booking.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/53d73232-120f-44db-a26b-0a12221b3b8b" width="100%" /> </td> <td valign="top"> <strong>New reservation visibe on the list. Old bookings are deleted automatically.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/0a2348a8-6872-4439-be17-1df539b94f1e" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Editing any chosen reservation (date, time, room).</strong>
-
-
-<img src="https://github.com/user-attachments/assets/802bf6c3-ff56-4e74-aa82-b460da22d940" width="100%" /> </td> <td valign="top"> <strong>Choosing the time from the past. Message displayed.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/92a5abe5-943d-41fd-a2b4-855b52fba40e" width="100%" /> </td> <td valign="top"> <strong>Dipslay user profile.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/287e36c2-e909-4a9e-8fb2-d5e69ef481f5" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Edit user profile (name, lastname, password).</strong>
-
-
-<img src="https://github.com/user-attachments/assets/eede2458-5ebd-4d59-bc1e-45791d9d5ac2" width="100%" /> </td> <td valign="top"> <strong>Profile data updated.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/57c73884-4520-44d6-a097-163764240a23" width="100%" /> </td> <td valign="top"> <strong>Log out. Log in as admin.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/0176eddc-a095-40a9-a68d-386b58fcb475" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Display users and change their role.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/f0ad1abe-fba6-45cd-af16-a7dca5d1054a" width="100%" /> </td> <td valign="top"> <strong>Edit user.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/71c5ee45-b48a-4979-814f-40410cd17126" width="100%" /> </td> <td valign="top"> <strong>Display rooms and add new room.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/11ef0850-083d-4fcd-a28c-dcf68f048827" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Manage user bookings.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/53f186e9-343c-437a-874a-8e073e3927f4" width="100%" /> </td> <td valign="top"> <strong>Search by the keywords.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/b8f84281-47da-432f-b589-1e87529e23fa" width="100%" /> </td> <td valign="top"> <strong>Non existing page (404).</strong>
-
-
-<img src="https://github.com/user-attachments/assets/7a32064f-6a2f-4812-a892-56dfa5d7fbc3" width="100%" /> </td> </tr> <tr> <td valign="top"> <strong>Triggered (from the code level) exception (500).</strong>
-
-
-<img src="https://github.com/user-attachments/assets/0e2a4700-f742-472e-9de9-1488a0c158ec" width="100%" /> </td> <td valign="top"> <strong>Trying to access admin page being logged in as a student/teacher.</strong>
-
-
-<img src="https://github.com/user-attachments/assets/70075961-a2f8-4d4c-8250-e412e141dd71" width="100%" /> </td> <td valign="top"> </td> </tr> </table>
-
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>1. Log in.</strong><br>
+      <img src="https://github.com/user-attachments/assets/69ba7c31-ff53-492e-ae40-43e6b46f10a5" width="100%" />
+    </td>
+    <td width="50%" valign="top">
+      <strong>2. See current bookings.</strong><br>
+      <img src="https://github.com/user-attachments/assets/0a8fb53a-f2e6-4072-9a6a-eda483b3c28a" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>3. Adding reservation.</strong><br>
+      <img src="https://github.com/user-attachments/assets/6c622866-5835-4a4f-884d-b50670ba0f1a" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>4. Trying to add reservation with no chosen room.</strong><br>
+      <img src="https://github.com/user-attachments/assets/19caaec0-f1d4-4322-b4cf-443f38e53c95" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>5. Choosing the room from the map and details display.</strong><br>
+      <img src="https://github.com/user-attachments/assets/a2350e45-e0c0-4665-8baf-190af1217164" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>6. Valid date, time and room. Proceeding to make a booking.</strong><br>
+      <img src="https://github.com/user-attachments/assets/53d73232-120f-44db-a26b-0a12221b3b8b" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>7. New reservation visibe on the list. Old bookings are deleted automatically.</strong><br>
+      <img src="https://github.com/user-attachments/assets/0a2348a8-6872-4439-be17-1df539b94f1e" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>8. Editing any chosen reservation (date, time, room).</strong><br>
+      <img src="https://github.com/user-attachments/assets/802bf6c3-ff56-4e74-aa82-b460da22d940" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>9. Choosing the time from the past. Message displayed.</strong><br>
+      <img src="https://github.com/user-attachments/assets/92a5abe5-943d-41fd-a2b4-855b52fba40e" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>10. Dipslay user profile.</strong><br>
+      <img src="https://github.com/user-attachments/assets/287e36c2-e909-4a9e-8fb2-d5e69ef481f5" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>11. Edit user profile (name, lastname, password).</strong><br>
+      <img src="https://github.com/user-attachments/assets/eede2458-5ebd-4d59-bc1e-45791d9d5ac2" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>12. Profile data updated.</strong><br>
+      <img src="https://github.com/user-attachments/assets/57c73884-4520-44d6-a097-163764240a23" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>13. Log out. Log in as admin.</strong><br>
+      <img src="https://github.com/user-attachments/assets/0176eddc-a095-40a9-a68d-386b58fcb475" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>14. Display users and change their role.</strong><br>
+      <img src="https://github.com/user-attachments/assets/f0ad1abe-fba6-45cd-af16-a7dca5d1054a" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>15. Edit user.</strong><br>
+      <img src="https://github.com/user-attachments/assets/71c5ee45-b48a-4979-814f-40410cd17126" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>16. Display rooms and add new room.</strong><br>
+      <img src="https://github.com/user-attachments/assets/11ef0850-083d-4fcd-a28c-dcf68f048827" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>17. Manage user bookings.</strong><br>
+      <img src="https://github.com/user-attachments/assets/53f186e9-343c-437a-874a-8e073e3927f4" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>18. Search by the keywords.</strong><br>
+      <img src="https://github.com/user-attachments/assets/b8f84281-47da-432f-b589-1e87529e23fa" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>19. Non existing page (404).</strong><br>
+      <img src="https://github.com/user-attachments/assets/7a32064f-6a2f-4812-a892-56dfa5d7fbc3" width="100%" />
+    </td>
+    <td valign="top">
+      <strong>20. Triggered (from the code level) exception (500).</strong><br>
+      <img src="https://github.com/user-attachments/assets/0e2a4700-f742-472e-9de9-1488a0c158ec" width="100%" />
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>21. Trying to access admin page being logged in as a student/teacher.</strong><br>
+      <img src="https://github.com/user-attachments/assets/70075961-a2f8-4d4c-8250-e412e141dd71" width="100%" />
+    </td>
+    <td valign="top">
+      </td>
+  </tr>
+</table>
 ## 📱 Mobile Views
 
 <table> <tr> <td width="25%" valign="top"> <strong>Log in page.</strong>
