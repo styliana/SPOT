@@ -289,7 +289,20 @@ HTML
 
 <img src="https://github.com/user-attachments/assets/1f94ff1e-93f1-44c2-b31b-411e5f475759" width="100%" /> </td> </tr> </table>
 
+## Quality rated by Lighthouse: AMAZING!
 
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>My bookings page.</strong><br>
+      <img width="1915" height="970" alt="image" src="https://github.com/user-attachments/assets/9e600c6c-da84-4649-88b0-65da4bea2ea4" />
+    </td>
+    <td width="50%" valign="top">
+      <strong>Reservation page.</strong><br>
+      <img width="1910" height="914" alt="image" src="https://github.com/user-attachments/assets/5bc22a85-9207-4918-9f57-5bdfe054a888" />
+    </td>
+  </tr>
+</table>
 
 ## ✅ Requirements Checklist
 [x] Technologies: Docker, GIT, HTML5, CSS, JS, PHP, PostgreSQL.
