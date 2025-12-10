@@ -7,27 +7,10 @@
     <?php include __DIR__ . '/components/global_head_links.php'; ?>
 
     <style>
-        /* === STYLE ADMINA === */
-        body { background-color: #f3f4f6 !important; }
-        .admin-header { background-color: #1f2937 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .admin-badge { background: #ef4444; color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; margin-left: 8px; }
-        .nav-link.active { color: #60a5fa !important; font-weight: 700; position: relative; }
-        .nav-link.active::after { content: ''; position: absolute; bottom: -22px; left: 0; width: 100%; height: 3px; background-color: #60a5fa; }
-        
+
         .admin-container { max-width: 1300px; margin: 3rem auto; padding: 0 2rem; padding-bottom: 100px; }
         
-        /* Formularz w Karcie */
-        .admin-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 2rem; margin-bottom: 2rem; }
-        .form-title { font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
-        .add-room-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; align-items: end; }
-        .form-group { margin-bottom: 0; }
-        .form-group label { font-size: 0.85rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; display: block; }
-        .form-group input { width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid #e5e7eb; background: #f9fafb; outline: none; transition: 0.2s; }
-        .form-group input:focus { border-color: #0A6BEF; background: white; }
-        .submit-btn-admin { background-color: #0A6BEF; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; height: 42px; width: 100%; }
-        .submit-btn-admin:hover { background-color: #0855BB; transform: translateY(-2px); }
-
-        /* Tabela */
+                /* Tabela */
         .admin-header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; }
         .search-wrapper { position: relative; width: 300px; }
         .search-wrapper input { width: 100%; padding: 12px 15px 12px 45px; border-radius: 50px; border: 1px solid #e5e7eb; background: white; outline: none; }
@@ -39,27 +22,12 @@
         td { padding: 1rem; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
         tr:hover { background-color: #f8fafc; }
 
-        .icon-btn { border: none; background: #f3f4f6; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; }
+               .icon-btn { border: none; background: #f3f4f6; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; }
         .icon-btn:hover { transform: translateY(-2px); color: white; }
         .icon-btn.delete:hover { background-color: #ef4444; }
         .pill { padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
         .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
-
-        @media (max-width: 850px) {
-            .admin-container { padding: 1rem; }
-            .main-nav { display: none !important; }
-            .add-room-form { grid-template-columns: 1fr; }
-            .table-container { background: transparent; box-shadow: none; }
-            thead { display: none; }
-            tr { display: flex; flex-direction: column; background: white; margin-bottom: 1rem; border-radius: 16px; padding: 1.5rem; border: 1px solid #eee; }
-            td { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #f0f0f0; text-align: right; }
-            td:last-child { border-bottom: none; justify-content: flex-end; }
-            td::before { content: attr(data-label); font-weight: 700; font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; }
-            
-            .mobile-nav { display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; background: #1f2937; padding: 10px 15px; justify-content: space-between; z-index: 9999; }
-            .mobile-nav a { color: #9ca3af; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; width: 60px; }
-            .mobile-nav a.active { color: #60a5fa; }
-        }
+       
     </style>
 </head>
 <body>

@@ -82,9 +82,8 @@ class ReservationController extends AppController {
                 // Przekierowanie po sukcesie
                 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
                     return $this->redirect('/admin_bookings');
-                } else {
-                    return $this->redirect('/mybookings');
-                }
+                } 
+                return $this->redirect('/mybookings');
 
             } catch (Exception $e) {
                 // Wycofanie transakcji w razie błędu

@@ -20,10 +20,7 @@ class UserRepository extends Repository
 
         if ($user == false) return null;
 
-        return new User(
-            $user['email'], $user['password'], $user['name'], $user['surname'],
-            $user['role_name'] ?? 'student', $user['id']
-        );
+        return $this->mapToUser($user);
     }
 
     public function addUser(User $user): void
@@ -37,7 +34,7 @@ class UserRepository extends Repository
         ]);
     }
 
-    // === METODY DLA ADMINA (których brakowało) ===
+    // === METODY DLA ADMINA ===
 
     public function getAllUsers(): array
     {
@@ -52,10 +49,7 @@ class UserRepository extends Repository
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($users as $user) {
-            $result[] = new User(
-                $user['email'], $user['password'], $user['name'], $user['surname'],
-                $user['role_name'] ?? 'student', $user['id']
-            );
+            $result[] = $this->mapToUser($user);
         }
         return $result;
     }
@@ -71,11 +65,10 @@ class UserRepository extends Repository
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
         if ($user == false) return null;
-        return new User(
-            $user['email'], $user['password'], $user['name'], $user['surname'],
-            $user['role_name'] ?? 'student', $user['id']
-        );
+        
+        return $this->mapToUser($user);
     }
 
     public function updateUser(User $user): void
@@ -88,7 +81,6 @@ class UserRepository extends Repository
         ]);
     }
 
-    // Metoda do edycji przez admina (bez hasła)
     public function updateUserByAdmin(int $id, string $name, string $surname, string $email): void {
         $stmt = $this->database->connect()->prepare('
             UPDATE users 
@@ -121,4 +113,16 @@ class UserRepository extends Repository
     }
     
     public function getUsers(): array { return $this->getAllUsers(); }
+
+    // === Helper Mapping Method ===
+    private function mapToUser(array $user): User {
+        return new User(
+            $user['email'], 
+            $user['password'], 
+            $user['name'], 
+            $user['surname'],
+            $user['role_name'] ?? 'student', 
+            $user['id']
+        );
+    }
 }
