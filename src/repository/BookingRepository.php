@@ -12,7 +12,7 @@ class BookingRepository extends Repository {
             FROM bookings b
             LEFT JOIN rooms r ON b.room_id = r.id
             WHERE b.user_id = :user_id
-            ORDER BY b.date DESC, b.start_time ASC
+            ORDER BY b.date ASC, b.start_time ASC
         ');
         
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
