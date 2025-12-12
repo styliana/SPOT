@@ -125,6 +125,9 @@ erDiagram
     ROOMS ||--o{ BOOKINGS : "is reserved in"
 ```
 
+<img width="903" height="885" alt="image" src="https://github.com/user-attachments/assets/a53b5a45-1c1e-4822-b5a3-c355610e6514" />
+
+
 ## Advanced SQL elements
 Views: 
 - vw_booking_details: Aggregates booking data with user and room details using JOINs.
