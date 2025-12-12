@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Admin - Pokoje</title>
     
-    <?php include __DIR__ . '/components/global_head_links.php'; ?>
+    <?php include __DIR__ . '/components/global_head_links.html'; ?>
 
     <style>
 

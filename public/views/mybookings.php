@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPOT - Moje Rezerwacje</title>
-    <?php include __DIR__ . '/components/global_head_links.php'; ?>
+    <?php include __DIR__ . '/components/global_head_links.html'; ?>
     <link rel="stylesheet" type="text/css" href="/public/styles/bookings.css">
     
     <style>

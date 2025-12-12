@@ -5,7 +5,7 @@
     <title>Admin - Edycja Użytkownika</title>
 
     <link rel="stylesheet" type="text/css" href="/public/styles/admin.css?v=10.0">
-    <?php include __DIR__ . '/components/global_head_links.php'; ?>
+    <?php include __DIR__ . '/components/global_head_links.html'; ?>
 
     <style>
         body { background-color: #f3f4f6 !important; }

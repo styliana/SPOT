@@ -6,7 +6,7 @@
     <title>SPOT - <?php echo htmlspecialchars($room['name']); ?></title>
     
     <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
-        <?php include __DIR__ . '/components/global_head_links.php'; ?>
+        <?php include __DIR__ . '/components/global_head_links.html'; ?>
         
     <style>
 

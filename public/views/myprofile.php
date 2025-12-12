@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPOT - Mój Profil</title>
 
-    <?php include __DIR__ . '/components/global_head_links.php'; ?>
+    <?php include __DIR__ . '/components/global_head_links.html'; ?>
     <link rel="stylesheet" type="text/css" href="/public/styles/profile.css">
     <link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
     
