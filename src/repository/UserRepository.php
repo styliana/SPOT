@@ -114,7 +114,6 @@ class UserRepository extends Repository
     
     public function getUsers(): array { return $this->getAllUsers(); }
 
-=
     private function mapToUser(array $user): User {
         return new User(
             $user['email'], 
