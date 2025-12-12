@@ -25,16 +25,39 @@ class UserRepository extends Repository
 
     public function addUser(User $user): void
     {
-        $stmt = $this->database->connect()->prepare('
-            INSERT INTO users (email, password, name, surname, id_role)
-            VALUES (?, ?, ?, ?, (SELECT id FROM roles WHERE name = ?))
-        ');
-        $stmt->execute([
-            $user->getEmail(), $user->getPassword(), $user->getName(), $user->getSurname(), $user->getRole()
-        ]);
+        $pdo = $this->database->connect();
+        $pdo->beginTransaction();
+
+        try {
+            $stmt = $pdo->prepare('
+                INSERT INTO users (email, password, name, surname, id_role)
+                VALUES (?, ?, ?, ?, (SELECT id FROM roles WHERE name = ?))
+                RETURNING id
+            ');
+            
+            $stmt->execute([
+                $user->getEmail(), 
+                $user->getPassword(), 
+                $user->getName(), 
+                $user->getSurname(), 
+                $user->getRole()
+            ]);
+
+            $newUserId = $stmt->fetchColumn();
+
+            $stmtLog = $pdo->prepare('
+                INSERT INTO user_creation_logs (user_id)
+                VALUES (?)
+            ');
+            $stmtLog->execute([$newUserId]);
+
+            $pdo->commit();
+
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
     }
-
-
 
     public function getAllUsers(): array
     {
@@ -77,7 +100,10 @@ class UserRepository extends Repository
             UPDATE users SET name = ?, surname = ?, password = ? WHERE id = ?
         ');
         $stmt->execute([
-            $user->getName(), $user->getSurname(), $user->getPassword(), $user->getId()
+            $user->getName(), 
+            $user->getSurname(), 
+            $user->getPassword(), 
+            $user->getId()
         ]);
     }
 
@@ -104,9 +130,11 @@ class UserRepository extends Repository
     }
 
     public function deleteUser(int $id): void {
+ 
         $stmt = $this->database->connect()->prepare('DELETE FROM bookings WHERE user_id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
+        
         $stmt = $this->database->connect()->prepare('DELETE FROM users WHERE id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

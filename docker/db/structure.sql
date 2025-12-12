@@ -29,6 +29,7 @@ CREATE TABLE rooms (
     type VARCHAR(50),
     description TEXT
 );
+INSERT INTO roles (name) VALUES ('student'), ('teacher'), ('admin') ON CONFLICT DO NOTHING;
 
 CREATE TABLE bookings (
     id SERIAL PRIMARY KEY,
@@ -50,6 +51,14 @@ CREATE TABLE bookings_audit_log (
     reason TEXT
 );
 
+CREATE TABLE IF NOT EXISTS user_creation_logs (
+    user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    created_at_log TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO user_creation_logs (user_id, created_at_log)
+SELECT id, created_at FROM users
+ON CONFLICT (user_id) DO NOTHING;
 
 
 -- 2. Views

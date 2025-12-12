@@ -1,0 +1,11 @@
+UPDATE users SET id_role = (SELECT id FROM roles WHERE name = 'admin') WHERE email = 'admin@example.com';
+
+INSERT INTO rooms (id, name, workspaces, type, description) VALUES
+('ROOM1', 'Sala Konferencyjna', 20, 'Conference', 'Duża sala z rzutnikiem.'),
+('ROOM2', 'Mała Salka', 6, 'Focus', 'Idealna do pracy w ciszy.'),
+('ROOM3', 'Laboratorium', 12, 'Lab', 'Wyposażona w komputery.'),
+('ROOM4', 'Sala Spotkań', 8, 'Meeting', 'Stół okrągły.'),
+('ROOM5', 'Open Space', 15, 'Common', 'Przestrzeń wspólna.'),
+('AULA1', 'Aula Główna', 100, 'Lecture Hall', 'Dla dużych wykładów.'),
+('AULA2', 'Aula Boczna', 50, 'Lecture Hall', 'Mniejsza aula.'),
+('STUDYROOM1', 'Pokój Cichej Nauki', 4, 'Study', 'Tylko do nauki indywidualnej.');
