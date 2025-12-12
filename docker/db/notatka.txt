@@ -9,3 +9,5 @@ INSERT INTO rooms (id, name, workspaces, type, description) VALUES
 ('AULA1', 'Aula Główna', 100, 'Lecture Hall', 'Dla dużych wykładów.'),
 ('AULA2', 'Aula Boczna', 50, 'Lecture Hall', 'Mniejsza aula.'),
 ('STUDYROOM1', 'Pokój Cichej Nauki', 4, 'Study', 'Tylko do nauki indywidualnej.');
+
+# docker-compose exec -T db pg_dump -U docker db > backup.sql
