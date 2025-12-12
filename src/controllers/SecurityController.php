@@ -37,18 +37,15 @@ class SecurityController extends AppController {
             return $this->render('login', ['message' => 'Błędne hasło!']);
         }
 
-        // Sesja
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();
         $_SESSION['user_name'] = $user->getName();
         $_SESSION['user_surname'] = $user->getSurname();
         $_SESSION['user_role'] = $user->getRole(); 
 
-        // === NOWOŚĆ: Przekierowanie zależne od roli ===
         if ($user->getRole() === 'admin') {
             return $this->redirect('/admin_users');
         }
-        // ==============================================
 
         return $this->redirect('/mybookings');
     }

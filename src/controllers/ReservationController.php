@@ -15,13 +15,12 @@ class ReservationController extends AppController {
     public function reservation() { 
         $this->requireLogin();
 
-        // --- ZAPIS (POST) ---
         if ($this->isPost()) {
             $date = $_POST['date'];
             $startTime = $_POST['start_time'];
             $endTime = $_POST['end_time'];
             
-            // 1. Pobieramy ID pokoju i usuwamy białe znaki (spacje)
+
             $roomId = isset($_POST['room_id']) ? trim($_POST['room_id']) : '';
             
             $bookingId = $_POST['booking_id'] ?? null;
@@ -30,21 +29,18 @@ class ReservationController extends AppController {
             $ownerId = $_POST['booking_owner_id'] ?? $_SESSION['user_id'];
             if ($ownerId === '') $ownerId = $_SESSION['user_id'];
 
-            // === WALIDACJA: Czy wybrano pokój? ===
             if (empty($roomId)) {
                 return $this->renderWithData('Please,choose the room from the map.', $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
 
-            // === TRANSAKCJA (Wymóg regulaminowy) ===
+
             try {
-                // Rozpoczynamy transakcję
                 $this->bookingRepository->beginTransaction();
 
                 $bookingStart = new DateTime($date . ' ' . $startTime);
                 $bookingEnd = new DateTime($date . ' ' . $endTime);
                 $now = new DateTime();
                 
-                // Walidacja logiczna daty i czasu
                 if ($bookingStart < $now) {
                     throw new Exception('You cannot book in the past time.');
                 }
@@ -53,48 +49,37 @@ class ReservationController extends AppController {
                     throw new Exception('End time should be later than the start time.');
                 }
 
-                //Walidacja minimalnego czasu trwania (15 min)
-                // Obliczamy różnicę
                 $interval = $bookingStart->diff($bookingEnd);
-                // Zamieniamy różnicę na minuty (godziny * 60 + minuty)
                 if (($interval->h * 60 + $interval->i) < 15) {
                      throw new Exception('Booking should last at least 15 minutes.');
                 }
                 
-
-                // Sprawdzanie dostępności w bazie (wewnątrz transakcji)
                 $bookedRooms = $this->bookingRepository->getBookedRoomIds($date, $startTime, $endTime, (int)$bookingId);
                 
                 if (in_array($roomId, $bookedRooms)) {
                     throw new Exception('This room is already booked for the selected time slot.');
                 }
 
-                // Zapis / Aktualizacja
                 if ($bookingId) {
                     $this->bookingRepository->updateBooking((int)$bookingId, (int)$ownerId, $roomId, $date, $startTime, $endTime);
                 } else {
                     $this->bookingRepository->addBooking((int)$ownerId, $roomId, $date, $startTime, $endTime);
                 }
 
-                // Zatwierdzenie transakcji (tylko jeśli nie było błędów)
                 $this->bookingRepository->commit();
 
-                // Przekierowanie po sukcesie
                 if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
                     return $this->redirect('/admin_bookings');
                 } 
                 return $this->redirect('/mybookings');
 
             } catch (Exception $e) {
-                // Wycofanie transakcji w razie błędu
                 $this->bookingRepository->rollBack();
                 
-                // Wyświetlenie błędu użytkownikowi
                 return $this->renderWithData($e->getMessage(), $date, $startTime, $endTime, $roomId, $bookingId, $ownerId);
             }
         }
 
-        // --- WYŚWIETLANIE (GET) ---
         $bookingId = $_GET['booking_id'] ?? null;
         if ($bookingId === '') $bookingId = null;
 
@@ -108,7 +93,6 @@ class ReservationController extends AppController {
             }
         }
 
-        // Priorytetyzacja danych: URL > Baza danych > Puste
         $selectedRoomId = $_GET['room_id'] ?? null;
         $selectedDate   = $_GET['date'] ?? null;
         $selectedStart  = $_GET['start'] ?? null;
@@ -119,7 +103,7 @@ class ReservationController extends AppController {
             if (!$selectedDate)   $selectedDate = $existingBooking->getDate();
             
             if (!$selectedStart || !$selectedEnd) {
-                // Rozdzielamy format "HH:MM - HH:MM"
+                // rozdz format "HH:MM - HH:MM"
                 $times = explode(' - ', $existingBooking->getTimeRange());
                 if (!$selectedStart) $selectedStart = $times[0] ?? '';
                 if (!$selectedEnd)   $selectedEnd   = $times[1] ?? '';

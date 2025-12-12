@@ -1,19 +1,16 @@
 <?php
 
-// Baza i Modele
 require_once __DIR__ . '/src/controllers/AppController.php';
 require_once __DIR__ . '/src/db/Database.php';
 require_once __DIR__ . '/src/models/User.php';
 require_once __DIR__ . '/src/models/Room.php';
 require_once __DIR__ . '/src/models/Booking.php';
 
-// Repozytoria
 require_once __DIR__ . '/src/repository/Repository.php';
 require_once __DIR__ . '/src/repository/UserRepository.php';
 require_once __DIR__ . '/src/repository/RoomRepository.php';
 require_once __DIR__ . '/src/repository/BookingRepository.php';
 
-// Kontrolery
 require_once __DIR__ . '/src/controllers/SecurityController.php';
 require_once __DIR__ . '/src/controllers/ReservationController.php';
 require_once __DIR__ . '/src/controllers/BookingsController.php';

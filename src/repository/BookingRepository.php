@@ -35,7 +35,6 @@ class BookingRepository extends Repository {
         return $result;
     }
 
-    // === NOWA METODA: Potrzebna, aby Admin mógł edytować cudzą rezerwację ===
     public function getBookingById(int $id): ?Booking {
         $stmt = $this->database->connect()->prepare('
             SELECT b.*, r.name as room_name, r.type as room_type
@@ -62,7 +61,6 @@ class BookingRepository extends Repository {
         );
     }
 
-    // === DLA ADMINA: Pobierz wszystkie rezerwacje ===
     public function getAllBookings(): array {
         $result = [];
         $stmt = $this->database->connect()->prepare('
@@ -76,7 +74,6 @@ class BookingRepository extends Repository {
         $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($bookings as $booking) {
-            // Wyświetlamy też email usera, żeby admin wiedział czyje to
             $roomDisplay = ($booking['room_name'] ?? 'Unknown') . ' (' . ($booking['user_email'] ?? 'Unknown') . ')';
             
             $result[] = new Booking(
@@ -102,7 +99,6 @@ class BookingRepository extends Repository {
         $stmt->execute([$userId, $roomId, $date, $startTime, $endTime, 'Confirmed']);
     }
 
-    // === UPDATE: Pozwala zachować oryginalnego właściciela (user_id) ===
     public function updateBooking(int $bookingId, int $userId, string $roomId, string $date, string $startTime, string $endTime): void {
         $stmt = $this->database->connect()->prepare('
             UPDATE bookings 
@@ -118,9 +114,7 @@ class BookingRepository extends Repository {
         $stmt->execute();
     }
 
-    // === NOWA METODA: Czyszczenie archiwalnych rezerwacji (wykonywane przez AppController) ===
     public function cleanArchivedBookings(): void {
-        // Usuwa rezerwacje, których data+czas zakończenia jest mniejsza niż aktualny timestamp
         $stmt = $this->database->connect()->prepare('
             DELETE FROM bookings
             WHERE (date::text || \' \' || end_time::text)::timestamp < CURRENT_TIMESTAMP
@@ -128,9 +122,7 @@ class BookingRepository extends Repository {
         ');
         $stmt->execute();
     }
-    // =======================================================================================
 
-    // === SPRAWDZANIE DOSTĘPNOŚCI (z wykluczeniem edytowanej) ===
     public function getBookedRoomIds(string $date, string $startTime, string $endTime, ?int $excludeBookingId = null): array {
         $sql = 'SELECT room_id FROM bookings 
                 WHERE date = :date 

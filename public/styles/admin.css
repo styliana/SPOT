@@ -1,7 +1,5 @@
 body { background-color: #f3f4f6 !important; }
-        .admin-container { max-width: 600px; margin: 3rem auto; padding: 0 1rem; min-height: 80vh; }
-        
-        /* Karta Formularza */
+
         .edit-form-card {
             background: white; padding: 3rem; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -25,14 +23,15 @@ body { background-color: #f3f4f6 !important; }
             display: block; text-align: center; margin-top: 1rem; color: #9ca3af; text-decoration: none; font-size: 0.9rem;
         }
 
-            /* Tabela Użytkowników */
+
             .table-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid rgba(0,0,0,0.02); margin-top: 2rem; }
             table { width: 100%; border-collapse: collapse; }
             th { background-color: #fff; padding: 1.5rem 1.5rem; text-align: left; font-weight: 700; color: #6b7280; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #f3f4f6; cursor: pointer; }
             td { padding: 1.2rem 1.5rem; border-bottom: 1px solid #f3f4f6; color: #374151; font-size: 0.95rem; vertical-align: middle; }
             tr:hover { background-color: #f8fafc; }
+
+                    .admin-container { max-width: 1300px; margin: 3rem auto; padding: 0 2rem; padding-bottom: 100px; }
         
-body { background-color: #f3f4f6 !important; }
         .admin-header { background-color: #1f2937 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .admin-badge { background: #ef4444; color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; margin-left: 8px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
         .nav-link.active { color: #60a5fa !important; font-weight: 700; position: relative; }
@@ -52,7 +51,7 @@ body { background-color: #f3f4f6 !important; }
         .role-select { padding: 5px 10px; border-radius: 8px; border: 1px solid #e5e7eb; font-family: 'Roboto', sans-serif; font-size: 0.9rem; cursor: pointer; background-color: #f9fafb; color: #374151; outline: none; }
         .role-select:focus { border-color: #0A6BEF; }
 
-         /* Formularz w Karcie */
+
         .admin-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 2rem; margin-bottom: 2rem; }
         .form-title { font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
         .add-room-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; align-items: end; }
@@ -62,19 +61,3 @@ body { background-color: #f3f4f6 !important; }
         .form-group input:focus { border-color: #0A6BEF; background: white; }
         .submit-btn-admin { background-color: #0A6BEF; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; height: 42px; width: 100%; }
         .submit-btn-admin:hover { background-color: #0855BB; transform: translateY(-2px); }
-
-        @media (max-width: 850px) {
-            .admin-container { padding: 1rem; }
-            .main-nav { display: none !important; }
-            .add-room-form { grid-template-columns: 1fr; }
-            .table-container { background: transparent; box-shadow: none; }
-            thead { display: none; }
-            tr { display: flex; flex-direction: column; background: white; margin-bottom: 1rem; border-radius: 16px; padding: 1.5rem; border: 1px solid #eee; }
-            td { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #f0f0f0; text-align: right; }
-            td:last-child { border-bottom: none; justify-content: flex-end; }
-            td::before { content: attr(data-label); font-weight: 700; font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; }
-            
-            .mobile-nav { display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; background: #1f2937; padding: 10px 15px; justify-content: space-between; z-index: 9999; }
-            .mobile-nav a { color: #9ca3af; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; width: 60px; }
-            .mobile-nav a.active { color: #60a5fa; }
-        }

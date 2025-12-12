@@ -1,8 +1,3 @@
-<?php
-// public/views/myprofile.php
-// UWAGA: Kod dołączony przez AppController znajduje się poza blokiem <?php
-// Musimy upewnić się, że $user jest zdefiniowany w kontrolerze.
-?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -18,8 +13,6 @@
 <body>
 
 <?php 
-// W tym miejscu znajdował się stary blok definicji $isAdmin oraz cała hardkodowana sekcja <header>.
-// Zastępujemy go tylko czystym dołączeniem komponentu.
 include __DIR__ . '/components/header.php'; 
 ?>
 

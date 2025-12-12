@@ -1,39 +1,31 @@
-/* --- 1. Reset i Ustawienia Globalne --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* --- 2. Zmienne (Paleta Kolorów) --- */
 :root {
-    /* Główne kolory */
     
     --primary-blue: #1622a5; 
     --accent-blue: #101985; 
     --primary-blue-light: #E0EEFF;
     --light-blue: #57B1E1;
-    
-    /* Tekst i Nagłówki */
-    --dark-blue-text: #212B36;
-    --dark-blue-header: #1622a5; /* To jest ten kolor, który chciałeś */
 
-    /* Tła */
+    --dark-blue-text: #212B36;
+    --dark-blue-header: #1622a5;
+
     --white: #FFFFFF;
     --background-white: #FFFFFF;
     --background-gray-light: #F5F7FA;
     --input-background: #F0F2F5;
-    
-    /* Obramowania i inne */
+
     --border-gray: #D1D5DB;
 
-    /* Pigułki (Pills) */
     --pill-gray: #E5E7EB; 
     --pill-green: #D1FAE5;
     --pill-orange: #FFEDD5;
     --pill-red: #fee2e2;
 
-    /* Fonty */
     --font-poppins: 'Poppins', sans-serif;
     --font-roboto: 'Roboto', sans-serif;
 }
@@ -264,10 +256,9 @@ input[readonly] {
 
 
 /* --- 9. Style widoku admina --- */
-/* Styl nagłówka Admina - Ciemny Grafit/Fiolet */
 .admin-header {
-    background-color: #2d3748 !important; /* Ciemny kolor */
-    border-bottom: 3px solid #e53e3e; /* Czerwony pasek na dole */
+    background-color: #2d3748 !important;
+    border-bottom: 3px solid #e53e3e;
 }
 .admin-badge {
     background-color: #e53e3e;
@@ -279,7 +270,7 @@ input[readonly] {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-/* Styl tabeli admina */
+
 .admin-table-container {
     background: white;
     padding: 2rem;

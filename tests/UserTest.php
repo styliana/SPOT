@@ -25,7 +25,6 @@ class UserTest extends TestCase
 
     public function testUserRoleDefault()
     {
-        // Test czy domyślna rola to student (jeśli tak jest w logice, tutaj zakładamy wstrzyknięcie)
         $user = new User('a@b.com', 'pass', 'A', 'B', 'admin');
         $this->assertEquals('admin', $user->getRole());
     }

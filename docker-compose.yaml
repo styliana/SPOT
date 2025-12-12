@@ -5,7 +5,6 @@ services:
       dockerfile: docker/nginx/Dockerfile
     ports:
       - "8080:80"
-    # BRAK 'volumes' dla web - to jest poprawne
     depends_on:
       - php
     networks:

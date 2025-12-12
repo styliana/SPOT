@@ -66,7 +66,6 @@
                                 $start = $times[0] ?? '';
                                 $end = $times[1] ?? '';
                                 
-                                // === POPRAWKA: Używamy 'room_id' (przekazywanego przez kontroler) ===
                                 $roomId = $booking['room_id'] ?? ''; 
                                 
                                 $editUrl = "/reservation?booking_id=" . $booking['id'] . 

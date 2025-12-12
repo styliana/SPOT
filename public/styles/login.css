@@ -1,4 +1,3 @@
-/* --- Struktura Strony Logowania --- */
 .login-page {
     display: flex;
     width: 100vw;
@@ -7,7 +6,6 @@
     background-color: var(--background-gray-light);
 }
 
-/* --- 1. Panel z Obrazkiem (Lewa Strona) --- */
 .left-pane {
     flex: 1;
     position: relative;
@@ -21,11 +19,8 @@
     object-fit: cover;
 }
 
-/* Logo na mobilce (dla register.html) */
 .mobile-logo { display: none; margin-bottom: 2rem; }
-/* Usunięto style .logo, bo nie ma ich w HTML */
 
-/* --- 2. Panel Formularza (Prawa Strona) --- */
 .right-pane {
     flex: 1;
     display: flex;
@@ -51,7 +46,6 @@
     text-align: center;
 }
 
-/* === NOWY STYL DLA KOMUNIKATÓW BŁĘDÓW === */
 .message.error {
     background-color: #fee2e2;
     color: #b91c1c;
@@ -63,7 +57,6 @@
     font-weight: 500;
     text-align: left;
 }
-/* === KONIEC NOWEGO STYLU === */
 
 .toggle-buttons {
     display: flex;
@@ -100,18 +93,15 @@
     width: 100%;
 }
 
-/* Style .form-group, input, label są w main.css */
-
 .password-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 .password-wrapper input {
-    /* Przywracamy padding, jeśli ikona jest usunięta */
     padding-right: 1rem; 
 }
-/* Usunięto .eye-icon */
+
 
 .form-extras {
     display: flex;
@@ -144,17 +134,3 @@
     font-weight: 500;
 }
 .forgot-password:hover { text-decoration: underline; }
-
-/* Style .login-btn są w main.css */
-
-/* --- RESPONSIVE (Mobile) --- */
-@media (max-width: 800px) {
-    .login-page { flex-direction: column; height: auto; min-height: 100vh; }
-    .left-pane { display: none; }
-    .right-pane { flex: 1; width: 100%; align-items: center; padding: 2rem 1.5rem; }
-    .form-container { max-width: 100%; align-items: center; }
-    .mobile-logo { display: flex; }
-    .page-title { text-align: center; }
-    .toggle-buttons, .login-form { width: 100%; }
-    .subtitle { text-align: center; }
-}

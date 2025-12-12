@@ -1,4 +1,3 @@
-/* --- 1. Układ Strony --- */
 body {
     background-color: var(--background-gray-light);
 }
@@ -15,7 +14,6 @@ body {
     margin-bottom: 2.5rem;
 }
 
-/* --- 2. Karta Profilu --- */
 .profile-card {
     background-color: var(--background-white);
     padding: 2.5rem 3rem;
@@ -24,7 +22,6 @@ body {
     text-align: center;
 }
 
-/* --- 3. Awatar --- */
 .profile-avatar {
     margin-bottom: 1rem;
     display: inline-block;
@@ -48,7 +45,6 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* --- 4. Dane Użytkownika --- */
 .user-name {
     font-family: 'Poppins', sans-serif;
     font-size: 1.75rem;
@@ -64,7 +60,6 @@ body {
     word-break: break-all;
 }
 
-/* --- 5. Separator --- */
 .profile-separator {
     border: none;
     height: 1px;
@@ -72,7 +67,6 @@ body {
     margin: 2rem 0;
 }
 
-/* --- 6. Szczegóły Profilu --- */
 .profile-details {
     text-align: left;
     margin-bottom: 2.5rem;
@@ -103,35 +97,6 @@ body {
     text-align: right;
 }
 
-/* --- 7. Przycisk Edycji --- */
 .edit-profile-button {
-    /* Style bazowe są w main.css */
-    width: auto; /* Nadpisanie 100% z main.css */
-}
-
-/* --- 8. Responsywność --- */
-@media (max-width: 768px) {
-    .profile-page-content {
-        margin: 2rem auto;
-        padding: 1rem;
-    }
-    .profile-card {
-        padding: 2rem 1.5rem;
-    }
-    .user-name {
-        font-size: 1.5rem;
-    }
-    .detail-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.6rem 0;
-    }
-    .detail-label {
-        font-size: 0.8rem;
-        margin-bottom: 0.25rem;
-    }
-    .detail-value {
-        font-size: 0.95rem;
-        text-align: left;
-    }
+    width: auto; 
 }

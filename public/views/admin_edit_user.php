@@ -11,7 +11,6 @@
         body { background-color: #f3f4f6 !important; }
         .admin-container { max-width: 600px; margin: 3rem auto; padding: 0 1rem; min-height: 80vh; }
         
-        /* Karta Formularza */
         .edit-form-card {
             background: white; padding: 3rem; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);

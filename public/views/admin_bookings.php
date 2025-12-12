@@ -6,45 +6,9 @@
     <title>Admin - Rezerwacje</title>
 
     <?php include __DIR__ . '/components/global_head_links.php'; ?>
+    <link rel="stylesheet" type="text/css" href="/public/styles/admin_bookings.css">
 
     <style>
-        /* === STYLE ADMINA (WBUDOWANE) === */
-        
-        body { background-color: #f3f4f6 !important; }
-
-        /* Header */
-        .admin-header {
-            background-color: #1f2937 !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .admin-badge {
-            background: #ef4444; color: white; padding: 3px 8px; border-radius: 6px;
-            font-size: 0.7rem; margin-left: 8px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
-        }
-        .nav-link.active {
-            color: #60a5fa !important; font-weight: 700; position: relative;
-        }
-        .nav-link.active::after {
-            content: ''; position: absolute; bottom: -22px; left: 0; width: 100%; height: 3px; background-color: #60a5fa;
-        }
-
-        /* Kontener */
-        .admin-container {
-            max-width: 1300px; margin: 3rem auto; padding: 0 2rem; padding-bottom: 100px;
-        }
-
-        /* Panel Górny */
-        .admin-header-panel {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
-        }
-        .page-title {
-            font-size: 2rem; color: #1f2937; font-weight: 800; margin: 0;
-        }
-        .sort-hint {
-            font-size: 0.85rem; color: #6b7280; margin-top: 5px; display: flex; align-items: center; gap: 5px;
-        }
-
-        /* Wyszukiwarka */
         .search-wrapper { position: relative; width: 320px; }
         .search-wrapper input {
             width: 100%; padding: 12px 15px 12px 45px; border-radius: 50px; border: 1px solid #e5e7eb;
@@ -58,7 +22,6 @@
             position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 22px;
         }
 
-        /* Tabela Desktop */
         .table-container {
             background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             overflow: hidden; border: 1px solid rgba(0,0,0,0.02);
@@ -77,27 +40,6 @@
         tr:last-child td { border-bottom: none; }
         tr:hover { background-color: #f8fafc; }
 
-        /* Ikony Akcji */
-        .actions-cell { display: flex; gap: 10px; justify-content: center; align-items: center; }
-        .icon-btn {
-            border: none; background: #f3f4f6; width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: all 0.2s; color: #6b7280; text-decoration: none;
-        }
-        .icon-btn:hover { transform: translateY(-2px); color: white; }
-        .icon-btn.edit:hover { background-color: #0A6BEF; box-shadow: 0 4px 10px rgba(10, 107, 239, 0.3); }
-        .icon-btn.delete:hover { background-color: #ef4444; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
-        .icon-btn span { font-size: 20px; }
-
-        /* Pigułki */
-        .pill { padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
-        .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
-        .pill-green { background-color: #D1FAE5; color: #067647; }
-        .pill-orange { background-color: #FFEDD5; color: #b45309; }
-        .pill-red { background-color: #fee2e2; color: #b91c1c; }
-        .pill-gray { background-color: #E5E7EB; color: #4b5563; }
-
-        /* Mobile View */
         @media (max-width: 850px) {
             .admin-container { padding: 1rem; margin: 1rem auto; }
             .main-nav { display: none !important; }

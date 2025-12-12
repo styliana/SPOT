@@ -14,11 +14,9 @@ class ProfileController extends AppController {
         $this->userRepository = new UserRepository();
     }
 
-    // Wyświetlanie profilu (READ)
     public function myprofile() {
         $this->requireLogin();
         
-        // Pobieramy świeże dane z bazy
         $userId = $_SESSION['user_id'];
         $user = $this->userRepository->getUserById($userId);
 
@@ -29,7 +27,6 @@ class ProfileController extends AppController {
         return $this->render('myprofile', ['user' => $user]);
     }
 
-    // Wyświetlanie formularza edycji (GET)
     public function edit() {
         $this->requireLogin();
         
@@ -43,7 +40,6 @@ class ProfileController extends AppController {
         return $this->render('edit_profile', ['user' => $user]);
     }
 
-    // Przetwarzanie formularza edycji (POST)
     public function update() {
         $this->requireLogin();
 
@@ -51,14 +47,12 @@ class ProfileController extends AppController {
             return $this->redirect('/myprofile');
         }
 
-        // 1. Pobierz dane z formularza
         $name = $_POST['name'];
         $surname = $_POST['surname'];
         $oldPassword = $_POST['old_password'];
         $newPassword = $_POST['new_password'];
         $confirmNewPassword = $_POST['confirm_new_password'];
 
-        // 2. Pobierz aktualnego użytkownika z bazy
         $userId = $_SESSION['user_id'];
         $currentUser = $this->userRepository->getUserById($userId);
 
@@ -66,18 +60,15 @@ class ProfileController extends AppController {
             return $this->redirect('/login');
         }
 
-        // 3. Walidacja: Czy podano stare hasło?
         if (empty($oldPassword)) {
             return $this->render('edit_profile', ['user' => $currentUser, 'message' => 'Musisz podać stare hasło, aby zapisać zmiany!']);
         }
 
-        // 4. Walidacja: Czy stare hasło jest poprawne?
         if (!password_verify($oldPassword, $currentUser->getPassword())) {
             return $this->render('edit_profile', ['user' => $currentUser, 'message' => 'Stare hasło jest nieprawidłowe!']);
         }
 
-        // 5. Logika zmiany hasła
-        $finalPasswordHash = $currentUser->getPassword(); // Domyślnie zostaje stare
+        $finalPasswordHash = $currentUser->getPassword(); 
 
         if (!empty($newPassword)) {
             if ($newPassword !== $confirmNewPassword) {
@@ -86,11 +77,10 @@ class ProfileController extends AppController {
             if (password_verify($newPassword, $finalPasswordHash)) {
                  return $this->render('edit_profile', ['user' => $currentUser, 'message' => 'Nowe hasło musi być inne niż poprzednie!']);
             }
-            // Haszujemy nowe hasło
+
             $finalPasswordHash = password_hash($newPassword, PASSWORD_BCRYPT);
         }
 
-        // 6. Aktualizacja w bazie
         $updatedUser = new User(
             $currentUser->getEmail(),
             $finalPasswordHash,
@@ -102,11 +92,9 @@ class ProfileController extends AppController {
 
         $this->userRepository->updateUser($updatedUser);
 
-        // 7. Aktualizacja sesji (żeby nagłówek zaktualizował się od razu)
         $_SESSION['user_name'] = $name;
         $_SESSION['user_surname'] = $surname;
 
-        // Sukces - wracamy do profilu
         return $this->render('myprofile', ['user' => $updatedUser, 'message' => 'Dane zostały zaktualizowane!']);
     }
 }

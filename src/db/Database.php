@@ -3,7 +3,7 @@
 require_once __DIR__ . '/config.php'; 
 
 class Database {
-    // 1. Statyczna właściwość przetrzymująca JEDYNĄ instancję tej klasy
+    // statyczna właściwość przetrzymująca JEDYNĄ instancję tej klasy
     private static $instance = null;
 
     private $username;
@@ -12,7 +12,6 @@ class Database {
     private $database;
     private $connection = null;
 
-    // 2. Konstruktor musi być PRYWATNY, żeby nikt nie mógł zrobić "new Database()"
     private function __construct()
     {
         $this->username = USERNAME;
@@ -21,7 +20,6 @@ class Database {
         $this->database = DATABASE;
     }
 
-    // 3. Statyczna metoda, która zwraca zawsze tę samą instancję
     public static function getInstance()
     {
         if (self::$instance === null) {

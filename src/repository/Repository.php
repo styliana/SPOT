@@ -10,7 +10,7 @@ class Repository {
         $this->database = Database::getInstance();
     }
 
-    // === TRANSAKCJE ===
+
     public function beginTransaction() {
         $this->database->connect()->beginTransaction();
     }

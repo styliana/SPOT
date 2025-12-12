@@ -29,16 +29,12 @@ class Booking {
     public function getId(): int { return $this->id; }
     public function getUserId(): int { return $this->userId; }
     
-    // === TEJ METODY BRAKOWAŁO ===
     public function getRoomId(): string { return $this->roomId; }
-    // ============================
-
     public function getRoomName(): string { return $this->roomName; }
     public function getRoomType(): string { return $this->roomType; }
     public function getDate(): string { return $this->date; }
     
     public function getTimeRange(): string { 
-        // Formatowanie czasu (usuwa sekundy)
         return substr($this->startTime, 0, 5) . ' - ' . substr($this->endTime, 0, 5); 
     }
     

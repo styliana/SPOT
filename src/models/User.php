@@ -5,7 +5,7 @@ class User {
     private $password;
     private $name;
     private $surname;
-    private $role; // Tutaj nadal trzymamy NAZWĘ (np. 'student'), dla wygody aplikacji
+    private $role; 
     private $id;
 
     public function __construct(

@@ -1,4 +1,5 @@
--- 1. STRUKTURA (TABELE)
+-- In case we have to redo the structure, we drop existing tables, views, and triggers first.
+-- 1. Tables structure
 
 DROP TABLE IF EXISTS bookings CASCADE;
 DROP TABLE IF EXISTS rooms CASCADE;
@@ -51,7 +52,7 @@ CREATE TABLE bookings_audit_log (
 
 
 
--- 2. WIDOKI (VIEWS)
+-- 2. Views
 
 CREATE OR REPLACE VIEW vw_booking_details AS
 SELECT 
@@ -78,7 +79,7 @@ LEFT JOIN bookings b ON r.id = b.room_id
 GROUP BY r.name;
 
 
--- 3. WYZWALACZ (TRIGGER)
+-- 3. Trigger
 
 CREATE OR REPLACE FUNCTION log_booking_deletion()
 RETURNS TRIGGER AS $$

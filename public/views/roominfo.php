@@ -9,9 +9,7 @@
         <?php include __DIR__ . '/components/global_head_links.php'; ?>
         
     <style>
-        body {
-            background-color: #f3f4f6 !important;
-        }
+
         .room-info-page-content {
             display: flex;
             justify-content: center;
@@ -110,15 +108,7 @@
         .choose-room-btn:hover {
             background-color: #0855BB;
             transform: translateY(-2px);
-        }
-        .pill {
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-        .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
+        
     </style>
 </head>
 <body>

@@ -1,12 +1,10 @@
 <?php
-// public/views/components/global_head_links.php
-// To jest plik dołączeń, który zawiera tylko tagi <link>
 
-// Globalne style (podstawowe)
+// Global
 echo '<link rel="stylesheet" type="text/css" href="/public/styles/main.css">';
 echo '<link rel="stylesheet" type="text/css" href="/public/styles/header.css">';
 
-// Fonty i Ikony (Globalne)
+// Fonts n icons
 echo '<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">';
 echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
 echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';

@@ -14,20 +14,12 @@ class BookingsController extends AppController {
     }
 
     public function mybookings() {
-        // 1. Sprawdzamy, czy użytkownik jest zalogowany
         $this->requireLogin();
-        
-        // 2. Pobieramy ID użytkownika z sesji
         $userId = $_SESSION['user_id'];
-
-        // 3. Pobieramy rezerwacje z bazy danych
         $bookingsObjects = $this->bookingRepository->getBookingsByUserId($userId);
-        
-        // 4. Mapujemy obiekty na tablicę dla widoku
         $bookingsData = [];
         
         foreach ($bookingsObjects as $booking) {
-            // Ustalamy kolor statusu
             $statusPill = 'pill-gray';
             if ($booking->getStatus() === 'Confirmed') {
                 $statusPill = 'pill-green';
@@ -39,7 +31,7 @@ class BookingsController extends AppController {
 
             $bookingsData[] = [
                 'id' => $booking->getId(),
-                'room_id' => $booking->getRoomId(), // Potrzebne do linku edycji
+                'room_id' => $booking->getRoomId(), 
                 'room_name' => $booking->getRoomName(),
                 'date' => $booking->getDate(),
                 'time' => $booking->getTimeRange(),
@@ -49,8 +41,7 @@ class BookingsController extends AppController {
                 'status_pill' => $statusPill
             ];
         }
-        
-        // 5. Renderujemy widok
+
         return $this->render('mybookings', ['bookings' => $bookingsData]);
     }
 

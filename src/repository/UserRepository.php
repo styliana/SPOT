@@ -34,7 +34,7 @@ class UserRepository extends Repository
         ]);
     }
 
-    // === METODY DLA ADMINA ===
+
 
     public function getAllUsers(): array
     {
@@ -114,7 +114,7 @@ class UserRepository extends Repository
     
     public function getUsers(): array { return $this->getAllUsers(); }
 
-    // === Helper Mapping Method ===
+=
     private function mapToUser(array $user): User {
         return new User(
             $user['email'], 

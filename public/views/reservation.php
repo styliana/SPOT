@@ -98,7 +98,7 @@
          
          const mapOverlay = document.getElementById('map-overlay');
          const svgMap = document.getElementById('room-layer');
-         // Szukamy diva do błędów JS, a jeśli go nie ma, używamy tego PHP-owego
+
          const jsErrorDiv = document.querySelector('.js-error');
          const phpErrorDiv = document.querySelector('.form-wrapper .message.error:not(.js-error)');
          const messageDiv = jsErrorDiv || phpErrorDiv;
@@ -106,7 +106,7 @@
          const today = new Date().toISOString().split('T')[0];
          dateInput.setAttribute('min', today);
 
-         // === USPRAWNIENIE 1: Domyślna data ===
+
          if (!dateInput.value) {
              dateInput.value = today;
          }
@@ -115,7 +115,6 @@
              if (messageDiv) {
                  messageDiv.style.display = 'block';
                  messageDiv.textContent = msg;
-                 // Jeśli używamy diva PHP, upewnijmy się, że wygląda dobrze
                  if (!messageDiv.classList.contains('js-error')) {
                      messageDiv.classList.add('message', 'error');
                  }
@@ -129,7 +128,6 @@
              }
          }
 
-         // Generowanie podpisów na mapie
          function generateRoomLabels() {
              const rooms = svgMap.querySelectorAll('rect.room');
              rooms.forEach(room => {
@@ -158,23 +156,20 @@
              const end = endTimeInput.value;
              const bookingId = bookingIdInput.value ? bookingIdInput.value : null; 
 
-             // 1. Sprawdzenie czy pola są wypełnione
              if (!date || !start || !end) {
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto'; 
                  return;
              }
 
-             // === USPRAWNIENIE 2: Walidacja godzin (Client-Side) ===
              if (start >= end) {
                  showMessage('Godzina zakończenia musi być późniejsza niż rozpoczęcia.');
                  mapOverlay.style.opacity = '1';
                  mapOverlay.style.pointerEvents = 'auto';
-                 roomInput.value = ''; // Czyścimy wybór pokoju, bo godziny są błędne
-                 return; // Przerywamy, nie wysyłamy zapytania do serwera
+                 roomInput.value = ''; 
+                 return;
              }
 
-             // Jeśli walidacja przeszła, odblokowujemy mapę wizualnie (choć dane wciąż się ładują)
              mapOverlay.style.opacity = '0';
              mapOverlay.style.pointerEvents = 'none'; 
 
@@ -187,7 +182,7 @@
              })
              .then(response => response.json())
              .then(bookedRooms => {
-                 // Reset widoku pokoi
+
                  document.querySelectorAll('rect.room').forEach(el => {
                      el.classList.remove('unavailable', 'room-selected-active');
                      el.classList.add('available');
@@ -196,7 +191,6 @@
                      el.style.cursor = "";
                  });
 
-                 // Oznaczanie zajętych pokoi
                  if (Array.isArray(bookedRooms)) {
                      bookedRooms.forEach(rawId => {
                          const dbIdUpper = rawId.trim().toUpperCase();
@@ -212,7 +206,6 @@
                      });
                  }
 
-                 // Przywracanie zaznaczenia wybranego pokoju (jeśli wciąż dostępny)
                  const currentSelectedId = roomInput.value;
                  if (currentSelectedId) {
                      const selectedEl = document.getElementById(currentSelectedId);
@@ -220,7 +213,7 @@
                          selectedEl.classList.remove('available');
                          selectedEl.classList.add('room-selected-active');
                      } else {
-                         // Jeśli wybrany pokój stał się niedostępny przy zmianie godziny
+
                          roomInput.value = "";
                      }
                  }
@@ -251,10 +244,8 @@
              window.location.href = `/room/${roomId}?date=${date}&start=${start}&end=${end}&booking_id=${bookingId}&owner_id=${ownerId}`;
          });
 
-         // Uruchomienie na starcie (żeby załadować domyślną datę i ew. dostępność)
          checkAvailability();
-         
-         // Dodatkowa walidacja przy submicie (na wypadek manipulacji HTML)
+        
          const form = document.getElementById('booking-form');
          form.addEventListener('submit', (e) => {
              if (startTimeInput.value >= endTimeInput.value) {

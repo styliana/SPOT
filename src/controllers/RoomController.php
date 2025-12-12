@@ -30,7 +30,6 @@ class RoomController extends AppController {
             'description' => $room->getDescription()
         ];
 
-        // === NOWOŚĆ: Przekazujemy parametry daty/czasu do widoku ===
         $queryParams = [
             'date' => $_GET['date'] ?? '',
             'start' => $_GET['start'] ?? '',

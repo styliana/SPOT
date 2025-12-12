@@ -1,9 +1,7 @@
-/* --- 1. Ustawienia Jasnego Motywu --- */
 body {
     background-color: var(--background-gray-light);
 }
 
-/* --- 2. Główna zawartość strony --- */
 .reservation-page-content {
     width: 100%;
     max-width: 1400px;
@@ -15,7 +13,6 @@ body {
     margin-bottom: 2rem;
 }
 
-/* --- 3. Grid (Desktop) --- */
 .content-grid {
     display: grid;
     grid-template-columns: minmax(350px, 1fr) 2fr;
@@ -40,7 +37,6 @@ body {
     align-self: start;
 }
 
-/* --- 4. Elementy Formularza --- */
 .reservation-form {
     display: flex;
     flex-direction: column;
@@ -67,7 +63,6 @@ body {
     cursor: pointer;
 }
 
-/* --- 5. Style Mapy Interaktywnej --- */
 #map-container {
     position: relative;
     width: 100%;
@@ -80,12 +75,10 @@ body {
     overflow: hidden;
 }
 
-/* Kontener relatywny dla mapy (przeniesione z HTML) */
 .map-container-relative {
     position: relative;
 }
 
-/* Nakładka blokująca mapę (przeniesione z HTML) */
 .map-disabled-overlay {
     position: absolute;
     top: 0;
@@ -113,8 +106,6 @@ body {
     height: 100%;
 }
 
-/* === KLUCZOWE STYLE DLA POKOI === */
-
 .room { 
     fill: rgba(255, 255, 255, 0); 
     stroke: rgba(0,0,0,0.5); 
@@ -123,64 +114,39 @@ body {
     transition: fill 0.2s ease-in-out; 
 }
 
-/* HOVER - Tylko dla dostępnych (niezaznaczonych) */
 .room.available:hover { 
-    fill: rgba(74, 222, 128, 0.4) !important; /* Delikatna zieleń przy najechaniu */
+    fill: rgba(74, 222, 128, 0.4) !important;
 }
 
-/* ZAJĘTY (CZERWONY) - Solidny kolor */
 .room.unavailable { 
-    fill: rgba(220, 38, 38, 0.85) !important; /* Czerwony */
+    fill: rgba(220, 38, 38, 0.85) !important; 
     stroke: #b91c1c !important;
     cursor: not-allowed !important;
     pointer-events: none !important;
 }
 
-/* WYBRANY (ZIELONY) - Solidny kolor "na stałe" */
 .room.room-selected-active {
-    fill: rgba(22, 163, 74, 0.85) !important; /* Mocny Zielony (Green-600) */
-    stroke: #14532d !important; /* Ciemna obwódka */
+    fill: rgba(22, 163, 74, 0.85) !important; 
+    stroke: #14532d !important;
     stroke-width: 2px !important;
     fill-opacity: 1 !important;
 }
 
-/* === NOWE: PODPISY POKOI === */
 .room-label {
     font-family: 'Poppins', sans-serif;
     font-size: 11px;
     fill: #374151;
     text-anchor: middle;
     dominant-baseline: middle;
-    pointer-events: none; /* Kliknięcia przechodzą przez tekst */
+    pointer-events: none; 
     font-weight: 600;
     opacity: 0.8;
     user-select: none;
 }
 
-/* Kontrast dla zajętych lub wybranych */
 .room.unavailable + .room-label,
 .room.room-selected-active + .room-label {
     fill: #000;
     font-weight: 800;
     opacity: 1;
-}
-
-/* --- 6. RESPONSIVE --- */
-@media (max-width: 800px) {
-    body { background-color: var(--background-white); }
-    .reservation-page-content { padding: 1.5rem; }
-    .page-title { font-size: 1.75rem; text-align: center; }
-    .content-grid { display: block; }
-    .form-wrapper { padding: 0; box-shadow: none; width: 100%; display: flex; flex-direction: column; }
-    .reservation-form { display: flex; flex-direction: column; }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-spacer { display: none; }
-    .map-wrapper { width: 100%; margin: 1.5rem 0; order: 2; }
-    
-    .form-wrapper .form-group:nth-child(-n+2) { order: 1; }
-    .form-wrapper .form-group:nth-child(n+4) { order: 3; }
-    .form-wrapper .submit-btn { order: 3; }
-    
-    .desktop-only { display: none; }
-    #map-container { aspect-ratio: 1 / 1; border: 1px solid #eee; }
 }

@@ -1,21 +1,15 @@
 <?php
-// public/views/components/header.php
 
-// Upewniamy się, że sesja jest rozpoczęta i sprawdzamy rolę
 if (!isset($_SESSION)) {
     session_start();
 }
 
-// Sprawdzamy, czy użytkownik jest administratorem
 $isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
-// Funkcja pomocnicza do oznaczania aktywnego linku
 function isActive($path) {
-    // Używamy strpos dla elastyczności (np. '/room/ROOM1' i 'room')
     return (strpos($_SERVER['REQUEST_URI'], $path) !== false) ? 'active' : '';
 }
 
-// Wyróżniamy mybookings/admin_users jako aktywną stronę startową, jeśli URI jest tylko '/'
 $isHomePage = ($_SERVER['REQUEST_URI'] === '/');
 
 ?>
