@@ -151,6 +151,7 @@ Transaction: To ensure data integrity. Multiple SQL operations are treated as a 
 
 ## 🌟 4. Main functionalities
 - Logging and sesions: Secure authentication with password hashing.
+- Registration: live input validation.
 - Roles: Role system (Student/Teacher/Admin) with access blocking (Middleware checkAdmin).
 - Reservations: Interactive SVG map, date&time validation, bookings list, database conflict resolving.
 - Admin panel: User, rooms, bookings management (CRUD).
