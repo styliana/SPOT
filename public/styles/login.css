@@ -134,3 +134,24 @@
     font-weight: 500;
 }
 .forgot-password:hover { text-decoration: underline; }
+
+
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column; 
+        height: 100vh; 
+    }
+
+    .left-pane {
+        display: none;
+    }
+
+    .right-pane {
+        width: 100%; 
+        padding: 1.5rem; 
+    }
+
+    .form-container {
+        max-width: 100%; 
+    }
+}
