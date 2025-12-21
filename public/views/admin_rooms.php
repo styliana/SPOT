@@ -37,6 +37,19 @@
         
         <div class="admin-card">
             <h3 class="form-title">Add New Room</h3>
+            <?php if(isset($messages)): ?>
+        <?php foreach($messages as $message): ?>
+            <div style="color: #ef4444; margin-bottom: 1rem; font-weight: 600;">
+                <?= $message; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <form action="/admin_rooms" method="POST" class="add-room-form">
+        <div class="form-group">
+            <label>ID (np. ROOM9)</label>
+            <input type="text" name="id" placeholder="Unique ID" required pattern="[A-Z0-9]+" title="Only uppercase letters and numbers allowed">
+        </div>
             <form action="/admin_rooms" method="POST" class="add-room-form">
                 <div class="form-group"><label>ID (np. ROOM9)</label><input type="text" name="id" placeholder="Unique ID" required></div>
                 <div class="form-group"><label>Name</label><input type="text" name="name" placeholder="Display Name" required></div>

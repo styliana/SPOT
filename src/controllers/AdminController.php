@@ -4,6 +4,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 require_once __DIR__ . '/../repository/RoomRepository.php';
 require_once __DIR__ . '/../repository/BookingRepository.php';
+require_once __DIR__ . '/../models/Room.php';
 
 class AdminController extends AppController {
 
@@ -27,7 +28,39 @@ class AdminController extends AppController {
     }
 
     public function admin_users() { $this->checkAdmin(); $users = $this->userRepository->getAllUsers(); return $this->render('admin_users', ['users' => $users]); }
-    public function admin_rooms() { $this->checkAdmin(); if($this->isPost()){ $r = new Room($_POST['id'],$_POST['name'],(int)$_POST['workspaces'],$_POST['type'],$_POST['description']); $this->roomRepository->addRoom($r); return $this->redirect('/admin_rooms'); } $rooms = $this->roomRepository->getRooms(); return $this->render('admin_rooms', ['rooms' => $rooms]); }
+    public function admin_rooms() {
+    $this->checkAdmin(); //
+
+    if ($this->isPost()) {
+        $id = $_POST['id'];
+        
+        // Sprawdzenie czy pokój o takim ID już istnieje
+        $existingRoom = $this->roomRepository->getRoom($id); //
+        
+        if ($existingRoom) {
+            $rooms = $this->roomRepository->getRooms(); //
+            return $this->render('admin_rooms', [
+                'rooms' => $rooms, 
+                'messages' => ['Room with this ID already exists!']
+            ]);
+        }
+
+        $r = new Room(
+            $id,
+            $_POST['name'],
+            (int)$_POST['workspaces'],
+            $_POST['type'],
+            $_POST['description']
+        ); //
+        
+        $this->roomRepository->addRoom($r); //
+        return $this->redirect('/admin_rooms'); //
+    }
+
+    $rooms = $this->roomRepository->getRooms(); //
+    return $this->render('admin_rooms', ['rooms' => $rooms]);
+}
+
     public function admin_bookings() { $this->checkAdmin(); $bookings = $this->bookingRepository->getAllBookings(); return $this->render('admin_bookings', ['bookings' => $bookings]); }
     public function admin_delete_user() { $this->checkAdmin(); if($this->isPost()){ $this->userRepository->deleteUser($_POST['id']); } $this->redirect('/admin_users'); }
     public function admin_delete_room() { $this->checkAdmin(); if($this->isPost()){ $this->roomRepository->deleteRoom($_POST['id']); } $this->redirect('/admin_rooms'); }
