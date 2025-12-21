@@ -6,7 +6,7 @@
     <title>Admin - Rezerwacje</title>
 
     <?php include __DIR__ . '/components/global_head_links.html'; ?>
-    <link rel="stylesheet" type="text/css" href="/public/styles/admin_bookings.css">
+<link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
 
     <style>
         .search-wrapper { position: relative; width: 320px; }

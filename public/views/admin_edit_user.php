@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Admin - Edycja Użytkownika</title>
 
-    <link rel="stylesheet" type="text/css" href="/public/styles/admin.css?v=10.0">
     <?php include __DIR__ . '/components/global_head_links.html'; ?>
+    <link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
 
     <style>
         body { background-color: #f3f4f6 !important; }

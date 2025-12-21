@@ -5,6 +5,7 @@
     <title>Admin - Pokoje</title>
     
     <?php include __DIR__ . '/components/global_head_links.html'; ?>
+    <link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
 
     <style>
 
