@@ -8,26 +8,9 @@
     <link rel="stylesheet" type="text/css" href="/public/styles/admin.css">
 
     <style>
-
-        .admin-container { max-width: 1300px; margin: 3rem auto; padding: 0 2rem; padding-bottom: 100px; }
-        
-        .admin-header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; }
         .search-wrapper { position: relative; width: 300px; }
         .search-wrapper input { width: 100%; padding: 12px 15px 12px 45px; border-radius: 50px; border: 1px solid #e5e7eb; background: white; outline: none; }
         .search-wrapper .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
-        
-        .table-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #fff; padding: 1rem; text-align: left; font-weight: 700; color: #6b7280; border-bottom: 2px solid #f3f4f6; cursor: pointer; }
-        td { padding: 1rem; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
-        tr:hover { background-color: #f8fafc; }
-
-               .icon-btn { border: none; background: #f3f4f6; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6b7280; }
-        .icon-btn:hover { transform: translateY(-2px); color: white; }
-        .icon-btn.delete:hover { background-color: #ef4444; }
-        .pill { padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
-        .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
-       
     </style>
 </head>
 <body>

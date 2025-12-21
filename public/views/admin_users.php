@@ -16,11 +16,7 @@
         .search-wrapper input:focus { border-color: #0A6BEF; box-shadow: 0 4px 15px rgba(10, 107, 239, 0.15); width: 340px; }
         .search-wrapper .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 22px; }
 
-        .table-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid rgba(0,0,0,0.02); }
-        table { width: 100%; border-collapse: collapse; }
-        th { background-color: #fff; padding: 1.5rem 1.5rem; text-align: left; font-weight: 700; color: #6b7280; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 2px solid #f3f4f6; cursor: pointer; }
-        td { padding: 1.2rem 1.5rem; border-bottom: 1px solid #f3f4f6; color: #374151; font-size: 0.95rem; vertical-align: middle; }
-        tr:hover { background-color: #f8fafc; }
+
     </style>
 </head>
 <body>

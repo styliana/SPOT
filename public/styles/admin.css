@@ -61,3 +61,16 @@ body { background-color: #f3f4f6 !important; }
         .form-group input:focus { border-color: #0A6BEF; background: white; }
         .submit-btn-admin { background-color: #0A6BEF; color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; height: 42px; width: 100%; }
         .submit-btn-admin:hover { background-color: #0855BB; transform: translateY(-2px); }
+
+        
+        .admin-header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; }
+        
+        .table-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 1rem; text-align: left; font-weight: 700; color: #6b7280; border-bottom: 2px solid #f3f4f6; cursor: pointer; }
+        td { padding: 1rem; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
+        tr:hover { background-color: #f8fafc; }
+
+        .pill { padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+        .pill-blue { background-color: #E0EEFF; color: #0A6BEF; }
+       
