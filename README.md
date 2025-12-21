@@ -267,6 +267,9 @@ Transaction: To ensure data integrity. Multiple SQL operations are treated as a 
       <img src="https://github.com/user-attachments/assets/70075961-a2f8-4d4c-8250-e412e141dd71" width="100%" />
     </td>
     <td valign="top">
+        <strong>22. Admin adding a room that ID already exists in db - message displayed.</strong><br>
+        <img width="1842" height="875" alt="image" src="https://github.com/user-attachments/assets/d36fdbad-638e-44d4-82ea-27751a9eca01" />
+
       </td>
   </tr>
 </table>
@@ -323,25 +326,22 @@ Transaction: To ensure data integrity. Multiple SQL operations are treated as a 
 </table>
 
 ## ✅ 7. Requirements Checklist
-[x] Technologies: Docker, GIT, HTML5, CSS, JS, PHP, PostgreSQL.
+- Technologies: Docker, GIT, HTML5, CSS, JS, PHP, PostgreSQL.
+- MVC Architecture without frameworks.
+- Responsive Design (Media Queries).
+- Login, Sessions, Permissions.
+- Database: Relationships, 3rd Normal Form.
+- Views (2), Trigger (1), Procedure (1).
+- SQL Transactions (during reservation).
+- Fetch API (room availability check).
+- Tests (PHPUnit + Bash).
+- Error Handling (400, 403, 404, 500 pages).
+- Documentation and README.
 
-[x] MVC Architecture without frameworks.
-
-[x] Responsive Design (Media Queries).
-
-[x] Login, Sessions, Permissions.
-
-[x] Database: Relationships, 3rd Normal Form.
-
-[x] Views (2), Trigger (1), Procedure (1).
-
-[x] SQL Transactions (during reservation).
-
-[x] Fetch API (room availability check).
-
-[x] Tests (PHPUnit + Bash).
-
-[x] Error Handling (400, 403, 404, 500 pages).
-
-[x] Documentation and README.
-
+## 8. Areas of improvement (future)
+1) Filtering and sorting options for the user tables (as there is for admin).
+2) Dynamic map change.
+3) More specific limits (e.g. booking should not only last over 15 minutes but less than...) for booking.
+4) Interactive messages after having completed reservation.
+5) Booking assigned to teacher having more priority than student one.
+6) Confirm reservation button 15 minutes before the reservation.
