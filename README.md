@@ -345,3 +345,4 @@ Transaction: To ensure data integrity. Multiple SQL operations are treated as a 
 4) Interactive messages after having completed reservation.
 5) Booking assigned to teacher having more priority than student one.
 6) Confirm reservation button 15 minutes before the reservation.
+7) Room booking by: capacity, purpose, equipement. Not limiting by date and time.
