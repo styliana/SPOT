@@ -3,7 +3,6 @@
 require_once __DIR__ . '/config.php'; 
 
 class Database {
-    // statyczna właściwość przetrzymująca JEDYNĄ instancję tej klasy
     private static $instance = null;
 
     private $username;
@@ -35,7 +34,7 @@ class Database {
         }
 
         try {
-            // Port 5432 jest standardowy wewnątrz sieci dockerowej (chyba że zmieniłeś go w configu kontenera db)
+            // Port 5432 jest standardowy wewnątrz sieci dockerowej (jesli nie zmienilam w configu)
             $conn = new PDO(
                 "pgsql:host=$this->host;port=5432;dbname=$this->database;sslmode=prefer",
                 $this->username,

@@ -120,14 +120,12 @@
         <div class="room-card">
             
             <?php
-                // === LOGIKA ZACHOWANIA DANYCH I WŁAŚCICIELA ===
                 $date = $_GET['date'] ?? '';
                 $start = $_GET['start'] ?? '';
                 $end = $_GET['end'] ?? '';
                 $bookingId = $_GET['booking_id'] ?? '';
-                $ownerId = $_GET['owner_id'] ?? ''; // <-- WAŻNE: Przekazujemy to dalej
+                $ownerId = $_GET['owner_id'] ?? ''; 
                 
-                // Budujemy parametry URL
                 $params = "date=$date&start=$start&end=$end&booking_id=$bookingId&owner_id=$ownerId";
 
                 $backLink = "/reservation?" . $params;
